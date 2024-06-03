@@ -4,7 +4,6 @@ from tkinter import messagebox
 
 
 def install_update(current_version, repo_url):
-    # API-URL für das neueste Release
     api_url = f"{repo_url}/releases/latest"
 
     response = requests.get(api_url)
@@ -32,7 +31,6 @@ def download_and_install_update(download_url, latest_version):
     download_path = os.path.expanduser(f"~/Downloads/startcenter installer {latest_version}.exe")
     with open(download_path, "wb") as file:
         file.write(response.content)
-    # Führen Sie den Installer aus
     execute_installer(download_path)
 
 

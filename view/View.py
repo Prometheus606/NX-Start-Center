@@ -59,6 +59,9 @@ class View(tk.Tk):
         self.title("NX Startcenter")
         self.resizable(width=False, height=False)
         self.wm_iconbitmap(self.duh_logo_ico)
+        self.attributes("-topmost", True)
+        self.lift()
+        self.attributes("-topmost", False)
         self.geometry(f"{self.win_width}x{self.win_height}+{int(self.winfo_screenwidth() / 2 - self.win_width / 2)}+{int(self.winfo_screenheight() / 2 - self.win_height / 2)}")
 
         # =================================== root frames ==================================

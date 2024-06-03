@@ -12,7 +12,7 @@ if __name__ == "__main__":
     app_author = os.getenv('APP_AUTHOR')
     app_support_mail = os.getenv('APP_SUPPORT_MAIL')
     update_url = os.getenv('UPDATE_URL')
-    app_version = "v1.0.0"
+    app_version = "v1.0.1"
 
     if not install_update(app_version, update_url):
         model = Model(config_file, app_version, app_date, app_author, app_support_mail)
