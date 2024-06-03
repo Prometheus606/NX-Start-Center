@@ -3,10 +3,11 @@ import os
 from tkinter import messagebox
 
 
-def install_update(current_version, repo_url):
+def install_update(current_version, repo_url, api_token):
     api_url = f"{repo_url}/releases/latest"
 
-    response = requests.get(api_url)
+    headers = {'Authorization': f'token {api_token}'}
+    response = requests.get(api_url, headers=headers)
     if response.status_code == 200:
         latest_release = response.json()
         latest_version = latest_release["tag_name"]
