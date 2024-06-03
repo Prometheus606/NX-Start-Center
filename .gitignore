@@ -1,0 +1,11 @@
+launch Startcenter.bat
+config.json
+.env
+venv
+output/exe
+output/installer/Output
+output/NX Start Center
+build
+NX Start Center.spec
+update erstellen.md
+.idea
