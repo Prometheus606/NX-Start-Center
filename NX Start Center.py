@@ -1,18 +1,15 @@
-import os
-from dotenv import load_dotenv
 from controller.Update import install_update
 from view.View import View
 from model.Model import Model
 from controller.Controller import Controller
 
 if __name__ == "__main__":
-    load_dotenv()
-    config_file = os.getenv('CONFIG_FILE')
-    app_date = os.getenv('APP_DATE')
-    app_author = os.getenv('APP_AUTHOR')
-    app_support_mail = os.getenv('APP_SUPPORT_MAIL')
-    update_url = os.getenv('UPDATE_URL')
-    app_version = "v1.0.1"
+    config_file = "config.json"
+    app_date = "04.06.2024"
+    app_author = "Niklas Beitler"
+    app_support_mail = "niklas.beitler@duh-group.com"
+    update_url = "https://api.github.com/repos/Prometheus606/NX-Start-Center"
+    app_version = "V1.0.1"
 
     if not install_update(app_version, update_url):
         model = Model(config_file, app_version, app_date, app_author, app_support_mail)
