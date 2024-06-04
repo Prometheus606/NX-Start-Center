@@ -15,7 +15,7 @@ AllowNoIcons=yes
 LicenseFile=D:\Projekte\Projekte Python\duh_startcenter\LICENSE.txt
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
-OutputBaseFilename=startcenter installer
+OutputBaseFilename=startcenter-installer
 SetupIconFile=D:\Projekte\Projekte Python\duh_startcenter\src\images\duhGroup_Logo.ico
 Password=@tm5$a!Nt#7!HzAH
 Encryption=yes
