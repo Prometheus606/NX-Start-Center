@@ -6,6 +6,7 @@ from controller.UiChanges import UiChanges
 from controller.OpenVSCode import OpenVSCode
 from controller.OpenExplorer import OpenExplorer
 from controller.SetLastConfig import SetLastConfig
+from controller.Licence import Licence
 
 
 class Controller:
@@ -21,14 +22,7 @@ class Controller:
         self.open_vscode = OpenVSCode(self)
         self.open_explorer = OpenExplorer(self)
         self.set_last_config = SetLastConfig(self)
-
-    def show_license_info(self):
-        """Not implemented"""
-        pass
-
-    def start_lmtools(self):
-        """Not implemented"""
-        pass
+        self.tools = Licence(self)
 
     def start(self):
         self.view.mainloop()

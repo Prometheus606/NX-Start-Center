@@ -121,6 +121,8 @@ class UiChanges:
         if the x position >= 131, then right tab is selected.
         THE VALUE MIGHT BE WRONG IF THE WINDOW SIZE CHANGES!!
         """
+        self.controller.view.messageLabel.config(text="")
+
         if e.x >= 131:
             self.controller.view.buttons_frame.pack(side=ttk.TOP, fill="both", expand=False)
             self.controller.view.pp_dir_btn.pack_forget()

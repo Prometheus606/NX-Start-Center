@@ -25,15 +25,20 @@ class CustomMenuBar(tk.Frame):
             {'label': 'Beenden', 'command': self.quit},
         ]
 
-        self.tools_menu = [
-            {'label': 'Lizenzchecker', 'command': self.placeholder},
+        self.licence_menu = [
+            {'label': 'Lizenz öffnen', 'command': self.placeholder},
             {'label': 'LMTools starten', 'command': self.placeholder}
+        ]
+
+        self.settings_menu = [
+            {'label': 'Einstellungen', 'command': self.placeholder},
+            {'label': 'Startbatch anpassen', 'command': self.placeholder}
         ]
 
         self.menus = [
             {'label': 'Datei', 'submenu': self.file_menu},
-            # {'label': 'Tools', 'submenu': self.tools_menu},
-            {'label': 'Einstellungen', 'command': self.placeholder},
+            {'label': 'Lizenz', 'submenu': self.licence_menu},
+            {'label': 'Einstellungen', 'submenu': self.settings_menu},
             {'label': 'Info', 'command':self.show_info},
         ]
 

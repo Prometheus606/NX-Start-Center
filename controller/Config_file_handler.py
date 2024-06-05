@@ -15,7 +15,9 @@ def load_config(config_file: str, setting: str):
                 if setting == "settings":
                     config[setting] = {
                         "nx_installation_path": "D:\\Siemens\\NX_Versionen",
-                        "customer_environment_path": "D:\\Siemens\\Kundenumgebung"
+                        "customer_environment_path": "D:\\Siemens\\Kundenumgebung",
+                        "licence_server_path": "D:\\Siemens\\License Server\\lmtools.exe",
+                        "licence_path": "D:\\Siemens\\License\\License_ugslmd.lic"
                     }
                 elif setting == "last_configuration":
                     config[setting] = {}

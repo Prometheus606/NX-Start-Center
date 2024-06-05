@@ -23,9 +23,13 @@ class Model:
         self.native_versions = self.get_native_versions()
         self.versions = self.get_versions()
         self.machines = self.get_machines()
+        self.editors = ["Notepad", "Notepad++", "VSCode"]
+        self.editor = "notepad"
 
         self.nx_installation_path = self.settings.get("nx_installation_path")
         self.customer_environment_path = self.settings.get("customer_environment_path")
+        self.licence_server_path = self.settings.get("licence_server_path")
+        self.licence_path = self.settings.get("licence_path")
 
         self.dark_themes = ["solar", "darkly", "cyborg"]
         self.light_themes = ["cosmo", "flatly", "minty", "pulse", "lumen"]

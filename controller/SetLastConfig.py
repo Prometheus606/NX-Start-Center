@@ -56,6 +56,13 @@ class SetLastConfig:
             else:
                 self.controller.view.batchstart.set(False)
                 self.controller.model.batchstart = self.controller.view.batchstart.get()
+
+            if self.controller.model.settings and self.controller.model.settings.get("editor") is not None:
+                self.controller.view.editor.set(self.controller.model.settings["editor"])
+                self.controller.model.editor = self.controller.view.editor.get()
+            else:
+                self.controller.view.editor.set("vscode")
+                self.controller.model.editor = self.controller.view.editor.get()
         except KeyError:
             pass
 
