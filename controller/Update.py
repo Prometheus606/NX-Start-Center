@@ -14,7 +14,9 @@ def install_update(current_version, repo_url):
 
             if latest_version.lower() > current_version.lower():
                 download_url = latest_release["assets"][0]["browser_download_url"]
-                if user_accepts_update():
+                title = latest_release["name"]
+                description = latest_release["body"]
+                if user_accepts_update(current_version, latest_version, description, title):
                     download_and_install_update(download_url, latest_version)
                     return True
         else:
@@ -25,9 +27,9 @@ def install_update(current_version, repo_url):
         print("No connection.")
 
 
-def user_accepts_update():
+def user_accepts_update(current_version, latest_version, description, title):
     print(f"Ein neues Update ist verfügbar!")
-    return messagebox.askyesno("Update verfügbar", "Eine neue Version ist verfügbar! Jetzt installieren?")
+    return messagebox.askyesno("Update verfügbar", f"Eine neue Version ist verfügbar!\n\nDeine Version:{current_version}\nNeue Version: {latest_version}\n\nWas ist neu:\n{description}\n\nJetzt installieren?")
 
 
 def download_and_install_update(download_url, latest_version):
@@ -48,4 +50,4 @@ def download_and_install_update(download_url, latest_version):
 
 def execute_installer(installer_path):
     import subprocess
-    subprocess.run([installer_path])
+    subprocess.Popen([installer_path])
