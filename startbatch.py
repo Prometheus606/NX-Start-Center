@@ -90,9 +90,9 @@ if Path(fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/UGII/cx_tools/").ex
 
 
 # NX title in Leiste schreiben
-if not Path(fr"{KUNDENPFAD}/{KUNDENNAME}/_Umgebung/{NX_VERSION}/UGII/startup/nxtitel_configgroup.men").exists():
-    if not Path(fr"{KUNDENPFAD}/{KUNDENNAME}/_Umgebung/{NX_VERSION}/UGII/startup").exists():
-        os.makedirs(fr"{KUNDENPFAD}/{KUNDENNAME}/_Umgebung/{NX_VERSION}/UGII/startup")
+if not Path(fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/UGII/startup/nxtitel_configgroup.men").exists():
+    if not Path(fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/UGII/startup").exists():
+        os.makedirs(fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/UGII/startup")
     source_file = "src/NX Title/nxtitel_configgroup.men"
     destination_file = f"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/UGII/startup/nxtitel_configgroup.men"
     with open(source_file) as f:

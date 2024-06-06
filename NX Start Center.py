@@ -9,7 +9,7 @@ if __name__ == "__main__":
     app_author = "Niklas Beitler"
     app_support_mail = "niklas.beitler@duh-group.com"
     update_url = "https://api.github.com/repos/Prometheus606/NX-Start-Center"
-    app_version = "V1.1.0"
+    app_version = "V1.1.1"
 
     if not install_update(app_version, update_url):
         model = Model(config_file, app_version, app_date, app_author, app_support_mail)
