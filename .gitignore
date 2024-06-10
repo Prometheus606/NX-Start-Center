@@ -1,6 +1,4 @@
-launch Startcenter.bat
 config.json
-.env
 venv
 output/exe
 output/installer/Output
@@ -9,3 +7,9 @@ build
 NX Start Center.spec
 update erstellen.md
 .idea
+env.py
+__pycache__
+controller/__pycache__
+view/__pycache__
+model/__pycache__
+nuitka-crash-report.xml

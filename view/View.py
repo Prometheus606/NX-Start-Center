@@ -1,5 +1,4 @@
 import ctypes as ct
-import os
 import tkinter as tk
 import ttkbootstrap as ttk
 from view.CustomMenuBar import CustomMenuBar
