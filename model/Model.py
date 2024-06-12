@@ -19,6 +19,7 @@ class Model:
         self.load_feed = 0
         self.order_number = "0000"
         self.batchstart = 0
+        self.use_role = 1
         self.customers = self.get_customers()
         self.native_versions = self.get_native_versions()
         self.versions = self.get_versions()
@@ -68,7 +69,7 @@ class Model:
             version_list = []
             folder_content = os.listdir(base_path)
             for i in folder_content:
-                if Path(f"{base_path}\\{i}").is_dir():
+                if Path(f"{base_path}\\{i}").is_dir() and i.lower().startswith("nx"):
                     version_list.append(i)
             if self.last_configuration and self.last_configuration.get("last_native_version") is not None and self.last_configuration.get("last_native_version") in version_list:
                 self.native_version = self.last_configuration["last_native_version"]
@@ -90,6 +91,9 @@ class Model:
             for i in folder_content:
                 if Path(f"{base_path}\\{i}").is_dir():
                     customer_list.append(i)
+            if len(customer_list) == 0:
+                print("Keine Kundenumgebung angelegt.")
+                return []
             if self.last_configuration and self.last_configuration.get("last_customer") is not None and self.last_configuration.get("last_customer") in customer_list:
                 self.customer = self.last_configuration["last_customer"]
             else:
@@ -108,8 +112,11 @@ class Model:
             version_list = []
             folder_content = os.listdir(base_path)
             for i in folder_content:
-                if Path(f"{base_path}\\{i}").is_dir():
+                if Path(f"{base_path}\\{i}").is_dir() and i.lower().startswith("nx"):
                     version_list.append(i)
+            if len(version_list) == 0:
+                print("Keine Version angelegt.")
+                return []
             if self.last_configuration and self.last_configuration.get("last_version") is not None and self.last_configuration.get("last_version") in version_list:
                 self.version = self.last_configuration["last_version"]
             else:
@@ -130,6 +137,9 @@ class Model:
             for i in folder_content:
                 if Path(f"{base_path}\\{i}").is_dir():
                     machines_list.append(i)
+            if len(machines_list) == 0:
+                print("Keine Maschine angelegt.")
+                return []
             if self.last_configuration and self.last_configuration.get("last_machine") is not None and self.last_configuration.get("last_machine") in machines_list:
                 self.machine = self.last_configuration["last_machine"]
             else:

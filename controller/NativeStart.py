@@ -1,5 +1,9 @@
 import subprocess
 from controller.Config_file_handler import save_config
+import getpass
+from pathlib import Path
+import os
+import shutil
 
 class NativeStart:
     """
@@ -12,6 +16,13 @@ class NativeStart:
 
     def start_NX_nativ(self):
         self.controller.view.messageLabel.config(text="")
+
+        # Rolle in die jeweilige NX version kopieren wenn haken gesetzt ist
+        if self.controller.model.use_role and Path(fr"{os.getcwd()}\src\Rolle\roles\nx_role0.mtx").exists():
+            username = getpass.getuser()
+            source_folder = fr"src\Rolle\roles"
+            destination_folder = fr"C:/Users/{username}/AppData/Local/Siemens/{self.controller.model.native_version}/roles/"
+            shutil.copytree(source_folder, destination_folder, dirs_exist_ok=True)
 
         base_path = self.controller.model.settings['nx_installation_path']
         try:

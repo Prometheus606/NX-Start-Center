@@ -1,8 +1,10 @@
+import os
 from tkinter import messagebox
 from controller.Config_file_handler import save_config
 import shutil
 import subprocess
 import getpass
+from pathlib import Path
 
 class NXStart:
     """
@@ -18,11 +20,11 @@ class NXStart:
         self.controller.view.messageLabel.config(text="")
         script = "startbatch.bat" if batchstart else "startbatch.py"
 
-        # Rolle bei mir in die jeweilige NX version kopieren
-        username = getpass.getuser()
-        if username == "niklas.beitler":
-            source_folder = fr"D:/Siemens/Meine_Rolle/roles/"
-            destination_folder = fr"C:/Users/niklas.beitler/AppData/Local/Siemens/{self.controller.model.version}/"
+        # Rolle in die jeweilige NX version kopieren wenn haken gesetzt ist
+        if self.controller.model.use_role and Path(fr"{os.getcwd()}\src\Rolle\roles\nx_role0.mtx").exists():
+            username = getpass.getuser()
+            source_folder = fr"src\Rolle\roles"
+            destination_folder = fr"C:/Users/{username}/AppData/Local/Siemens/{self.controller.model.version}/roles/"
             shutil.copytree(source_folder, destination_folder, dirs_exist_ok=True)
 
         command = [

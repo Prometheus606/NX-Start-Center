@@ -28,10 +28,15 @@ class UiChanges:
         self.controller.model.customer = self.controller.view.customer.get()
 
         self.controller.model.versions = self.controller.model.get_versions()
-        self.controller.model.version = self.controller.model.versions[0]
-        self.controller.view.version.set(self.controller.model.version)
-        self.controller.view.register.nxversion_combobox.config(values=self.controller.model.versions)
-        self.controller.view.register.nxversion_combobox.current(self.controller.model.versions.index(self.controller.model.version))
+        if len(self.controller.model.versions) > 0:
+            self.controller.model.version = self.controller.model.versions[0]
+            self.controller.view.version.set(self.controller.model.version)
+            self.controller.view.register.nxversion_combobox.config(values=self.controller.model.versions)
+            self.controller.view.register.nxversion_combobox.current(self.controller.model.versions.index(self.controller.model.version))
+        else:
+            self.controller.model.version = ""
+            self.controller.view.version.set("")
+            self.controller.view.register.nxversion_combobox.config(values=self.controller.model.versions)
 
         self.controller.model.machines = self.controller.model.get_machines()
         if len(self.controller.model.machines) > 0:
