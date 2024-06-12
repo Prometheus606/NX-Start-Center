@@ -123,14 +123,25 @@ class UiChanges:
         """
         self.controller.view.messageLabel.config(text="")
 
+        if e.x >= 260:
+            return
+
         if e.x >= 131:
             self.controller.view.buttons_frame.pack(side=ttk.TOP, fill="both", expand=False)
             self.controller.view.pp_dir_btn.pack_forget()
             self.controller.view.vsCode_btn.pack_forget()
             self.controller.view.option_frame.pack_forget()
             self.controller.view.language_frame.pack_forget()
+            self.controller.view.register.new_machine_controller_entry.grid(row=4, column=1, padx=5, pady=5)
+            self.controller.view.register.new_machine_type_entry.grid(row=5, column=1, padx=5, pady=5)
+            self.controller.view.register.new_machine_type_lbl.grid(row=5, column=0, sticky="w")
+            self.controller.view.register.new_machine_controller_lbl.grid(row=4, column=0, sticky="w")
             self.controller.view.start_btn.config(text="Projekt Anlegen", command=self.controller.create_new_customer.create_new_customer)
         else:
+            self.controller.view.register.new_machine_controller_entry.grid_forget()
+            self.controller.view.register.new_machine_type_entry.grid_forget()
+            self.controller.view.register.new_machine_controller_lbl.grid_forget()
+            self.controller.view.register.new_machine_type_lbl.grid_forget()
             self.controller.view.buttons_frame.pack(side=ttk.BOTTOM, fill="both", expand=False)
             self.controller.view.pp_dir_btn.pack(side=ttk.LEFT, padx=5)
             self.controller.view.vsCode_btn.pack(side=ttk.LEFT, padx=5)

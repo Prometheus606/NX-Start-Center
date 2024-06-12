@@ -41,6 +41,15 @@ class Model:
         self.app_author = app_author
         self.app_support_mail = app_support_mail
 
+        self.machinetypes = {"Mill machine": "MDM0101",
+                                  "TurnMill machine": "MDM0104",
+                                  "Lathe machine": "MDM0201",
+                                  "MillTurn machine": "MDM0204",
+                                  "Wedm machine": "MDM0301",
+                                  "Robot machine": "MDM0401",
+                                  "Generic machine": "MDM0901"}
+        self.machine_controllers = ["Sinumerik", "Fanuk", "Okuma", "HeidenhainTNC"]
+
     def set_theme(self):
         """
         If a preferred theme is set in the configuration file, that theme will be applied. Otherwise, the darkly theme is applied.

@@ -32,9 +32,11 @@ class View(tk.Tk):
         self.new_version = ttk.StringVar()
         self.new_machine = ttk.StringVar()
         self.new_order = ttk.StringVar()
+        self.new_machine_controller = ttk.StringVar()
+        self.new_machine_type = ttk.StringVar()
 
         self.load_pp = ttk.BooleanVar()
-        self.load_cse = ttk.BooleanVar()
+        self.load_installed_machines = ttk.BooleanVar()
         self.load_device = ttk.BooleanVar()
         self.load_tool = ttk.BooleanVar()
         self.load_feed = ttk.BooleanVar()
@@ -76,7 +78,7 @@ class View(tk.Tk):
 
         # ==================================== Project Frame ====================================
 
-        self.register = ProjectFrame(self.left_frame, self.model, self.customer, self.version, self.machine, self.new_customer, self.new_version, self.new_machine, self.new_order)
+        self.register = ProjectFrame(self.left_frame, self.model, self.customer, self.version, self.machine, self.new_customer, self.new_version, self.new_machine, self.new_order, self.new_machine_type, self.new_machine_controller)
         self.register.pack(fill="both")
 
         # ==================================== Project options group ====================================
