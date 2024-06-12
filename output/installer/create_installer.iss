@@ -34,6 +34,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "D:\Projekte\Projekte Python\duh_startcenter\output\exe\DUH_Startcenter.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\Projekte\Projekte Python\duh_startcenter\startbatch.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\Projekte\Projekte Python\duh_startcenter\startbatch.py"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\Projekte\Projekte Python\duh_startcenter\customer_settings.py"; DestDir: "{app}"; Flags: ignoreversion onlyifdoesntexist
 Source: "..\..\src\*"; DestDir: "{app}\src"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\exe\NX_Startcenter.dist\certifi\*"; DestDir: "{app}\certifi"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files

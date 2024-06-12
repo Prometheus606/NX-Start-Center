@@ -11,7 +11,7 @@ UGII_LANG = sys.argv[3]
 KUNDENPFAD = sys.argv[4]
 NXPFAD = sys.argv[5]
 PPCHECK = int(sys.argv[6])
-CSECHECK = int(sys.argv[7])
+INSTALLED_MACHINES_CHECK = int(sys.argv[7])
 TOOLCHECK = int(sys.argv[8])
 DEVICECHECK = int(sys.argv[9])
 FEEDSPEEDCHECK = int(sys.argv[10])
@@ -49,31 +49,31 @@ os.environ['UGII_LOAD_OPTIONS'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VE
 # ------------------------------------------------------------------------------
 
 # Library
+os.environ['UGII_CAM_LIBRARY_MACHINE_DIR'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/library/machine/"
+os.environ['UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/library/machine/installed_machines/"
+os.environ['UGII_CAM_POST_DIR'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/postprocessor/"
+os.environ['UGII_CAM_POST_CONFIG_FILE'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/postprocessor/template_post.dat"
+os.environ['UGII_CAM_TOOL_PATH_DIR'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/tool_path/"
+os.environ[f'UGII_CAM_LIBRARY_TOOL_DIR'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/library/tool/"
+os.environ['UGII_CAM_LIBRARY_FEEDS_SPEEDS_DIR'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/library/feeds_speeds/"
+os.environ['UGII_CAM_LIBRARY_DEVICE_DIR'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/library/device/"
+
 if PPCHECK:
+    os.environ['UGII_CAM_POST_DIR'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/MACH/resource/postprocessor/"
+    os.environ['UGII_CAM_USER_DEF_EVENT_DIR'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/MACH/resource/user_def_event/"
+
+if INSTALLED_MACHINES_CHECK:
     os.environ['UGII_CAM_LIBRARY_MACHINE_DIR'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/MACH/resource/library/machine/"
     os.environ['UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/MACH/resource/library/machine/installed_machines/"
-else:
-    os.environ['UGII_CAM_LIBRARY_MACHINE_DIR'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/library/machine/"
-    os.environ['UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/library/machine/installed_machines/"
-
-os.environ['UGII_CAM_POST_CONFIG_FILE'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/postprocessor/template_post.dat"
-os.environ['UGII_CAM_POST_DIR'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/postprocessor/"
-os.environ['UGII_CAM_TOOL_PATH_DIR'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/tool_path/"
 
 if TOOLCHECK:
     os.environ['UGII_CAM_LIBRARY_TOOL_DIR'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/MACH/resource/library/tool/"
-else:
-    os.environ[f'UGII_CAM_LIBRARY_TOOL_DIR'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/library/tool/"
 
 if FEEDSPEEDCHECK:
     os.environ['UGII_CAM_LIBRARY_FEEDS_SPEEDS_DIR'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/MACH/resource/library/feeds_speeds/"
-else:
-    os.environ['UGII_CAM_LIBRARY_FEEDS_SPEEDS_DIR'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/library/feeds_speeds/"
 
 if DEVICECHECK:
     os.environ['UGII_CAM_LIBRARY_DEVICE_DIR'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/MACH/resource/library/device/"
-else:
-    os.environ['UGII_CAM_LIBRARY_DEVICE_DIR'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/library/device/"
 
 
 if Path(fr"{KUNDENPFAD}{KUNDENNAME}/5_Umgebung/{NX_VERSION}/MACH/resource/template_part").exists():
@@ -106,13 +106,15 @@ os.environ['UGII_USER_DIR'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSIO
 # nur bei externer Simulation verwendbar
 os.environ['UGII_CAM_IPW_SNAPSHOT'] = "1"
 
+# ------------------------------------------------------------------------------
+# Kundenanpassungen lesen
 # - -----------------------------------------------------------------------------
-# Kundenanpassungen
-# - -----------------------------------------------------------------------------
-# Setzen der Variablen für Hans Weber Messzyklen
-os.environ['CX_PROBE_APP'] = fr"{KUNDENPFAD}/Hans_Weber/5_Umgebung/NX2206/CX_Probing/CX_Probing_Main.dll"
+try:
+    from customer_settings import Customize
+    Customize(KUNDENPFAD, KUNDENNAME, NX_VERSION, NXPFAD)
 
-
+except ImportError:
+    pass
 # ------------------------------------------------------------------------------
 # Start NX
 # ------------------------------------------------------------------------------
@@ -128,5 +130,3 @@ try:
 
 except FileNotFoundError:
     sys.exit(3)
-
-

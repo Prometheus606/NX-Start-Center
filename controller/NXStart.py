@@ -34,7 +34,7 @@ class NXStart:
             self.controller.model.settings.get("customer_environment_path"),
             self.controller.model.settings.get("nx_installation_path"),
             str(int(self.controller.model.load_pp)),
-            str(int(self.controller.model.load_cse)),
+            str(int(self.controller.model.load_installed_machines)),
             str(int(self.controller.model.load_tool)),
             str(int(self.controller.model.load_device)),
             str(int(self.controller.model.load_feed))
@@ -61,21 +61,6 @@ class NXStart:
         except FileNotFoundError:
             messagebox.showerror("Fehler", f"Die Datei {script} konnte nicht gefunden werden.")
 
-        # if not startbatch.start(
-        #             self.controller.model.customer,
-        #             NX_VERSION,
-        #             self.controller.model.language,
-        #             self.controller.model.settings.get("customer_environment_path"),
-        #             NXPFAD,
-        #             self.controller.model.load_pp,
-        #             self.controller.model.load_cse,
-        #             self.controller.model.load_tool,
-        #             self.controller.model.load_device,
-        #             self.controller.model.load_feed):
-        #
-        #     print("Fehler beim starten von NX")
-        #     messagebox.showinfo("Info", f"Die Datei\n'{nx_path}'\nkonnte nicht gefunden werden.")
-
         save_config(
             self.controller.model.config_file,
             "last_configuration",
@@ -83,7 +68,7 @@ class NXStart:
             last_version=self.controller.model.version,
             last_machine=self.controller.model.machine,
             last_load_pp=int(self.controller.model.load_pp),
-            last_load_cse=int(self.controller.model.load_cse),
+            last_load_installed_machines=int(self.controller.model.load_installed_machines),
             last_load_tool=int(self.controller.model.load_tool),
             last_load_device=int(self.controller.model.load_device),
             last_load_feed=int(self.controller.model.load_feed),

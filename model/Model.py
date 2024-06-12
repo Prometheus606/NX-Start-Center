@@ -13,7 +13,7 @@ class Model:
         self.native_version = ""
         self.language = ""
         self.load_pp = 0
-        self.load_cse = 0
+        self.load_installed_machines = 0
         self.load_tool = 0
         self.load_device = 0
         self.load_feed = 0

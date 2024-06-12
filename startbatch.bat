@@ -13,7 +13,7 @@ set UGII_LANG=%3
 set KUNDENPFAD=%4
 set NXPFAD=%5
 set PPCHECK=%6
-set CSECHECK=%7
+set INSTALLED_MACHINES_CHECK=%7
 set TOOLCHECK=%8
 set DEVICECHECK=%9
 shift
@@ -65,35 +65,35 @@ rem 					CAM - Machordner mit Standardstruktur					*
 rem *****************************************************************************
 
 rem ***** Library *****
-if /i "%PPCHECK%" == "1" (
-	set UGII_CAM_LIBRARY_MACHINE_DIR=%KUNDENPFAD%/%KUNDENNAME%/5_Umgebung/%NX_VERSION%/MACH/resource/library/machine/
-	set UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR=%KUNDENPFAD%/%KUNDENNAME%/5_Umgebung/%NX_VERSION%/MACH/resource/library/machine/installed_machines/
-) else (
-	set UGII_CAM_LIBRARY_MACHINE_DIR=%NXPFAD%/%NX_VERSION%/MACH/resource/library/machine/
-	set UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR=%NXPFAD%/%NX_VERSION%/MACH/resource/library/machine/
- 
-)
-
+set UGII_CAM_LIBRARY_MACHINE_DIR=%NXPFAD%/%NX_VERSION%/MACH/resource/library/machine/
+set UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR=%NXPFAD%/%NX_VERSION%/MACH/resource/library/machine/
 set UGII_CAM_POST_CONFIG_FILE=%NXPFAD%/%NX_VERSION%/mach/resource/postprocessor/template_post.dat
 set UGII_CAM_POST_DIR=%NXPFAD%/%NX_VERSION%/mach/resource/postprocessor/
 set UGII_CAM_TOOL_PATH_DIR=%NXPFAD%/%NX_VERSION%/mach/resource/tool_path/
+set UGII_CAM_LIBRARY_TOOL_DIR=%NXPFAD%/%NX_VERSION%/MACH/resource/library/tool/
+set UGII_CAM_LIBRARY_FEEDS_SPEEDS_DIR=%NXPFAD%/%NX_VERSION%/MACH/resource/library/feeds_speeds/
+set UGII_CAM_LIBRARY_DEVICE_DIR=%NXPFAD%/%NX_VERSION%/MACH/resource/library/device/
+
+if /i "%PPCHECK%" == "1" (
+	set UGII_CAM_POST_DIR=%KUNDENPFAD%/%KUNDENNAME%/5_Umgebung/%NX_VERSION%/MACH/resource/postprocessor/
+	set UGII_CAM_USER_DEF_EVENT_DIR=%KUNDENPFAD%/%KUNDENNAME%/5_Umgebung/%NX_VERSION%/MACH/resource/user_def_event/
+)
+
+if /i "%INSTALLED_MACHINES_CHECK%" == "1" (
+	set UGII_CAM_LIBRARY_MACHINE_DIR=%KUNDENPFAD%/%KUNDENNAME%/5_Umgebung/%NX_VERSION%/MACH/resource/library/machine/
+	set UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR=%KUNDENPFAD%/%KUNDENNAME%/5_Umgebung/%NX_VERSION%/MACH/resource/library/machine/installed_machines/
+)
 
 if /i "%TOOLCHECK%" == "1" (
-set UGII_CAM_LIBRARY_TOOL_DIR=%KUNDENPFAD%/%KUNDENNAME%/5_Umgebung/%NX_VERSION%/MACH/resource/library/tool/
-) else (
-set UGII_CAM_LIBRARY_TOOL_DIR=%NXPFAD%/%NX_VERSION%/MACH/resource/library/tool/
+    set UGII_CAM_LIBRARY_TOOL_DIR=%KUNDENPFAD%/%KUNDENNAME%/5_Umgebung/%NX_VERSION%/MACH/resource/library/tool/
 )
 
 if /i "%FEEDSPEEDCHECK%" == "1" (
-set UGII_CAM_LIBRARY_FEEDS_SPEEDS_DIR=%KUNDENPFAD%/%KUNDENNAME%/5_Umgebung/%NX_VERSION%/MACH/resource/library/feeds_speeds/
-) else (
-set UGII_CAM_LIBRARY_FEEDS_SPEEDS_DIR=%NXPFAD%/%NX_VERSION%/MACH/resource/library/feeds_speeds/
+    set UGII_CAM_LIBRARY_FEEDS_SPEEDS_DIR=%KUNDENPFAD%/%KUNDENNAME%/5_Umgebung/%NX_VERSION%/MACH/resource/library/feeds_speeds/
 )
 
 if /i "%DEVICECHECK%" == "1" (
-set UGII_CAM_LIBRARY_DEVICE_DIR=%KUNDENPFAD%/%KUNDENNAME%/5_Umgebung/%NX_VERSION%/MACH/resource/library/device/
-) else (
-set UGII_CAM_LIBRARY_DEVICE_DIR=%NXPFAD%/%NX_VERSION%/MACH/resource/library/device/
+    set UGII_CAM_LIBRARY_DEVICE_DIR=%KUNDENPFAD%/%KUNDENNAME%/5_Umgebung/%NX_VERSION%/MACH/resource/library/device/
 )
 
 rem ***** PP *****

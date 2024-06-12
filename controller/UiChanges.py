@@ -12,7 +12,7 @@ class UiChanges:
         self.controller.view.language_frame.german_radio.config(command=self.language_selected)
         self.controller.view.language_frame.english_radio.config(command=self.language_selected)
         self.controller.view.option_frame.pp_check.config(command=self.pp_check_selected)
-        self.controller.view.option_frame.cse_check.config(command=self.cse_check_selected)
+        self.controller.view.option_frame.installed_machines_check.config(command=self.installed_machines_check_selected)
         self.controller.view.option_frame.tool_check.config(command=self.tool_check_selected)
         self.controller.view.option_frame.device_check.config(command=self.device_check_selected)
         self.controller.view.option_frame.feed_check.config(command=self.feed_check_selected)
@@ -86,12 +86,12 @@ class UiChanges:
         self.controller.view.messageLabel.config(text="")
         self.controller.model.load_pp = self.controller.view.load_pp.get()
 
-    def cse_check_selected(self):
+    def installed_machines_check_selected(self):
         """
         Defines what happens if the cse Checkbox was modified
         """
         self.controller.view.messageLabel.config(text="")
-        self.controller.model.load_cse = self.controller.view.load_cse.get()
+        self.controller.model.load_installed_machines = self.controller.view.load_installed_machines.get()
 
     def tool_check_selected(self):
         """

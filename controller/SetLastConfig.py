@@ -15,12 +15,12 @@ class SetLastConfig:
                 self.controller.view.load_pp.set(True)
                 self.controller.model.load_pp = self.controller.view.load_pp.get()
 
-            if self.controller.model.last_configuration and self.controller.model.last_configuration.get("last_load_cse") is not None:
-                self.controller.view.load_cse.set(bool(int(self.controller.model.last_configuration["last_load_cse"])))
-                self.controller.model.load_cse = self.controller.view.load_cse.get()
+            if self.controller.model.last_configuration and self.controller.model.last_configuration.get("last_load_installed_machines") is not None:
+                self.controller.view.load_installed_machines.set(bool(int(self.controller.model.last_configuration["last_load_installed_machines"])))
+                self.controller.model.load_installed_machines = self.controller.view.load_installed_machines.get()
             else:
-                self.controller.view.load_cse.set(True)
-                self.controller.model.load_cse = self.controller.view.load_cse.get()
+                self.controller.view.load_installed_machines.set(True)
+                self.controller.model.load_installed_machines = self.controller.view.load_installed_machines.get()
 
             if self.controller.model.last_configuration and self.controller.model.last_configuration.get("last_load_device") is not None:
                 self.controller.view.load_device.set(bool(int(self.controller.model.last_configuration["last_load_device"])))

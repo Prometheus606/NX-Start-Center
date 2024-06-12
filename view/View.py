@@ -83,7 +83,7 @@ class View(tk.Tk):
 
         # ==================================== Project options group ====================================
 
-        self.option_frame = ProjectOptionFrame(self.left_frame, self.load_pp, self.load_cse, self.load_tool, self.load_device, self.load_feed, text="Ladeoptionen")
+        self.option_frame = ProjectOptionFrame(self.left_frame, self.load_pp, self.load_installed_machines, self.load_tool, self.load_device, self.load_feed, text="Ladeoptionen")
         self.option_frame.pack(fill="both", expand=False, pady=10)
 
         # ==================================== language frame ====================================

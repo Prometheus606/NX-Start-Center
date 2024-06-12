@@ -29,8 +29,8 @@ def install_update(model, repo_url):
 
 
 def user_accepts_update(current_version, latest_version, description, title):
-    print(f"Ein neues Update ist verfügbar!")
-    return messagebox.askyesno("Update verfügbar", f"Eine neue Version ist verfügbar!\n\nDeine Version:{current_version}\nNeue Version: {latest_version}\n\nWas ist neu:\n{description}\n\nJetzt installieren?")
+    # print(f"Ein neues Update ist verfügbar!")
+    return messagebox.askyesno("Update verfügbar", f"Eine neue Version ist verfügbar!\n\nAktuelle Version:{current_version}\nNeue Version: {latest_version}\n\nWas macht das neue Update:\n{description}\n\nJetzt installieren?")
 
 
 def download_and_install_update(model, download_url, latest_version):

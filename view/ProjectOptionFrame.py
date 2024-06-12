@@ -1,13 +1,13 @@
 import ttkbootstrap as ttk
 
 class ProjectOptionFrame(ttk.LabelFrame):
-    def __init__(self, master, load_pp, load_cse, load_tool, load_device, load_feed, *args, **kwargs):
+    def __init__(self, master, load_pp, load_installed_machines, load_tool, load_device, load_feed, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
 
-        self.pp_check = ttk.Checkbutton(self, text="Postprozessor laden", variable=load_pp, bootstyle="round-toggle")
+        self.installed_machines_check = ttk.Checkbutton(self, text="Installed Machines laden", variable=load_installed_machines, bootstyle="round-toggle")
+        self.installed_machines_check.grid(row=1, column=0, sticky="w", pady=5)
+        self.pp_check = ttk.Checkbutton(self, text="Postprozessor ordner laden", variable=load_pp,bootstyle="round-toggle")
         self.pp_check.grid(row=0, column=0, sticky="w", pady=5)
-        self.cse_check = ttk.Checkbutton(self, text="CSE laden", variable=load_cse, bootstyle="round-toggle")
-        self.cse_check.grid(row=1, column=0, sticky="w", pady=5)
         self.tool_check = ttk.Checkbutton(self, text="Werkzeuge laden", variable=load_tool, bootstyle="round-toggle")
         self.tool_check.grid(row=2, column=0, sticky="w", pady=5)
         self.device_check = ttk.Checkbutton(self, text="Device laden", variable=load_device, bootstyle="round-toggle")
