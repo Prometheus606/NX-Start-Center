@@ -1,0 +1,14 @@
+TITLE ConmatiX
+
+VERSION 160
+
+BUTTON CX_Deliver_Machine
+LABEL Deliver Machine
+BITMAP $CX_PP_TOOLS\MTK_deliverer\images\encrypt_pp.bmp
+ACTION $CX_PP_TOOLS\MTK_deliverer\main.py
+
+BUTTON CX_Open_VSCODE
+LABEL Open VS Code
+BITMAP $CX_PP_TOOLS\NX Open VSCode\images\VSCode.bmp
+ACTION $CX_PP_TOOLS\NX Open VSCode\main.py
+

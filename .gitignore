@@ -5,7 +5,6 @@ output/installer/Output
 output/NX Start Center
 build
 NX Start Center.spec
-update erstellen.md
 .idea
 env.py
 __pycache__
@@ -13,3 +12,4 @@ controller/__pycache__
 view/__pycache__
 model/__pycache__
 nuitka-crash-report.xml
+mom_information.out

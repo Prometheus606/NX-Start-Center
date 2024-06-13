@@ -11,7 +11,7 @@ NX_StartCenter ist ein Python-Tool, das die Verwaltung und den Start von Siemens
 - **Speicherung der Einstellungen:** Das Tool speichert die zuletzt verwendeten Einstellungen, sodass beim nächsten Start keine erneuten Eingaben erforderlich sind.
 - **Anpassung der Start-Batch:** Änderungen an der Start-Batch-Datei können in `startbatch.py` vorgenommen werden.
 
-## Installation
+## Installation für Entwickler
 
 1. Klonen Sie das Repository:
     ```bash
@@ -25,12 +25,27 @@ NX_StartCenter ist ein Python-Tool, das die Verwaltung und den Start von Siemens
     ```bash
     pip install -r requirements.txt
     ```
+   
+## Installation für Anwender
+1. Installieren Sie Python:
+~~~ bash
+
+~~~
+2. Installieren Sie Visual Studio Code und setzen Sie den Haken bei "Hinzufügen zu PATH":
+~~~ bash
+https://code.visualstudio.com/
+~~~
+3. Laden sie die installer datei herunter:
+~~~ bash
+https://github.com/Prometheus606/NX-Start-Center/releases/download/v1.2.0/DUH_Startcenter-installer.exe
+~~~
+4. Starten Sie die Datei DUH_Startcenter-installer.exe
 
 ## Verwendung
 
 1. Starten Sie das Tool:
     ```bash
-    python NX_StartCenter.exe
+    python NX_StartCenter.py
     ```
 2. Wählen Sie die gewünschte Siemens NX-Version oder Kundenumgebung aus.
 3. Starten Sie Siemens NX, den Explorer oder VSCode mit den ausgewählten Einstellungen.

@@ -2,6 +2,7 @@ import subprocess
 import sys
 from pathlib import Path
 import os
+import shutil
 
 # print("Mit mir kann man debuggen :)")
 
@@ -19,16 +20,16 @@ FEEDSPEEDCHECK = int(sys.argv[10])
 # ------------------------------------------------------------------------------
 # Einstellungen für lokale Computer
 # ------------------------------------------------------------------------------
-os.environ['UGII_BASE_DIR'] = fr"{NXPFAD}/{NX_VERSION}/"
+os.environ['UGII_BASE_DIR'] = f"{NXPFAD}\\{NX_VERSION}\\"
 os.environ['UGII_LANG'] = UGII_LANG
 
-# wird nur bei NX - Versionen vor NX12 benötigt
-# UGII_ROOT_DIR = C:/Siemens/ %NX_VERSION %/UGII
+os.environ['CX_PP_TOOLS'] = f"{os.path.dirname(os.getcwd())}"
 
-# os.environ['CX_SETTINGS_DIR'] = fr"{KUNDENPFAD}"
+# wird nur bei NX - Versionen vor NX12 benötigt
+# UGII_ROOT_DIR = C:\\Siemens\\ %NX_VERSION %\\UGII
 
 # Setzen des Temp - Ordners
-os.environ['UGII_CAM_CSE_USER_DIR'] = fr"{KUNDENPFAD}/{KUNDENNAME}/2_Testdaten/Temp/"
+os.environ['UGII_CAM_CSE_USER_DIR'] = f"{KUNDENPFAD}\\{KUNDENNAME}\\2_Testdaten\\Temp\\"
 
 # Multi core cpu unterstützung *
 os.environ['UGII_SMP_ENABLE'] = "1"
@@ -36,72 +37,74 @@ os.environ['UGII_SMP_ENABLE'] = "1"
 
 # Setzen des User - Ordners
 # Verwendung von eigenen Rollen, Loadoptions usw...
-os.environ['UGII_VENDOR_DIR'] = fr"{KUNDENPFAD}/6_Custom/"
+os.environ['UGII_VENDOR_DIR'] = f"{KUNDENPFAD}\\6_Custom\\"
 
 # Rolle
-os.environ['UGII_DEFAULT_ROLE'] = fr"{KUNDENPFAD}/6_Custom/roles/nx_role0.mtx"
+#os.environ['UGII_DEFAULT_ROLE'] = f"{KUNDENPFAD}\\6_Custom\\roles\\nx_role0.mtx"
 
 # Ladeoptionen
-os.environ['UGII_LOAD_OPTIONS'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/MACH/resource/"
+os.environ['UGII_LOAD_OPTIONS'] = f"{KUNDENPFAD}\\{KUNDENNAME}\\5_Umgebung\\{NX_VERSION}\\MACH\\resource\\"
 
 # ------------------------------------------------------------------------------
 # CAM - Machordner mit Standardstruktur *
 # ------------------------------------------------------------------------------
 
 # Library
-os.environ['UGII_CAM_LIBRARY_MACHINE_DIR'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/library/machine/"
-os.environ['UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/library/machine/installed_machines/"
-os.environ['UGII_CAM_POST_DIR'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/postprocessor/"
-os.environ['UGII_CAM_POST_CONFIG_FILE'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/postprocessor/template_post.dat"
-os.environ['UGII_CAM_TOOL_PATH_DIR'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/tool_path/"
-os.environ[f'UGII_CAM_LIBRARY_TOOL_DIR'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/library/tool/"
-os.environ['UGII_CAM_LIBRARY_FEEDS_SPEEDS_DIR'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/library/feeds_speeds/"
-os.environ['UGII_CAM_LIBRARY_DEVICE_DIR'] = fr"{NXPFAD}/{NX_VERSION}/MACH/resource/library/device/"
+os.environ['UGII_CAM_LIBRARY_MACHINE_DIR'] = f"{NXPFAD}\\{NX_VERSION}\\MACH\\resource\\library\\machine\\"
+os.environ['UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR'] = f"{NXPFAD}\\{NX_VERSION}\\MACH\\resource\\library\\machine\\installed_machines\\"
+os.environ['UGII_CAM_POST_DIR'] = f"{NXPFAD}\\{NX_VERSION}\\MACH\\resource\\postprocessor\\"
+os.environ['UGII_CAM_POST_CONFIG_FILE'] = f"{NXPFAD}\\{NX_VERSION}\\MACH\\resource\\postprocessor\\template_post.dat"
+os.environ['UGII_CAM_TOOL_PATH_DIR'] = f"{NXPFAD}\\{NX_VERSION}\\MACH\\resource\\tool_path\\"
+os.environ[f'UGII_CAM_LIBRARY_TOOL_DIR'] = f"{NXPFAD}\\{NX_VERSION}\\MACH\\resource\\library\\tool\\"
+os.environ['UGII_CAM_LIBRARY_FEEDS_SPEEDS_DIR'] = f"{NXPFAD}\\{NX_VERSION}\\MACH\\resource\\library\\feeds_speeds\\"
+os.environ['UGII_CAM_LIBRARY_DEVICE_DIR'] = f"{NXPFAD}\\{NX_VERSION}\\MACH\\resource\\library\\device\\"
 
 if PPCHECK:
-    os.environ['UGII_CAM_POST_DIR'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/MACH/resource/postprocessor/"
-    os.environ['UGII_CAM_USER_DEF_EVENT_DIR'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/MACH/resource/user_def_event/"
+    os.environ['UGII_CAM_POST_DIR'] = f"{KUNDENPFAD}\\{KUNDENNAME}\\5_Umgebung\\{NX_VERSION}\\MACH\\resource\\postprocessor\\"
+    os.environ['UGII_CAM_USER_DEF_EVENT_DIR'] = f"{KUNDENPFAD}\\{KUNDENNAME}\\5_Umgebung\\{NX_VERSION}\\MACH\\resource\\user_def_event\\"
 
 if INSTALLED_MACHINES_CHECK:
-    os.environ['UGII_CAM_LIBRARY_MACHINE_DIR'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/MACH/resource/library/machine/"
-    os.environ['UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/MACH/resource/library/machine/installed_machines/"
+    os.environ['UGII_CAM_LIBRARY_MACHINE_DIR'] = f"{KUNDENPFAD}\\{KUNDENNAME}\\5_Umgebung\\{NX_VERSION}\\MACH\\resource\\library\\machine\\"
+    os.environ['UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR'] = f"{KUNDENPFAD}\\{KUNDENNAME}\\5_Umgebung\\{NX_VERSION}\\MACH\\resource\\library\\machine\\installed_machines\\"
 
 if TOOLCHECK:
-    os.environ['UGII_CAM_LIBRARY_TOOL_DIR'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/MACH/resource/library/tool/"
+    os.environ['UGII_CAM_LIBRARY_TOOL_DIR'] = f"{KUNDENPFAD}\\{KUNDENNAME}\\5_Umgebung\\{NX_VERSION}\\MACH\\resource\\library\\tool\\"
 
 if FEEDSPEEDCHECK:
-    os.environ['UGII_CAM_LIBRARY_FEEDS_SPEEDS_DIR'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/MACH/resource/library/feeds_speeds/"
+    os.environ['UGII_CAM_LIBRARY_FEEDS_SPEEDS_DIR'] = f"{KUNDENPFAD}\\{KUNDENNAME}\\5_Umgebung\\{NX_VERSION}\\MACH\\resource\\library\\feeds_speeds\\"
 
 if DEVICECHECK:
-    os.environ['UGII_CAM_LIBRARY_DEVICE_DIR'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/MACH/resource/library/device/"
+    os.environ['UGII_CAM_LIBRARY_DEVICE_DIR'] = f"{KUNDENPFAD}\\{KUNDENNAME}\\5_Umgebung\\{NX_VERSION}\\MACH\\resource\\library\\device\\"
 
 
-if Path(fr"{KUNDENPFAD}{KUNDENNAME}/5_Umgebung/{NX_VERSION}/MACH/resource/template_part").exists():
-    os.environ['UGII_CAM_TEMPLATE_PART_DIR'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/MACH/resource/template_part/"
-    os.environ['UGII_CAM_TEMPLATE_PART_METRIC_DIR'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/MACH/resource/template_part/metric/"
-    os.environ['UGII_TEMPLATE_DIR'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/MACH/resource/usertools/templates/"
+if Path(f"{KUNDENPFAD}{KUNDENNAME}\\5_Umgebung\\{NX_VERSION}\\MACH\\resource\\template_part").exists():
+    os.environ['UGII_CAM_TEMPLATE_PART_DIR'] = f"{KUNDENPFAD}\\{KUNDENNAME}\\5_Umgebung\\{NX_VERSION}\\MACH\\resource\\template_part\\"
+    os.environ['UGII_CAM_TEMPLATE_PART_METRIC_DIR'] = f"{KUNDENPFAD}\\{KUNDENNAME}\\5_Umgebung\\{NX_VERSION}\\MACH\\resource\\template_part\\metric\\"
+    os.environ['UGII_TEMPLATE_DIR'] = f"{KUNDENPFAD}\\{KUNDENNAME}\\5_Umgebung\\{NX_VERSION}\\MACH\\resource\\usertools\\templates\\"
 
 
 # ------------------------------------------------------------------------------
-# Anpassungen für CAD / CAM Umgebung
+# Anpassungen für CAD \\ CAM Umgebung
 # ------------------------------------------------------------------------------
-if Path(fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/UGII/cx_tools/").exists():
-    os.environ['CX_DLL_SYSDIR'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/UGII/cx_tools/"
+if Path(f"{KUNDENPFAD}\\{KUNDENNAME}\\5_Umgebung\\{NX_VERSION}\\UGII\\cx_tools\\").exists():
+    os.environ['CX_DLL_SYSDIR'] = f"{KUNDENPFAD}\\{KUNDENNAME}\\5_Umgebung\\{NX_VERSION}\\UGII\\cx_tools\\"
 
 
-# NX title in Leiste schreiben
-if not Path(fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/UGII/startup/nxtitel_configgroup.men").exists():
-    if not Path(fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/UGII/startup").exists():
-        os.makedirs(fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/UGII/startup")
-    source_file = "src/NX Title/nxtitel_configgroup.men"
-    destination_file = f"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/UGII/startup/nxtitel_configgroup.men"
-    with open(source_file) as f:
+# NX title in Leiste schreiben und conmatix tab erstellen
+startup_path = f"{KUNDENPFAD}\\{KUNDENNAME}\\5_Umgebung\\{NX_VERSION}\\UGII\\startup"
+if not Path(f"{startup_path}\\nxtitel_configgroup.men").exists() or not Path(f"{startup_path}\\CX_PP_tools.rtb").exists():
+    if not Path(f"{startup_path}").exists():
+        os.makedirs(f"{startup_path}")
+    nxtitle_file = "src\\NX_UI\\nxtitel_configgroup.men"
+    pp_tools_file = "src\\NX_UI\\CX_PP_tools.rtb"
+    shutil.copy(pp_tools_file, f"{startup_path}\\CX_PP_tools.rtb")
+    with open(nxtitle_file) as f:
         data = f.read()
-    with open(destination_file, "w") as f:
+    with open(f"{startup_path}\\nxtitel_configgroup.men", "w") as f:
         f.write(data)
-        f.write(f"TITLE CAM - {KUNDENNAME} {NX_VERSION}\n")
+        f.write(f"TITLE CAM - {KUNDENNAME} {NX_VERSION}")
 
-os.environ['UGII_USER_DIR'] = fr"{KUNDENPFAD}/{KUNDENNAME}/5_Umgebung/{NX_VERSION}/UGII/"
+os.environ['UGII_USER_DIR'] = f"{KUNDENPFAD}\\{KUNDENNAME}\\5_Umgebung\\{NX_VERSION}\\UGII\\"
 
 # nur bei externer Simulation verwendbar
 os.environ['UGII_CAM_IPW_SNAPSHOT'] = "1"
@@ -121,9 +124,9 @@ except ImportError:
 
 NX_VERSION = (int(NX_VERSION.replace("NX", "").strip()))
 if NX_VERSION < 2206:
-    nx_path = fr"{NXPFAD}/NX{NX_VERSION}/UGII/ugraf.exe"
+    nx_path = f"{NXPFAD}\\NX{NX_VERSION}\\UGII\\ugraf.exe"
 else:
-    nx_path = fr"{NXPFAD}/NX{NX_VERSION}/NXBIN/ugraf.exe"
+    nx_path = f"{NXPFAD}\\NX{NX_VERSION}\\NXBIN\\ugraf.exe"
 
 try:
     process = subprocess.Popen(nx_path)

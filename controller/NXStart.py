@@ -6,10 +6,12 @@ import subprocess
 import getpass
 from pathlib import Path
 
+
 class NXStart:
     """
     This class handles the Start NX Button
     """
+
     def __init__(self, controller):
         self.controller = controller
         self.controller.view.start_btn.config(command=self.start_NX_customer)
@@ -20,9 +22,9 @@ class NXStart:
         self.controller.view.messageLabel.config(text="")
         script = "startbatch.bat" if batchstart else "startbatch.py"
 
-        # Rolle in die jeweilige NX version kopieren wenn haken gesetzt ist
-        if self.controller.model.use_role and Path(fr"{os.getcwd()}\src\Rolle\roles\nx_role0.mtx").exists():
-            username = getpass.getuser()
+        # Rolle bei mir in die jeweilige NX version kopieren
+        username = getpass.getuser()
+        if username == "niklas.beitler" and Path(fr"{os.getcwd()}\src\Rolle\roles\nx_role0.mtx").exists():
             source_folder = fr"src\Rolle\roles"
             destination_folder = fr"C:/Users/{username}/AppData/Local/Siemens/{self.controller.model.version}/roles/"
             shutil.copytree(source_folder, destination_folder, dirs_exist_ok=True)
@@ -48,8 +50,9 @@ class NXStart:
             stderr = process.stderr
 
             if stdout:
-                print(stdout)
-                messagebox.showinfo("Info", f"{stdout}")
+                if "1 Datei(en) kopiert" not in stdout:
+                    print(stdout)
+                    messagebox.showinfo("Info", f"{stdout}")
 
             if process.returncode == 3:
                 print("Fehler beim starten von NX")

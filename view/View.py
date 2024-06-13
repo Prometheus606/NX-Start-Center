@@ -51,7 +51,6 @@ class View(tk.Tk):
         self.licence_server_path = tk.StringVar()
         self.theme = tk.StringVar()
         self.batchstart = ttk.BooleanVar()
-        self.use_role = ttk.BooleanVar()
         self.editor = ttk.StringVar()
 
         # ==================================== menubar ====================================
@@ -126,7 +125,7 @@ class View(tk.Tk):
 
         # ==================================== Setting Frame ====================================
 
-        self.setting_frame = SettingFrame(self, self.model, self.theme, self.nx_installation_path, self.customer_environment_path, self.licence_path, self.licence_server_path, "src/images/folder.png", self.editor, self.batchstart, self.use_role, text="Einstellungen")
+        self.setting_frame = SettingFrame(self, self.model, self.theme, self.nx_installation_path, self.customer_environment_path, self.licence_path, self.licence_server_path, "src/images/folder.png", self.editor, self.batchstart, text="Einstellungen")
 
         self.style = ttk.Style(self.model.theme)
 

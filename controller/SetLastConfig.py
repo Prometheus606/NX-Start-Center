@@ -57,13 +57,6 @@ class SetLastConfig:
                 self.controller.view.batchstart.set(False)
                 self.controller.model.batchstart = self.controller.view.batchstart.get()
 
-            if self.controller.model.settings and self.controller.model.settings.get("use_role") is not None:
-                self.controller.view.use_role.set(self.controller.model.settings["use_role"])
-                self.controller.model.use_role = self.controller.view.use_role.get()
-            else:
-                self.controller.view.use_role.set(False)
-                self.controller.model.use_role = self.controller.view.use_role.get()
-
             if self.controller.model.settings and self.controller.model.settings.get("editor") is not None:
                 self.controller.view.editor.set(self.controller.model.settings["editor"])
                 self.controller.model.editor = self.controller.view.editor.get()

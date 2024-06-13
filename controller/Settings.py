@@ -22,7 +22,6 @@ class Settings:
         self.controller.view.theme.trace_add("write", self.on_theme_change)
         self.controller.view.editor.trace_add("write", self.on_editor_change)
         self.controller.view.setting_frame.batchstart_check.config(command=self.batchstart_modified)
-        self.controller.view.setting_frame.use_role_check.config(command=self.use_role_modified)
 
         self.controller.view.menubar.settings_menu[0]["command"] = self.show_settings
         self.controller.view.menubar.settings_menu[1]["command"] = self.edit_startbatch
@@ -46,7 +45,7 @@ class Settings:
         self.controller.model.customer_environment_path = self.controller.view.customer_environment_path.get()
         self.controller.model.licence_path = self.controller.view.licence_path.get()
         self.controller.model.licence_server_path = self.controller.view.licence_server_path.get()
-        save_config(self.controller.model.config_file, "settings", licence_server_path=self.controller.model.licence_server_path, licence_path=self.controller.model.licence_path, nx_installation_path=self.controller.model.nx_installation_path, customer_environment_path=self.controller.model.customer_environment_path, batchstart=self.controller.model.batchstart, use_role=self.controller.model.use_role)
+        save_config(self.controller.model.config_file, "settings", licence_server_path=self.controller.model.licence_server_path, licence_path=self.controller.model.licence_path, nx_installation_path=self.controller.model.nx_installation_path, customer_environment_path=self.controller.model.customer_environment_path, batchstart=self.controller.model.batchstart)
 
         self.controller.view.messageLabel.config(text="")
         self.controller.view.setting_frame.pack_forget()
@@ -116,11 +115,3 @@ class Settings:
         self.controller.view.messageLabel.config(text="")
         self.controller.model.batchstart = self.controller.view.batchstart.get()
         save_config(self.controller.model.config_file, "settings", batchstart=self.controller.model.batchstart)
-
-    def use_role_modified(self):
-        """
-        Defines what happens if the use_role Checkbox was modified
-        """
-        self.controller.view.messageLabel.config(text="")
-        self.controller.model.use_role = self.controller.view.use_role.get()
-        save_config(self.controller.model.config_file, "settings", use_role=self.controller.model.use_role)
