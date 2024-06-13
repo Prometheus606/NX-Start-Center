@@ -25,6 +25,7 @@ class Settings:
 
         self.controller.view.menubar.settings_menu[0]["command"] = self.show_settings
         self.controller.view.menubar.settings_menu[1]["command"] = self.edit_startbatch
+        self.controller.view.menubar.settings_menu[2]["command"] = self.edit_user_settings_file
         self.controller.view.menubar.file_menu[1]["command"] = self.show_settings
         self.controller.view.menubar.file_menu[0]["command"] = self.hide_settings
 
@@ -35,6 +36,14 @@ class Settings:
 
         suffix = ".bat" if self.controller.model.batchstart else ".py"
         file_path = os.path.join(os.getcwd(), f"startbatch{suffix}")
+        editor = self.controller.model.editor.lower()
+
+        open_editor(file_path, editor)
+
+    def edit_user_settings_file(self):
+        import os
+
+        file_path = os.path.join(os.getcwd(), f"user_settings.py")
         editor = self.controller.model.editor.lower()
 
         open_editor(file_path, editor)

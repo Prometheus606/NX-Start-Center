@@ -17,6 +17,13 @@ class NativeStart:
     def start_NX_nativ(self):
         self.controller.view.messageLabel.config(text="")
 
+        # Rolle bei mir in die jeweilige NX version kopieren
+        username = getpass.getuser()
+        if username == "niklas.beitler" and Path(f"{os.getcwd()}\\src\\Rolle\\roles\\nx_role0.mtx").exists():
+            source_file = f"src\Rolle\\roles\\nx_role0.mtx"
+            destination_file = f"C:\\Users/{username}\\AppData\\Local\\Siemens\\{self.controller.model.native_version}\\roles\\nx_role0.mtx"
+            shutil.copy(source_file, destination_file)
+
         base_path = self.controller.model.settings['nx_installation_path']
         try:
             nx_version = (int(self.controller.model.native_version.replace("NX", "").strip()))

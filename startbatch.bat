@@ -2,11 +2,10 @@
 setlocal
 
 rem *****************************************************************************
-rem 					Einstellungen f�r Kunde          						*
+rem 					     WICHTIGER HINWEIS!!
+rem     Anpassungen an dieser Datei werden bei einem Update überschrieben!
 rem *****************************************************************************
-rem ------------------------------------------------------------------------------
-rem save start parameters
-rem ------------------------------------------------------------------------------
+
 shift
 set KUNDENNAME=%1
 set NX_VERSION=%2
@@ -21,7 +20,7 @@ shift
 set FEEDSPEEDCHECK=%9
 
 rem *****************************************************************************
-rem 	     			Einstellungen f�r lokale Computer      					*
+rem 	     			Einstellungen für lokale Computer      					*
 rem *****************************************************************************
 
 set UGII_BASE_DIR=%NXPFAD%\%NX_VERSION%

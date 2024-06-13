@@ -12,7 +12,7 @@ class SetLastConfig:
                 self.controller.view.load_pp.set(bool(int(self.controller.model.last_configuration["last_load_pp"])))
                 self.controller.model.load_pp = self.controller.view.load_pp.get()
             else:
-                self.controller.view.load_pp.set(True)
+                self.controller.view.load_pp.set(False)
                 self.controller.model.load_pp = self.controller.view.load_pp.get()
 
             if self.controller.model.last_configuration and self.controller.model.last_configuration.get("last_load_installed_machines") is not None:

@@ -15,6 +15,7 @@ git push -u origin main --tags
 ### 6. password beim installer:
 ~~~
 7. @tm5$a!Nt#7!HzAH
+ab 1.3.0: 6acb22090d42b4c234d00fe3e0f4e5db (CSE password)
 ~~~
 
 

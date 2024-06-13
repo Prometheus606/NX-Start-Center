@@ -9,43 +9,26 @@ NX_StartCenter ist ein Python-Tool, das die Verwaltung und den Start von Siemens
 - **Explorer und VSCode starten:** Öffnen Sie den Explorer und VSCode direkt in der ausgewählten Kundenumgebung.
 - **Einstellungsfenster:** Ändern Sie das Theme des Tools und passen Sie die Installationspfade von Siemens NX und den Kundenumgebungen an.
 - **Speicherung der Einstellungen:** Das Tool speichert die zuletzt verwendeten Einstellungen, sodass beim nächsten Start keine erneuten Eingaben erforderlich sind.
-- **Anpassung der Start-Batch:** Änderungen an der Start-Batch-Datei können in `startbatch.py` vorgenommen werden.
+- **Anpassung der Start-Batch:** Die startbatch kann angepasst werden. Lesen Sie dazu den Punkt "Anpassung der Start-Batch"
 
-## Installation für Entwickler
-
-1. Klonen Sie das Repository:
-    ```bash
-    git clone https://github.com/prometheus606/NX_StartCenter.git
-    ```
-2. Navigieren Sie in das Verzeichnis:
-    ```bash
-    cd NX_StartCenter
-    ```
-3. Installieren Sie die erforderlichen Abhängigkeiten:
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-## Installation für Anwender
-1. Installieren Sie Python:
+   
+## Installation
+1. Installieren Sie Python und setzen Sie den Haken bei "Hinzufügen zu PATH":
 ~~~ bash
-
+https://www.python.org/downloads/windows/
 ~~~
 2. Installieren Sie Visual Studio Code und setzen Sie den Haken bei "Hinzufügen zu PATH":
 ~~~ bash
 https://code.visualstudio.com/
 ~~~
-3. Laden sie die installer datei herunter:
-~~~ bash
-https://github.com/Prometheus606/NX-Start-Center/releases/download/v1.2.0/DUH_Startcenter-installer.exe
-~~~
 4. Starten Sie die Datei DUH_Startcenter-installer.exe
+5. Passen SIe die EInstellungen an.
 
 ## Verwendung
 
 1. Starten Sie das Tool:
     ```bash
-    python NX_StartCenter.py
+    DUH_Startcenter-installer.exe
     ```
 2. Wählen Sie die gewünschte Siemens NX-Version oder Kundenumgebung aus.
 3. Starten Sie Siemens NX, den Explorer oder VSCode mit den ausgewählten Einstellungen.
@@ -59,7 +42,10 @@ Im Einstellungsfenster können Sie:
 
 ## Anpassung der Start-Batch
 
-Änderungen an der Startlogik und weiteren Einstellungen können in der Datei `startbatch.py` vorgenommen werden. Hier können Sie die Batch-Befehle und andere Konfigurationen anpassen, um das Tool an Ihre spezifischen Anforderungen anzupassen.
+Änderungen an der Startlogik und weiteren Einstellungen können in der Datei `startbatch.py` oder `startbatch.bat` vorgenommen werden. 
+Hier können Sie die Batch-Befehle und andere Konfigurationen anpassen, um das Tool an Ihre spezifischen Anforderungen anzupassen. 
+ACHTUNG! Diese Änderungen werden bei Updates Überschrieben! 
+Anpassungen die nicht überschrieben werden sollen, können in "user_settings.py" gemacht werden.
 
 ## Lizenz
 

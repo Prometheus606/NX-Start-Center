@@ -24,10 +24,10 @@ class NXStart:
 
         # Rolle bei mir in die jeweilige NX version kopieren
         username = getpass.getuser()
-        if username == "niklas.beitler" and Path(fr"{os.getcwd()}\src\Rolle\roles\nx_role0.mtx").exists():
-            source_folder = fr"src\Rolle\roles"
-            destination_folder = fr"C:/Users/{username}/AppData/Local/Siemens/{self.controller.model.version}/roles/"
-            shutil.copytree(source_folder, destination_folder, dirs_exist_ok=True)
+        if username == "niklas.beitler" and Path(f"{os.getcwd()}\\src\\Rolle\\roles\\nx_role0.mtx").exists():
+            source_file = f"src\Rolle\\roles\\nx_role0.mtx"
+            destination_file = f"C:\\Users/{username}\\AppData\\Local\\Siemens\\{self.controller.model.version}\\roles\\nx_role0.mtx"
+            shutil.copy(source_file, destination_file)
 
         command = [
             "python" if script.endswith(".py") else script,

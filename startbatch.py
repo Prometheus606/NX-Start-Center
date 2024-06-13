@@ -1,3 +1,9 @@
+# *****************************************************************************
+# 					        WICHTIGER HINWEIS!!
+#     Anpassungen an dieser Datei werden bei einem Update überschrieben!
+#     Änderungen die bleiben sollen, bitte in der user_settings.py vornehmen
+# *****************************************************************************
+
 import subprocess
 import sys
 from pathlib import Path
@@ -113,7 +119,7 @@ os.environ['UGII_CAM_IPW_SNAPSHOT'] = "1"
 # Kundenanpassungen lesen
 # - -----------------------------------------------------------------------------
 try:
-    from customer_settings import Customize
+    from user_settings import Customize
     Customize(KUNDENPFAD, KUNDENNAME, NX_VERSION, NXPFAD)
 
 except ImportError:

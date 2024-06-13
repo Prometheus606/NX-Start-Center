@@ -1,8 +1,13 @@
-# - -----------------------------------------------------------------------------
-# Kundenanpassungen
-# - -----------------------------------------------------------------------------
+# *****************************************************************************
+# 					        WICHTIGER HINWEIS!!
+#
+#     Änderungen die nicht überschrieben werden sollen, bitte in dieser Datei vornehmen
+#
+# *****************************************************************************
+
 import os
 def Customize(KUNDENPFAD, KUNDENNAME, NX_VERSION, NXPFAD):
+
     # Setzen der Variablen für Hans Weber Messzyklen
     if KUNDENNAME == "Hans_Weber":
         os.environ['CX_PROBE_APP'] = fr"{KUNDENPFAD}/Hans_Weber/5_Umgebung/NX2206/CX_Probing/CX_Probing_Main.dll"

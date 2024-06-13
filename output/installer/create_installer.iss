@@ -12,12 +12,12 @@ AppPublisher=Niklas Beitler
 DefaultDirName={autopf}\DUH_Startcenter
 DefaultGroupName=DUH_Startcenter
 AllowNoIcons=yes
-LicenseFile=D:\Projekte\Projekte Python\duh_startcenter\LICENSE.txt
+LicenseFile=..\..\LICENSE.txt
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 OutputBaseFilename=DUH_Startcenter-installer
-SetupIconFile=D:\Projekte\Projekte Python\duh_startcenter\src\images\duhGroup_Logo.ico
-Password=@tm5$a!Nt#7!HzAH
+SetupIconFile=..\..\src\images\duhGroup_Logo.ico
+Password=6acb22090d42b4c234d00fe3e0f4e5db
 Encryption=yes
 Compression=lzma
 SolidCompression=yes
@@ -31,16 +31,17 @@ Name: "german"; MessagesFile: "compiler:Languages\German.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "D:\Projekte\Projekte Python\duh_startcenter\output\exe\DUH_Startcenter.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Projekte\Projekte Python\duh_startcenter\startbatch.bat"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Projekte\Projekte Python\duh_startcenter\startbatch.py"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Projekte\Projekte Python\duh_startcenter\customer_settings.py"; DestDir: "{app}"; Flags: ignoreversion onlyifdoesntexist
+Source: "..\..\output\exe\DUH_Startcenter.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\startbatch.bat"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\startbatch.py"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\USER_README.md"; DestDir: "{app}"; DestName: "README.md"; Flags: ignoreversion
+Source: "..\..\user_settings.py"; DestDir: "{app}"; Flags: ignoreversion onlyifdoesntexist
 Source: "..\..\src\*"; DestDir: "{app}\src"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\exe\NX_Startcenter.dist\certifi\*"; DestDir: "{app}\certifi"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 ;
-Source: "D:\Projekte\Projekte Python\NX Open VSCode\*"; DestDir: "{app}\..\NX Open VSCode"; Flags: recursesubdirs createallsubdirs
-Source: "D:\Projekte\Projekte Python\MTK_deliverer\*"; DestDir: "{app}\..\MTK_deliverer"; Flags: recursesubdirs createallsubdirs
+Source: "..\..\..\NX Open VSCode\*"; DestDir: "{app}\..\NX Open VSCode"; Flags: recursesubdirs createallsubdirs
+Source: "..\..\..\MTK_deliverer\*"; DestDir: "{app}\..\MTK_deliverer"; Flags: recursesubdirs createallsubdirs
 Source: "D:\Projekte\VS_Code_extensions\NX_Language\releases\*.vsix"; DestDir: "{tmp}"; Flags: ignoreversion
 Source: "D:\Projekte\VS_Code_extensions\NX_Language\install.bat"; DestDir: "{tmp}"; Flags: ignoreversion
 
