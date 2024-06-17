@@ -1,4 +1,5 @@
 from controller.NativeStart import NativeStart
+from controller.PostbuilderStart import PostbuilderStart
 from controller.NXStart import NXStart
 from controller.CreateNewCustomer import CreateNewCustomer
 from controller.Settings import Settings
@@ -16,6 +17,7 @@ class Controller:
 
         self.start_native = NativeStart(self)
         self.start_nx = NXStart(self)
+        self.start_pb = PostbuilderStart(self)
         self.create_new_customer = CreateNewCustomer(self)
         self.settings = Settings(self)
         self.ui_changes = UiChanges(self)

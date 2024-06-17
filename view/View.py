@@ -44,11 +44,13 @@ class View(tk.Tk):
         self.language = ttk.StringVar()
 
         self.native_version = ttk.StringVar()
+        self.postbuilder_version = ttk.StringVar()
 
         self.nx_installation_path = tk.StringVar()
         self.customer_environment_path = tk.StringVar()
         self.licence_path = tk.StringVar()
         self.licence_server_path = tk.StringVar()
+        self.roles_path = tk.StringVar()
         self.theme = tk.StringVar()
         self.batchstart = ttk.BooleanVar()
         self.editor = ttk.StringVar()
@@ -98,7 +100,7 @@ class View(tk.Tk):
 
         # ==================================== Error Message ====================================
 
-        self.message_frame = ttk.Frame(self.right_frame, height=50)
+        self.message_frame = ttk.Frame(self.right_frame, height=0)
         self.message_frame.pack(fill="both", expand=False)
 
         self.messageLabel = ttk.Label(self.message_frame, foreground="red")
@@ -106,8 +108,8 @@ class View(tk.Tk):
 
         # ==================================== NX Nativ start group ====================================
 
-        self.native_frame = NativStartFrame(self.right_frame, self.model, self.native_version, text="NX Nativ starten")
-        self.native_frame.place(x=0, y=317, width=260)
+        self.native_frame = NativStartFrame(self.right_frame, self.model, self.native_version, self.postbuilder_version)
+        self.native_frame.place(x=0, y=293, width=260)
 
         # ==================================== Buttons at the bottom ====================================
 
@@ -125,7 +127,7 @@ class View(tk.Tk):
 
         # ==================================== Setting Frame ====================================
 
-        self.setting_frame = SettingFrame(self, self.model, self.theme, self.nx_installation_path, self.customer_environment_path, self.licence_path, self.licence_server_path, "src/images/folder.png", self.editor, self.batchstart, text="Einstellungen")
+        self.setting_frame = SettingFrame(self, self.model, self.theme, self.nx_installation_path, self.customer_environment_path, self.licence_path, self.licence_server_path, "src/images/folder.png", self.editor, self.batchstart, self.roles_path, text="Einstellungen")
 
         self.style = ttk.Style(self.model.theme)
 

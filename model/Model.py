@@ -11,6 +11,7 @@ class Model:
         self.version = ""
         self.machine = ""
         self.native_version = ""
+        self.postbuilder_version = ""
         self.language = ""
         self.load_pp = 0
         self.load_installed_machines = 0
@@ -24,13 +25,15 @@ class Model:
         self.native_versions = self.get_native_versions()
         self.versions = self.get_versions()
         self.machines = self.get_machines()
+        self.postbuilder_versions = self.get_postbuilder_versions()
         self.editors = ["Notepad", "Notepad++", "VSCode"]
         self.editor = "notepad"
 
-        self.nx_installation_path = self.settings.get("nx_installation_path")
-        self.customer_environment_path = self.settings.get("customer_environment_path")
-        self.licence_server_path = self.settings.get("licence_server_path")
-        self.licence_path = self.settings.get("licence_path")
+        self.nx_installation_path = self.settings.get("nx_installation_path") or ""
+        self.customer_environment_path = self.settings.get("customer_environment_path") or ""
+        self.licence_server_path = self.settings.get("licence_server_path") or ""
+        self.licence_path = self.settings.get("licence_path") or ""
+        self.roles_path = self.settings.get("roles_path") or ""
 
         self.dark_themes = ["solar", "darkly", "cyborg"]
         self.light_themes = ["cosmo", "flatly", "minty", "pulse", "lumen"]
@@ -60,6 +63,18 @@ class Model:
         else:
             self.theme = "darkly"
 
+    def get_postbuilder_versions(self):
+        """
+        :return: the installed Postbuilder Versions from the given path in the settings
+        """
+        version_list = self.native_versions
+        if self.last_configuration and self.last_configuration.get("last_postbuilder_version") is not None and self.last_configuration.get("last_postbuilder_version") in version_list:
+            self.postbuilder_version = self.last_configuration["last_postbuilder_version"]
+        else:
+            if len(version_list) > 0:
+                self.postbuilder_version = version_list[0]
+        return version_list
+
     def get_native_versions(self):
         """
         :return: the installed NX Versions from the given path in the settings
@@ -74,7 +89,8 @@ class Model:
             if self.last_configuration and self.last_configuration.get("last_native_version") is not None and self.last_configuration.get("last_native_version") in version_list:
                 self.native_version = self.last_configuration["last_native_version"]
             else:
-                self.native_version = version_list[0]
+                if len(version_list) > 0:
+                    self.native_version = version_list[0]
             return version_list
         else:
             print("Der Pfad zu den NX versionen existiert nicht!")
@@ -97,7 +113,8 @@ class Model:
             if self.last_configuration and self.last_configuration.get("last_customer") is not None and self.last_configuration.get("last_customer") in customer_list:
                 self.customer = self.last_configuration["last_customer"]
             else:
-                self.customer = customer_list[0]
+                if len(customer_list) > 0:
+                    self.customer = customer_list[0]
             return customer_list
         else:
             print("Der Pfad zu der Kundenumgebung existiert nicht!")
@@ -120,7 +137,8 @@ class Model:
             if self.last_configuration and self.last_configuration.get("last_version") is not None and self.last_configuration.get("last_version") in version_list:
                 self.version = self.last_configuration["last_version"]
             else:
-                self.version = version_list[0]
+                if len(version_list) > 0:
+                    self.version = version_list[0]
             return version_list
         else:
             print("Keine NX Version gefunden, überprüfe deine Ordnerstruktur.")
@@ -143,7 +161,8 @@ class Model:
             if self.last_configuration and self.last_configuration.get("last_machine") is not None and self.last_configuration.get("last_machine") in machines_list:
                 self.machine = self.last_configuration["last_machine"]
             else:
-                self.machine = machines_list[0]
+                if len(machines_list) > 0:
+                    self.machine = machines_list[0]
             return machines_list
         else:
             print("Keine Maschinen gefunden, überprüfe deine Ordnerstruktur.")

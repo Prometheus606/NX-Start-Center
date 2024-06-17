@@ -32,7 +32,7 @@ class CustomMenuBar(tk.Frame):
 
         self.settings_menu = [
             {'label': 'Einstellungen', 'command': self.placeholder},
-            {'label': 'Startbatch öffnen', 'command': self.placeholder},
+            {'label': 'Start routine öffnen', 'command': self.placeholder},
             {'label': 'customer_settings.py öffnen', 'command': self.placeholder}
         ]
 

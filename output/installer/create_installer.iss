@@ -32,8 +32,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "..\..\output\exe\DUH_Startcenter.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\startbatch.bat"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\startbatch.py"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\start_routine.bat"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\start_routine.py"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\..\USER_README.md"; DestDir: "{app}"; DestName: "README.md"; Flags: ignoreversion
 Source: "..\..\user_settings.py"; DestDir: "{app}"; Flags: ignoreversion onlyifdoesntexist
 Source: "..\..\src\*"; DestDir: "{app}\src"; Flags: ignoreversion recursesubdirs createallsubdirs

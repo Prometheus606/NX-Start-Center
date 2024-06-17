@@ -57,6 +57,13 @@ class SetLastConfig:
                 self.controller.view.batchstart.set(False)
                 self.controller.model.batchstart = self.controller.view.batchstart.get()
 
+            if self.controller.model.settings and self.controller.model.settings.get("roles_path") is not None:
+                self.controller.view.roles_path.set(self.controller.model.settings["roles_path"])
+                self.controller.model.roles_path = self.controller.view.roles_path.get()
+            else:
+                self.controller.view.batchstart.set(False)
+                self.controller.model.batchstart = self.controller.view.batchstart.get()
+
             if self.controller.model.settings and self.controller.model.settings.get("editor") is not None:
                 self.controller.view.editor.set(self.controller.model.settings["editor"])
                 self.controller.model.editor = self.controller.view.editor.get()
@@ -74,3 +81,9 @@ class SetLastConfig:
 
         if not len(self.controller.model.customers):
             self.controller.view.messageLabel.config(text="Keine Kunden gefunden\nüberprüfe deine Einstellungen")
+
+        if not len(self.controller.model.native_versions):
+            self.controller.view.messageLabel.config(text="Keine NX Versionen gefunden\nüberprüfe deine Einstellungen")
+
+        if not len(self.controller.model.postbuilder_versions):
+            self.controller.view.messageLabel.config(text="Keine Postbuilder versionen gefunden\nüberprüfe deine Einstellungen")
