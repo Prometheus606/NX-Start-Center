@@ -30,6 +30,8 @@ os.environ['UGII_BASE_DIR'] = f"{NXPFAD}\\{NX_VERSION}\\"
 os.environ['UGII_LANG'] = UGII_LANG
 
 os.environ['CX_PP_TOOLS'] = f"{os.path.dirname(os.getcwd())}"
+os.environ['CX_CUSTOM_DIRS'] = f"{KUNDENPFAD}\\{KUNDENNAME}\\5_Umgebung\\{NX_VERSION}\\UGII\\"
+os.environ['UGII_CUSTOM_DIRECTORY_FILE'] = f"{KUNDENPFAD}\\{KUNDENNAME}\\5_Umgebung\\{NX_VERSION}\\UGII\\custom_dirs.dat"
 
 # wird nur bei NX - Versionen vor NX12 benötigt
 # UGII_ROOT_DIR = C:\\Siemens\\ %NX_VERSION %\\UGII
@@ -97,20 +99,20 @@ if Path(f"{KUNDENPFAD}\\{KUNDENNAME}\\5_Umgebung\\{NX_VERSION}\\UGII\\cx_tools\\
 
 
 # NX title in Leiste schreiben und conmatix tab erstellen
-startup_path = f"{KUNDENPFAD}\\{KUNDENNAME}\\5_Umgebung\\{NX_VERSION}\\UGII\\startup"
-if not Path(f"{startup_path}\\nxtitel_configgroup.men").exists() or not Path(f"{startup_path}\\CX_PP_tools.rtb").exists():
-    if not Path(f"{startup_path}").exists():
-        os.makedirs(f"{startup_path}")
-    nxtitle_file = "src\\NX_UI\\nxtitel_configgroup.men"
-    pp_tools_file = "src\\NX_UI\\CX_PP_tools.rtb"
-    shutil.copy(pp_tools_file, f"{startup_path}\\CX_PP_tools.rtb")
-    with open(nxtitle_file) as f:
-        data = f.read()
-    with open(f"{startup_path}\\nxtitel_configgroup.men", "w") as f:
-        f.write(data)
-        f.write(f"TITLE CAM - {KUNDENNAME} {NX_VERSION}")
-
-os.environ['UGII_USER_DIR'] = f"{KUNDENPFAD}\\{KUNDENNAME}\\5_Umgebung\\{NX_VERSION}\\UGII\\"
+startup_path = f"{os.environ.get('CX_CUSTOM_DIRS')}\\startup"
+nxtitle_file = "src\\NX_UI\\nxtitel_configgroup.men"
+pp_tools_file = "src\\NX_UI\\CX_PP_tools.rtb"
+custom_dirs_file = "src\\NX_UI\\custom_dirs.dat"
+if not Path(f"{startup_path}").exists():
+    os.makedirs(f"{startup_path}")
+if not Path(f"{os.environ.get('CX_CUSTOM_DIRS')}\\custom_dirs.dat").exists():
+    shutil.copy(custom_dirs_file, f"{os.environ.get('CX_CUSTOM_DIRS')}\\custom_dirs.dat")
+shutil.copy(pp_tools_file, f"{startup_path}\\CX_PP_tools.rtb")
+with open(nxtitle_file) as f:
+    data = f.read()
+with open(f"{startup_path}\\nxtitel_configgroup.men", "w") as f:
+    f.write(data)
+    f.write(f"TITLE CAM - {NX_VERSION}")
 
 # nur bei externer Simulation verwendbar
 os.environ['UGII_CAM_IPW_SNAPSHOT'] = "1"

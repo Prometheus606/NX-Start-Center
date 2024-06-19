@@ -1,4 +1,5 @@
 import ttkbootstrap as ttk
+from pathlib import Path
 
 class UiChanges:
     """
@@ -49,6 +50,8 @@ class UiChanges:
             self.controller.view.machine.set("")
             self.controller.view.register.machine_combobox.config(values=self.controller.model.machines)
 
+        self.set_checkboxes()
+
     def version_selected(self, e):
         """
         Defines what happens if the version Combobox was modified
@@ -69,6 +72,8 @@ class UiChanges:
             self.controller.view.machine.set("")
             self.controller.view.register.machine_combobox.config(values=self.controller.model.machines)
 
+        self.set_checkboxes()
+
     def machine_selected(self, e):
         """
         Defines what happens if the Machine Combobox was modified
@@ -76,6 +81,31 @@ class UiChanges:
         """
         self.controller.view.messageLabel.config(text="")
         self.controller.model.machine = self.controller.view.machine.get()
+
+    def set_checkboxes(self):
+        if Path(f"{self.controller.model.settings['customer_environment_path']}\\{self.controller.model.customer}\\5_Umgebung\\{self.controller.model.version}\\MACH\\resource\\library\\device").exists():
+            self.controller.model.load_device = True
+        else:
+            self.controller.model.load_device = False
+        self.controller.view.load_device.set(self.controller.model.load_device)
+
+        if Path(f"{self.controller.model.settings['customer_environment_path']}\\{self.controller.model.customer}\\5_Umgebung\\{self.controller.model.version}\\MACH\\resource\\library\\tool").exists():
+            self.controller.model.load_tool = True
+        else:
+            self.controller.model.load_tool = False
+        self.controller.view.load_tool.set(self.controller.model.load_tool)
+
+        if Path(f"{self.controller.model.settings['customer_environment_path']}\\{self.controller.model.customer}\\5_Umgebung\\{self.controller.model.version}\\MACH\\resource\\library\\feeds_speeds").exists():
+            self.controller.model.load_feed = True
+        else:
+            self.controller.model.load_feed = False
+        self.controller.view.load_feed.set(self.controller.model.load_feed)
+
+        if Path(f"{self.controller.model.settings['customer_environment_path']}\\{self.controller.model.customer}\\5_Umgebung\\{self.controller.model.version}\\MACH\\resource\\postprocessor").exists():
+            self.controller.model.load_pp = True
+        else:
+            self.controller.model.load_pp = False
+        self.controller.view.load_pp.set(self.controller.model.load_pp)
 
     def language_selected(self):
         """

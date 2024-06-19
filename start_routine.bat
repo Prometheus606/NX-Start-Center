@@ -32,6 +32,8 @@ rem ***** 5_Umgebung *****
 
 set CX_SETTINGS_DIR=%KUNDENPFAD%\
 set CX_PP_TOOLS=%~dp0..
+set CX_CUSTOM_DIRS=%KUNDENPFAD%\%KUNDENNAME%\5_Umgebung\%NX_VERSION%\UGII
+set UGII_CUSTOM_DIRECTORY_FILE=%KUNDENPFAD%\KUNDENNAME%\5_Umgebung\%NX_VERSION%\UGII\custom_dirs.dat
 
 
 rem *****************************************************************************
@@ -129,20 +131,17 @@ if exist "%KUNDENPFAD%\%KUNDENNAME%\5_Umgebung\%NX_VERSION%\UGII\cx_tools\" (
 )
 
 rem NX title in Leiste schreiben und conmatix tab erstellen
-set startup_path=%KUNDENPFAD%\%KUNDENNAME%\5_Umgebung\%NX_VERSION%\UGII\startup
+set startup_path=%CX_CUSTOM_DIRS%\startup
 if not exist "%startup_path%" (
     md "%startup_path%"
 )
-if not exist "%startup_path%\nxtitel_configgroup.men" (
-    copy "%~dp0src\NX_UI\nxtitel_configgroup.men" "%startup_path%" /Y
-    rem in  "nxtitel_configgroup.men" letzte Zeile schreiben
-    echo TITLE CAM - %KUNDENNAME% %NX_VERSION% >> "%startup_path%\"nxtitel_configgroup.men"
+if not exist "%CX_CUSTOM_DIRS%\custom_dirs.dat" (
+     copy "%~dp0src\NX_UI\custom_dirs.dat" "%CX_CUSTOM_DIRS%\custom_dirs.dat"
 )
-if not exist "%startup_path%\CX_PP_tools.rtb" (
-    copy "%~dp0src\NX_UI\CX_PP_tools.rtb" "%startup_path%" /Y
-)
-
-set UGII_USER_DIR=%KUNDENPFAD%\%KUNDENNAME%\5_Umgebung\%NX_VERSION%\UGII\
+copy "%~dp0src\NX_UI\CX_PP_tools.rtb" "%startup_path%" /Y
+copy "%~dp0src\NX_UI\nxtitel_configgroup.men" "%startup_path%" /Y
+rem in  "nxtitel_configgroup.men" letzte Zeile schreiben
+echo TITLE CAM - %NX_VERSION% >> "%startup_path%\"nxtitel_configgroup.men"
 
 rem nur bei Externer Simulation verwendbar
 set UGII_CAM_IPW_SNAPSHOT=1
