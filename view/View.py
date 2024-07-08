@@ -73,7 +73,7 @@ class View(tk.Tk):
         # =================================== root frames ==================================
 
         self.left_frame = ttk.Frame(self)
-        self.left_frame.pack(side=ttk.LEFT, fill=ttk.BOTH, expand=True, padx=10, pady=10)
+        self.left_frame.pack(side=ttk.LEFT, fill=ttk.BOTH, expand=False, padx=10, pady=10)
 
         self.right_frame = ttk.Frame(self)
         self.right_frame.pack(side=ttk.RIGHT, fill=ttk.BOTH, expand=True, padx=10, pady=10)

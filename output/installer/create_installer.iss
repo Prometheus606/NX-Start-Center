@@ -37,7 +37,7 @@ Source: "..\..\start_routine.py"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\..\USER_README.md"; DestDir: "{app}"; DestName: "README.md"; Flags: ignoreversion
 Source: "..\..\user_settings.py"; DestDir: "{app}"; Flags: ignoreversion onlyifdoesntexist
 Source: "..\..\src\*"; DestDir: "{app}\src"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\exe\NX_Startcenter.dist\certifi\*"; DestDir: "{app}\certifi"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\exe\certifi\*"; DestDir: "{app}\certifi"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 ;
 Source: "..\..\..\NX Open VSCode\*"; DestDir: "{app}\..\NX Open VSCode"; Flags: recursesubdirs createallsubdirs

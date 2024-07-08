@@ -16,12 +16,8 @@ class PostbuilderStart:
         base_path = self.controller.model.settings['nx_installation_path']
         try:
             nx_version = (int(self.controller.model.postbuilder_version.replace("NX", "").strip()))
-            if nx_version < 2206:
-                command = f"{base_path}\\NX{nx_version}\\POSTBUILD\\post_builder.bat {base_path}\\NX{nx_version}\\"
-            else:
-                command = f"{base_path}\\NX{nx_version}\\POSTBUILD\\post_builder.bat {base_path}\\NX{nx_version}\\"
-
-            subprocess.Popen(command, stderr=subprocess.PIPE, shell=False)
+            command = f"{base_path}\\NX{nx_version}\\POSTBUILD\\post_builder.bat {base_path}\\NX{nx_version}\\"
+            subprocess.Popen(command, shell=True)
             save_config(self.controller.model.config_file, "last_configuration", last_postbuilder_version=self.controller.model.postbuilder_version)
 
         except FileNotFoundError:

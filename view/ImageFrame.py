@@ -9,4 +9,5 @@ class ImageFrame(ttk.Frame):
         original_image = Image.open(image)
         scaled_image = original_image.resize((250, 250), Image.LANCZOS)  # Scale to 200x200 pixels
         self.image = ImageTk.PhotoImage(scaled_image)
+        self.image = ImageTk.PhotoImage(scaled_image)
         ttk.Label(self, image=self.image).pack(side="top")

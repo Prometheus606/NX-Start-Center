@@ -36,7 +36,7 @@ class Settings:
         import os
 
         suffix = ".bat" if self.controller.model.batchstart else ".py"
-        file_path = os.path.join(os.getcwd(), f"startbatch{suffix}")
+        file_path = os.path.join(os.getcwd(), f"start_routine{suffix}")
         editor = self.controller.model.editor.lower()
 
         open_editor(file_path, editor)
