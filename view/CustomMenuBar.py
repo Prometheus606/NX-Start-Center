@@ -32,8 +32,8 @@ class CustomMenuBar(tk.Frame):
 
         self.settings_menu = [
             {'label': 'Einstellungen', 'command': self.placeholder},
-            {'label': 'Start routine öffnen', 'command': self.placeholder},
-            {'label': 'customer_settings.py öffnen', 'command': self.placeholder}
+            {'label': 'start_routine öffnen', 'command': self.placeholder},
+            {'label': 'customer_settings öffnen', 'command': self.placeholder}
         ]
 
         self.menus = [
@@ -99,10 +99,11 @@ class CustomMenuBar(tk.Frame):
     def show_info(self):
         messagebox.showinfo("Info", f"""
         Dieses Tool wurde mit Python entwickelt
-        und soll das starten von NX Native und in 
-        verschiedenen Kundenumgebungen ermöglichen.
+        und ermöglicht das starten von NX Native und in 
+        verschiedenen Kundenumgebungen.
          
         Entwickler: {self.model.app_author}
+        Unternehmen: d.u.h Group GmbH
         E-mail: {self.model.app_support_mail}
         Version: {self.model.app_version}
         Datum: {self.model.app_date}

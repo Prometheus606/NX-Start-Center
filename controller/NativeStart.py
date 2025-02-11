@@ -12,7 +12,7 @@ class NativeStart:
         self.controller.view.native_frame.nxversion_native_combobox.bind("<<ComboboxSelected>>", self.native_version_selected)
 
     def start_NX_nativ(self):
-        self.controller.view.messageLabel.config(text="")
+        self.controller.view.set_message()
 
         # Rolle(n)in die jeweilige NX version kopieren
         Copy_Roles(self.controller, self.controller.model.native_version)
@@ -29,8 +29,8 @@ class NativeStart:
             save_config(self.controller.model.config_file, "last_configuration", last_native_version=self.controller.model.native_version)
 
         except FileNotFoundError:
-            self.controller.view.messageLabel.configure(text="Version kann nicht gestartet werden!", foreground="red")
+            self.controller.view.set_message("Version kann nicht gestartet werden!")
 
     def native_version_selected(self, e):
-        self.controller.view.messageLabel.config(text="")
+        self.controller.view.set_message()
         self.controller.model.native_version = self.controller.view.native_version.get()

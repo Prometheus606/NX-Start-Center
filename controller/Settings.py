@@ -39,15 +39,16 @@ class Settings:
         file_path = os.path.join(os.getcwd(), f"start_routine{suffix}")
         editor = self.controller.model.editor.lower()
 
-        open_editor(file_path, editor)
+        open_editor(self.controller, file_path, editor)
 
     def edit_user_settings_file(self):
         import os
 
-        file_path = os.path.join(os.getcwd(), f"user_settings.py")
+        suffix = ".bat" if self.controller.model.batchstart else ".py"
+        file_path = os.path.join(os.getcwd(), f"user_settings{suffix}")
         editor = self.controller.model.editor.lower()
 
-        open_editor(file_path, editor)
+        open_editor(self.controller, file_path, editor)
 
     def hide_settings(self):
 
@@ -58,13 +59,13 @@ class Settings:
         self.controller.model.roles_path = self.controller.view.roles_path.get()
         save_config(self.controller.model.config_file, "settings", licence_server_path=self.controller.model.licence_server_path, licence_path=self.controller.model.licence_path, roles_path=self.controller.model.roles_path, nx_installation_path=self.controller.model.nx_installation_path, customer_environment_path=self.controller.model.customer_environment_path, batchstart=self.controller.model.batchstart)
 
-        self.controller.view.messageLabel.config(text="")
+        self.controller.view.set_message()
         self.controller.view.setting_frame.pack_forget()
         self.controller.view.left_frame.pack(side=ttk.LEFT, fill=ttk.BOTH, expand=True, padx=10, pady=10)
         self.controller.view.right_frame.pack(side=ttk.RIGHT, fill=ttk.BOTH, expand=True, padx=10, pady=10)
 
     def show_settings(self):
-        self.controller.view.messageLabel.config(text="")
+        self.controller.view.set_message()
         self.controller.view.left_frame.pack_forget()
         self.controller.view.right_frame.pack_forget()
         self.controller.view.setting_frame.pack(side=ttk.TOP, fill=ttk.BOTH, expand=True, padx=10, pady=10)
@@ -136,6 +137,6 @@ class Settings:
         """
         Defines what happens if the batchstart Checkbox was modified
         """
-        self.controller.view.messageLabel.config(text="")
+        self.controller.view.set_message()
         self.controller.model.batchstart = self.controller.view.batchstart.get()
         save_config(self.controller.model.config_file, "settings", batchstart=self.controller.model.batchstart)

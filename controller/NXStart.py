@@ -2,6 +2,7 @@ from tkinter import messagebox
 from controller.Config_file_handler import save_config
 from controller.Copy_Roles import Copy_Roles
 import subprocess
+import winreg
 
 
 class NXStart:
@@ -13,11 +14,21 @@ class NXStart:
         self.controller = controller
         self.controller.view.start_btn.config(command=self.start_NX_customer)
 
+    def python_is_installed(self):
+        try:
+            with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Python\PythonCore") as key:
+                return True
+        except FileNotFoundError:
+            return False
+
     def start_NX_customer(self):
         batchstart = self.controller.model.batchstart
 
-        self.controller.view.messageLabel.config(text="")
+        self.controller.view.set_message()
         script = "start_routine.bat" if batchstart else "start_routine.py"
+
+        if not batchstart and not self.python_is_installed:
+            self.controller.view.set_message("Python ist nicht installiert. Bitte Installiere Python oder Wähle Batch zum starten aus.")
 
         # Rolle(n)in die jeweilige NX version kopieren
         Copy_Roles(self.controller, self.controller.model.version)

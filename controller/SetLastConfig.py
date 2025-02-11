@@ -74,16 +74,16 @@ class SetLastConfig:
             pass
 
         if not len(self.controller.model.machines):
-            self.controller.view.messageLabel.config(text="Keine Maschine gefunden,\nüberprüfe deine Ordnerstruktur.")
+            self.controller.view.set_message("Keine Maschine gefunden,\nüberprüfe deine Ordnerstruktur.")
 
         if not len(self.controller.model.versions):
-            self.controller.view.messageLabel.config(text="Keine Version gefunden\nüberprüfe deine Ordnerstruktur.")
+            self.controller.view.set_message("Keine Version gefunden\nüberprüfe deine Ordnerstruktur.")
 
         if not len(self.controller.model.customers):
-            self.controller.view.messageLabel.config(text="Keine Kunden gefunden\nüberprüfe deine Einstellungen")
+            self.controller.view.set_message("Keine Kunden gefunden\nüberprüfe deine Einstellungen")
 
         if not len(self.controller.model.native_versions):
-            self.controller.view.messageLabel.config(text="Keine NX Versionen gefunden\nüberprüfe deine Einstellungen")
+            self.controller.view.set_message("Keine NX Versionen gefunden\nüberprüfe deine Einstellungen")
 
         if not len(self.controller.model.postbuilder_versions):
-            self.controller.view.messageLabel.config(text="Keine Postbuilder versionen gefunden\nüberprüfe deine Einstellungen")
+            self.controller.view.set_message("Keine Postbuilder versionen gefunden\nüberprüfe deine Einstellungen")

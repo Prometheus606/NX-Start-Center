@@ -11,7 +11,7 @@ class PostbuilderStart:
         self.controller.view.native_frame.postbuilder_combobox.bind("<<ComboboxSelected>>", self.postbuilder_version_selected)
 
     def start_postbuilder(self):
-        self.controller.view.messageLabel.config(text="")
+        self.controller.view.set_message()
 
         base_path = self.controller.model.settings['nx_installation_path']
         try:
@@ -20,9 +20,9 @@ class PostbuilderStart:
             subprocess.Popen(command, shell=True)
             save_config(self.controller.model.config_file, "last_configuration", last_postbuilder_version=self.controller.model.postbuilder_version)
 
-        except FileNotFoundError:
-            self.controller.view.messageLabel.configure(text="Postbuilder version kann nicht gestartet werden!", foreground="red")
+        except (FileNotFoundError, Exception):
+            self.controller.view.set_messageure("Postbuilder version kann nicht gestartet werden!")
 
     def postbuilder_version_selected(self, e):
-        self.controller.view.messageLabel.config(text="")
+        self.controller.view.set_message()
         self.controller.model.postbuilder_version = self.controller.view.postbuilder_version.get()

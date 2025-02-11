@@ -22,7 +22,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='NX_Startcenter',
+    name='DUH_Startcenter',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

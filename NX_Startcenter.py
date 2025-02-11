@@ -1,4 +1,4 @@
-# from controller.Update import install_update
+from controller.Update import install_update
 from view.View import View
 from model.Model import Model
 from controller.Controller import Controller
@@ -14,7 +14,7 @@ if __name__ == "__main__":
 
     model = Model(config_file, app_version, app_date, app_author, app_support_mail)
 
-    # if not install_update(model, update_url):
-    view = View(model)
-    controller = Controller(model, view)
-    controller.start()
+    if not install_update(model, update_url):
+        view = View(model)
+        controller = Controller(model, view)
+        controller.start()

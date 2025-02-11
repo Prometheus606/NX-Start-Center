@@ -1,4 +1,5 @@
 import json
+from tkinter import messagebox
 
 def load_config(config_file: str, setting: str):
     """
@@ -33,12 +34,14 @@ def load_config(config_file: str, setting: str):
             with open(config_file, 'w') as f:
                 json.dump({}, f, indent=4)
             print(f"Die Datei '{config_file}' wurde nicht gefunden. Sie wurde neu erzeugt. Bitte überprüfe deine Einstellungen.")
+            messagebox.showinfo("Fehler", f"Die Datei '{config_file}' wurde nicht gefunden. Sie wurde neu erzeugt. Bitte überprüfe deine Einstellungen.")
 
         except json.decoder.JSONDecodeError:
             # Wenn die Datei nicht gefunden wird, erstelle eine neue Konfigurationsdatei
             with open(config_file, 'w') as f:
                 json.dump({}, f, indent=4)
             print(f"Die Datei '{config_file}' ist falsch formatiert. Sie wurde neu erzeugt. Bitte überprüfe deine Einstellungen.")
+            messagebox.showinfo("Fehler", f"Die Datei '{config_file}' ist falsch formatiert. Sie wurde neu erzeugt. Bitte überprüfe deine Einstellungen.")
 
 def save_config(config_file: str, group:str, **kwargs):
     """
@@ -55,3 +58,4 @@ def save_config(config_file: str, group:str, **kwargs):
             json.dump(data, f, indent=4)
     except Exception as e:
         print("Error saving json:", e)
+        messagebox.showerror("Fehler", f"Deine Einstellungen konnten nicht gespeichert werden.")

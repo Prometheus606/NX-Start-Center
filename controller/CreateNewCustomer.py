@@ -13,7 +13,7 @@ class CreateNewCustomer:
         self.controller = controller
 
     def create_new_customer(self):
-        self.controller.view.messageLabel.config(text="")
+        self.controller.view.set_message("")
         customer_is_new = True
         customer_path = fr"{self.controller.model.settings.get('customer_environment_path')}/{self.controller.view.new_customer.get()}"
         machine_controller = "Niklas"
@@ -30,17 +30,17 @@ class CreateNewCustomer:
 
         if not new_customer or not new_version:
             print("Kundenname und Version muss angegeben sein!")
-            self.controller.view.messageLabel.config(text="Kundenname und Version muss angegeben sein!", foreground="red")
+            self.controller.view.set_message("Kundenname und Version muss angegeben sein!")
             return
 
         if " " in new_customer or " " in new_version or " " in new_machine or " " in new_order:
             print("Leerzeichen sind nicht Zulässig!")
-            self.controller.view.messageLabel.config(text="Leerzeichen sind nicht Zulässig!", foreground="red")
+            self.controller.view.set_message("Leerzeichen sind nicht Zulässig!")
             return
 
         if not re.match(r"^NX\d{2,4}", new_version):
             print("Die Version muss das Format NXxxxx haben.")
-            self.controller.view.messageLabel.config(text="Die Version muss das Format NXxxxx haben.", foreground="red")
+            self.controller.view.set_message("Die Version muss das Format NXxxxx haben.""red")
             return
 
         if [i for i in os.listdir(self.controller.model.settings.get('customer_environment_path')) if new_customer.lower() == i.lower()]:
@@ -50,7 +50,7 @@ class CreateNewCustomer:
 
         if Path(fr"{installed_machines_dir}/{new_machine}").exists():
             print("Maschine bereits angelegt!")
-            self.controller.view.messageLabel.config(text="Maschine bereits angelegt!", foreground="red")
+            self.controller.view.set_message("Maschine bereits angelegt!")
             return
 
         if not new_order:
@@ -90,7 +90,7 @@ class CreateNewCustomer:
             if not self.create_dat_file() or not self.create_add_to_machine_database_file() or not self.add_to_ascii_file():
                 return
 
-        self.controller.view.messageLabel.config(text="Neues Projekt wurde angelegt.", foreground="orange")
+        self.controller.view.set_message("Neues Projekt wurde angelegt.", "orange")
 
     def create_dat_file(self):
         customer_path = fr"{self.controller.model.settings.get('customer_environment_path')}\{self.controller.view.new_customer.get()}"
@@ -107,7 +107,7 @@ class CreateNewCustomer:
             return True
         except Exception as e:
             print("Fehler beim erzeugen der .dat Datei: ", e)
-            self.controller.view.messageLabel.config(text="Fehler beim erzeugen der .dat Datei!", foreground="red")
+            self.controller.view.set_message("Fehler beim erzeugen der .dat Datei!")
             return False
 
     def create_add_to_machine_database_file(self):
@@ -126,7 +126,7 @@ class CreateNewCustomer:
 
         except Exception as e:
             print("Fehler beim erzeugen der add_to_machine_database.dat Datei: ", e)
-            self.controller.view.messageLabel.config(text="Fehler beim erzeugen der add_to_machine_database.dat Datei!", foreground="red")
+            self.controller.view.set_message("Fehler beim erzeugen der add_to_machine_database.dat Datei!")
             return False
 
     def add_to_ascii_file(self):
@@ -145,6 +145,6 @@ class CreateNewCustomer:
 
         except Exception as e:
             print("Fehler beim hinzufügen zur Ascii datei: ", e)
-            self.controller.view.messageLabel.config(text="Fehler beim hinzufügen zur Ascii datei!", foreground="red")
+            self.controller.view.set_message("Fehler beim hinzufügen zur Ascii datei!")
             return False
 

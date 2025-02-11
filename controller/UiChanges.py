@@ -24,7 +24,7 @@ class UiChanges:
         Defines what happens if the customer Combobox was modified
         :param e: event
         """
-        self.controller.view.messageLabel.config(text="")
+        self.controller.view.set_message()
 
         self.controller.model.customer = self.controller.view.customer.get()
 
@@ -57,7 +57,7 @@ class UiChanges:
         Defines what happens if the version Combobox was modified
         :param e: event
         """
-        self.controller.view.messageLabel.config(text="")
+        self.controller.view.set_message()
 
         self.controller.model.version = self.controller.view.version.get()
 
@@ -79,7 +79,7 @@ class UiChanges:
         Defines what happens if the Machine Combobox was modified
         :param e: event
         """
-        self.controller.view.messageLabel.config(text="")
+        self.controller.view.set_message()
         self.controller.model.machine = self.controller.view.machine.get()
 
     def set_checkboxes(self):
@@ -111,42 +111,42 @@ class UiChanges:
         """
         Defines what happens if the language radiobox was modified
         """
-        self.controller.view.messageLabel.config(text="")
+        self.controller.view.set_message()
         self.controller.model.language = self.controller.view.language.get()
 
     def pp_check_selected(self):
         """
         Defines what happens if the PP Checkbox was modified
         """
-        self.controller.view.messageLabel.config(text="")
+        self.controller.view.set_message()
         self.controller.model.load_pp = self.controller.view.load_pp.get()
 
     def installed_machines_check_selected(self):
         """
         Defines what happens if the cse Checkbox was modified
         """
-        self.controller.view.messageLabel.config(text="")
+        self.controller.view.set_message()
         self.controller.model.load_installed_machines = self.controller.view.load_installed_machines.get()
 
     def tool_check_selected(self):
         """
         Defines what happens if the tool Checkbox was modified
         """
-        self.controller.view.messageLabel.config(text="")
+        self.controller.view.set_message()
         self.controller.model.load_tool = self.controller.view.load_tool.get()
 
     def device_check_selected(self):
         """
         Defines what happens if the device Checkbox was modified
         """
-        self.controller.view.messageLabel.config(text="")
+        self.controller.view.set_message()
         self.controller.model.load_device = self.controller.view.load_device.get()
 
     def feed_check_selected(self):
         """
         Defines what happens if the feed Checkbox was modified
         """
-        self.controller.view.messageLabel.config(text="")
+        self.controller.view.set_message()
         self.controller.model.load_feed = self.controller.view.load_feed.get()
 
 
@@ -156,7 +156,7 @@ class UiChanges:
         if the x position >= 131, then right tab is selected.
         THE VALUE MIGHT BE WRONG IF THE WINDOW SIZE CHANGES!!
         """
-        self.controller.view.messageLabel.config(text="")
+        self.controller.view.set_message()
 
         if e.x >= 260:
             return

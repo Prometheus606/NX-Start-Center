@@ -16,7 +16,7 @@ class Licence:
     def show_license_info(self):
         file_path = self.controller.model.licence_path
         editor = self.controller.model.editor.lower()
-        open_editor(file_path, editor)
+        open_editor(self.controller, file_path, editor)
 
 
     def start_lmtools(self):
@@ -26,4 +26,5 @@ class Licence:
             subprocess.Popen([f"{os.getcwd()}\src\Open_LMTools.bat", file_path])
         except FileNotFoundError:
             print(f"Der Pfad {file_path} wurde nicht gefunden.")
-            messagebox.showerror("Fehler", f"Der Pfad {file_path} wurde nicht gefunden.")
+            # messagebox.showerror("Fehler", f"Der Pfad {file_path} wurde nicht gefunden.")
+            self.controller.view.set_message(f"Der Pfad {file_path} wurde nicht gefunden.")
