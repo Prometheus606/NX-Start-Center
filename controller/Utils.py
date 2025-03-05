@@ -15,6 +15,10 @@ def copy_folder(src: str, dst: str, symlinks=False, ignore=None):
         else:
             shutil.copy2(s, d)
 
+
+def copy_file(src: str, dst: str):
+    shutil.copy2(src, dst)
+
 def open_editor(controller, file_path, editor="notepad"):
     editor_command = {
         'notepad': [r'C:\Windows\System32\notepad.exe', file_path],

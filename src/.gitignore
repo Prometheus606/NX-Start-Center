@@ -1,0 +1,9 @@
+!sample/**/*.prt
+!Sample/**/*.prt
+!samples/**/*.prt
+!Samples/**/*.prt
+!cam-setup/**/*.prt
+!CAM-setup/**/*.prt
+!CAM_Setup/**/*.prt
+!CAM_setup/**/*.prt
+!cam_setup/**/*.prt
