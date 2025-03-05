@@ -43,8 +43,8 @@ Source: "..\exe\certifi\*"; DestDir: "{app}\certifi"; Flags: ignoreversion recur
 ;
 Source: "..\..\..\NX Open VSCode\*"; DestDir: "{app}\..\NX Open VSCode"; Flags: recursesubdirs createallsubdirs
 Source: "..\..\..\MTK_deliverer\*"; DestDir: "{app}\..\MTK_deliverer"; Flags: recursesubdirs createallsubdirs
-Source: "D:\Projekte\VS_Code_extensions\NX_Language\releases\*.vsix"; DestDir: "{tmp}"; Flags: ignoreversion
-Source: "D:\Projekte\VS_Code_extensions\NX_Language\install.bat"; DestDir: "{tmp}"; Flags: ignoreversion
+Source: "D:\Projekte\VS_Code_extensions\NX_Postprocessor\releases\*.vsix"; DestDir: "{tmp}"; Flags: ignoreversion
+Source: "D:\Projekte\VS_Code_extensions\NX_Postprocessor\install.bat"; DestDir: "{tmp}"; Flags: ignoreversion
 
 [Dirs]
 Name: "{app}\..\NX Open VSCode"; Permissions: everyone-modify

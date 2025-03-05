@@ -34,6 +34,7 @@ class Model:
         self.licence_server_path = self.settings.get("licence_server_path") or ""
         self.licence_path = self.settings.get("licence_path") or ""
         self.roles_path = self.settings.get("roles_path") or ""
+        self.fork_path = self.settings.get("fork_path") or ""
 
         self.dark_themes = ["solar", "darkly", "cyborg"]
         self.light_themes = ["cosmo", "flatly", "minty", "pulse", "lumen"]

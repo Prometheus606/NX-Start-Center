@@ -18,7 +18,8 @@ def load_config(config_file: str, setting: str):
                         "nx_installation_path": "D:\\Siemens\\NX_Versionen",
                         "customer_environment_path": "D:\\Siemens\\Kundenumgebung",
                         "licence_server_path": "D:\\Siemens\\License Server\\lmtools.exe",
-                        "licence_path": "D:\\Siemens\\License\\License_ugslmd.lic"
+                        "licence_path": "D:\\Siemens\\License\\License_ugslmd.lic",
+                        "fork_path": "C:\\Users\\niklas.beitler\\AppData\\Local\\Fork\\current\\Fork.exe"
                     }
                 elif setting == "last_configuration":
                     config[setting] = {}

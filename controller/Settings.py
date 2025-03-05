@@ -14,11 +14,13 @@ class Settings:
         self.controller.view.setting_frame.browse_customer_environment_path_btn.config(command=lambda: self.select_folder_or_file("customer_environment_path"))
         self.controller.view.setting_frame.browse_licence_path_btn.config(command=lambda: self.select_folder_or_file("licence_path"))
         self.controller.view.setting_frame.browse_licence_server_path_btn.config(command=lambda: self.select_folder_or_file("licence_server_path"))
+        self.controller.view.setting_frame.browse_fork_path_btn.config(command=lambda: self.select_folder_or_file("fork_path"))
         self.controller.view.setting_frame.browse_roles_path_btn.config(command=lambda: self.select_folder_or_file("roles_path"))
         self.controller.view.nx_installation_path.set(self.controller.model.nx_installation_path)
         self.controller.view.customer_environment_path.set(self.controller.model.customer_environment_path)
         self.controller.view.licence_path.set(self.controller.model.licence_path)
         self.controller.view.licence_server_path.set(self.controller.model.licence_server_path)
+        self.controller.view.fork_path.set(self.controller.model.fork_path)
         self.controller.view.setting_frame.return_btn.config(command=self.hide_settings)
         self.controller.view.theme.trace_add("write", self.on_theme_change)
         self.controller.view.editor.trace_add("write", self.on_editor_change)
@@ -57,7 +59,7 @@ class Settings:
         self.controller.model.licence_path = self.controller.view.licence_path.get()
         self.controller.model.licence_server_path = self.controller.view.licence_server_path.get()
         self.controller.model.roles_path = self.controller.view.roles_path.get()
-        save_config(self.controller.model.config_file, "settings", licence_server_path=self.controller.model.licence_server_path, licence_path=self.controller.model.licence_path, roles_path=self.controller.model.roles_path, nx_installation_path=self.controller.model.nx_installation_path, customer_environment_path=self.controller.model.customer_environment_path, batchstart=self.controller.model.batchstart)
+        save_config(self.controller.model.config_file, "settings", licence_server_path=self.controller.model.licence_server_path, licence_path=self.controller.model.licence_path, roles_path=self.controller.model.roles_path, fork_path=self.controller.model.fork_path, nx_installation_path=self.controller.model.nx_installation_path, customer_environment_path=self.controller.model.customer_environment_path, batchstart=self.controller.model.batchstart)
 
         self.controller.view.set_message()
         self.controller.view.setting_frame.pack_forget()
@@ -114,6 +116,12 @@ class Settings:
                 self.controller.model.licence_path = path
                 self.controller.view.licence_path.set(path)
                 save_config(self.controller.model.config_file, "settings", licence_path=self.controller.model.licence_path)
+        elif variable == "fork_path":
+            path = filedialog.askopenfile(title="Pfad zur Fork.exe auswählen", filetypes=(("EXE Dateien", "*.exe"),)).name
+            if Path(path).exists() and Path(path).is_file() and path.endswith(".exe"):
+                self.controller.model.fork_path = path
+                self.controller.view.fork_path.set(path)
+                save_config(self.controller.model.config_file, "settings", fork_path=self.controller.model.fork_path)
         elif variable == "roles_path":
             paths = filedialog.askopenfiles(title="Rollen auswählen", filetypes=(("MTX Dateien", "*.mtx"),))
             paths = [i.name for i in paths]
