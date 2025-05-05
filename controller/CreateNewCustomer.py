@@ -3,7 +3,7 @@ import shutil
 import os
 from pathlib import Path
 
-from controller.Utils import copy_folder, copy_file
+from controller.Utils import copy_folder, copy_file, remove_readonly_recursive
 
 class CreateNewCustomer:
     """
@@ -76,6 +76,7 @@ class CreateNewCustomer:
 
         if not self.new_order:
             self.controller.view.new_order.set("0000")
+            self.new_order = self.controller.view.new_order.get()
 
         if not os.path.exists(fr"{self.customer_path}/1_Kundendaten/{self.new_order}/"):
             os.makedirs(fr"{self.customer_path}/1_Kundendaten/{self.new_order}/")
@@ -124,17 +125,20 @@ class CreateNewCustomer:
             self.create_readme_file()
             copy_file("./src/.gitignore", self.machine_dir)
 
+            remove_readonly_recursive(self.machine_dir)
+
             if not self.create_dat_file() or not self.create_add_to_machine_database_file() or not self.add_to_ascii_file():
                 return
 
         self.controller.view.set_message("Neues Projekt wurde angelegt.", "orange")
 
+
+
     def create_dat_file(self):
-        cse_dir = fr"{self.cse_dir}\{self.machine_controller}"
         try:
             with open(fr"{self.machine_dir}\{self.new_machine}.dat", "w") as dat_file:
-                dat_file.write(self.new_machine + ",${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + self.new_machine + "\\" + self.new_machine + ".tcl,${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + self.new_machine + "\\" + self.new_machine + ".def")
-                dat_file.write("\nCSE_FILES, ${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + self.new_machine + "\\" + self.new_machine + ".MCF")
+                dat_file.write(self.new_machine + ",${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + self.new_machine + "\\postprocessor\\" + self.new_machine + ".tcl,${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + self.new_machine + "\\postprocessor\\" + self.new_machine + ".def")
+                dat_file.write("\nCSE_FILES, ${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + self.new_machine + f"\\cse_driver\\{self.machine_controller}\\" + self.new_machine + ".MCF")
             return True
         except Exception as e:
             print("Fehler beim erzeugen der .dat Datei: ", e)

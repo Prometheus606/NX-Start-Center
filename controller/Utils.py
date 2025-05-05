@@ -19,6 +19,15 @@ def copy_folder(src: str, dst: str, symlinks=False, ignore=None):
 def copy_file(src: str, dst: str):
     shutil.copy2(src, dst)
 
+def remove_readonly_recursive(path):
+    for root, dirs, files in os.walk(path):
+        for name in files:
+            file_path = os.path.join(root, name)
+            os.chmod(file_path, stat.S_IWRITE)
+        for name in dirs:
+            dir_path = os.path.join(root, name)
+            os.chmod(dir_path, stat.S_IWRITE)
+
 def open_editor(controller, file_path, editor="notepad"):
     editor_command = {
         'notepad': [r'C:\Windows\System32\notepad.exe', file_path],
