@@ -125,7 +125,7 @@ class CreateNewCustomer:
             self.create_readme_file()
             copy_file("./src/.gitignore", self.machine_dir)
 
-            remove_readonly_recursive(self.machine_dir)
+            remove_readonly_recursive(fr"{self.customer_path}/5_Umgebung/{self.new_version}/MACH/resource/library/machine/ascii")
 
             if not self.create_dat_file() or not self.create_add_to_machine_database_file() or not self.add_to_ascii_file():
                 return

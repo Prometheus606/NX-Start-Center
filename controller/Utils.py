@@ -2,6 +2,7 @@ import os
 import shutil
 import subprocess
 import getpass
+import stat
 from pathlib import Path
 from tkinter import messagebox
 
