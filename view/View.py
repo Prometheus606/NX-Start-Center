@@ -151,11 +151,14 @@ class View(tk.Tk):
         self.start_btn = ttk.Button(self.buttons_frame, text="NX Starten")
         self.start_btn.pack(side=ttk.LEFT, padx=5, pady=20)
 
-        self.pp_dir_btn = ttk.Button(self.buttons_frame, text="Maschinen Ordner Öffnen")
+        self.pp_dir_btn = ttk.Button(self.buttons_frame, text="Ordner Öffnen")
         self.pp_dir_btn.pack(side=ttk.LEFT, padx=5)
 
         self.vsCode_btn = ttk.Button(self.buttons_frame, text="PP Öffnen")
         self.vsCode_btn.pack(side=ttk.LEFT, padx=5)
+
+        self.fork_btn = ttk.Button(self.buttons_frame, text="Fork Öffnen")
+        self.fork_btn.pack(side=ttk.LEFT, padx=5)
 
         # ==================================== Setting Frame ====================================
 

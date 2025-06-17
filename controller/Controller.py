@@ -4,7 +4,8 @@ from controller.NXStart import NXStart
 from controller.CreateNewCustomer import CreateNewCustomer
 from controller.Settings import Settings
 from controller.UiChanges import UiChanges
-from controller.OpenVSCode import OpenVSCode
+from controller.VSCode import VSCode
+from controller.Fork import Fork
 from controller.OpenExplorer import OpenExplorer
 from controller.SetLastConfig import SetLastConfig
 from controller.Licence import Licence
@@ -21,7 +22,8 @@ class Controller:
         self.create_new_customer = CreateNewCustomer(self)
         self.settings = Settings(self)
         self.ui_changes = UiChanges(self)
-        self.open_vscode = OpenVSCode(self)
+        self.vscode = VSCode(self)
+        self.fork = Fork(self)
         self.open_explorer = OpenExplorer(self)
         self.set_last_config = SetLastConfig(self)
         self.tools = Licence(self)
