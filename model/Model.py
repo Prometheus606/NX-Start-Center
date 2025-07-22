@@ -173,4 +173,8 @@ class Model:
         """
         :return: the installed machines dir path
         """
-        return fr"{self.settings['customer_environment_path']}/{self.customer}/5_Umgebung/{self.version}/MACH\resource\library\machine\installed_machines"
+        path = fr"{self.settings['customer_environment_path']}/{self.customer}/5_Umgebung/{self.version}/MACH\resource\library\machine\installed_machines"
+        CAM_path = fr"{path}_{self.customer}"
+        if os.path.exists(CAM_path):
+            return CAM_path
+        return path

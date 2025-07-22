@@ -1,3 +1,14 @@
+sample/**
+Sample/**
+samples/**
+Samples/**
+cam-setup/**
+CAM-setup/**
+CAM_Setup/**
+CAM_setup/**
+cam_setup/**
+**/__pycache__/
+
 !sample/**/*.prt
 !Sample/**/*.prt
 !samples/**/*.prt

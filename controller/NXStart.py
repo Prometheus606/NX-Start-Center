@@ -52,11 +52,13 @@ class NXStart:
             process = subprocess.run(command, shell=False, capture_output=True, text=True)
             stdout = process.stdout
             stderr = process.stderr
-
             if stdout:
-                if "1 Datei(en) kopiert" not in stdout:
-                    print(stdout)
-                    messagebox.showinfo("Info", f"{stdout}")
+                stdout_clean = ""
+                for line in stdout.strip().split("\n"):
+                    if "1 Datei(en) kopiert" not in line:
+                        stdout_clean += f"\n{line}"
+                print(stdout_clean)
+                messagebox.showinfo("Info", f"{stdout_clean}")
 
             if process.returncode == 3:
                 print("Fehler beim starten von NX")

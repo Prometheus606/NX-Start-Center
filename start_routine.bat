@@ -147,6 +147,12 @@ rem nur bei Externer Simulation verwendbar
 set UGII_CAM_IPW_SNAPSHOT=1
 
 rem *****************************************************************************
+rem 						Read CAM Batch file (custom_nx.bat)
+rem *****************************************************************************
+set ENVPATH=%KUNDENPFAD%\%KUNDENNAME%\5_Umgebung\
+if exist %ENVPATH%%NX_VERSION%\start_apps\custom_nx.bat call %ENVPATH%%NX_VERSION%\start_apps\custom_nx.bat %ENVPATH% %NX_VERSION% %KUNDENNAME%
+
+rem *****************************************************************************
 rem 								Start NX
 rem *****************************************************************************
 set result="FALSE"
