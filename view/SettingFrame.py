@@ -60,4 +60,4 @@ class SettingFrame(ttk.LabelFrame):
         self.batchstart_check.grid(row=8, column=1, sticky="w", pady=15)
 
         self.return_btn = tk.Button(self, text="Zurück", width=15)
-        self.return_btn.grid(row=9, column=2, pady=40)
+        self.return_btn.grid(row=9, column=2, pady=10)

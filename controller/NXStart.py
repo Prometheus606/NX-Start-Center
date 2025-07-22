@@ -49,25 +49,30 @@ class NXStart:
         ]
 
         try:
-            process = subprocess.run(command, shell=False, capture_output=True, text=True)
-            stdout = process.stdout
-            stderr = process.stderr
-            if stdout:
-                stdout_clean = ""
-                for line in stdout.strip().split("\n"):
-                    if "1 Datei(en) kopiert" not in line:
-                        stdout_clean += f"\n{line}"
-                print(stdout_clean)
-                messagebox.showinfo("Info", f"{stdout_clean}")
+            if script.endswith(".bat"):
+                # .bat wird asynchron gestartet, GUI friert nicht ein
+                subprocess.Popen(command, shell=False, creationflags=subprocess.CREATE_NO_WINDOW)
+                # messagebox.showinfo("Info", "Batch-Datei wurde gestartet.")
+            else:
+                process = subprocess.run(command, shell=False, capture_output=True, text=True)
+                stdout = process.stdout
+                stderr = process.stderr
+                if stdout:
+                    stdout_clean = ""
+                    for line in stdout.strip().split("\n"):
+                        if "1 Datei(en) kopiert" not in line:
+                            stdout_clean += f"\n{line}"
+                    print(stdout_clean)
+                    messagebox.showinfo("Info", f"{stdout_clean}")
 
-            if process.returncode == 3:
-                print("Fehler beim starten von NX")
-                messagebox.showerror("Fehler",
-                                     f"Die Datei 'ugraf.exe' konnte nicht gefunden werden.\nBitte überprüfe den Pfad in der startbatch.")
-            elif process.returncode != 0:
-                print("Fehler beim starten von NX")
-                print(stderr)
-                messagebox.showerror("Fehler", f"Fehler beim starten von NX:\n{stderr}")
+                if process.returncode == 3:
+                    print("Fehler beim starten von NX")
+                    messagebox.showerror("Fehler",
+                                         f"Die Datei 'ugraf.exe' konnte nicht gefunden werden.\nBitte überprüfe den Pfad in der startbatch.")
+                elif process.returncode != 0:
+                    print("Fehler beim starten von NX")
+                    print(stderr)
+                    messagebox.showerror("Fehler", f"Fehler beim starten von NX:\n{stderr}")
 
         except FileNotFoundError:
             messagebox.showerror("Fehler", f"Die Datei {script} konnte nicht gefunden werden.")

@@ -45,7 +45,7 @@ rem ****************************************************************************
 rem 						Setzen des Temp-Ordners								*
 rem *****************************************************************************
 
-set UGII_CAM_CSE_USER_DIR="%KUNDENPFAD%\%KUNDENNAME%\2_Testdaten\Temp\"
+set UGII_CAM_CSE_USER_DIR=%KUNDENPFAD%\%KUNDENNAME%\2_Testdaten\Temp\
 
 
 rem *****************************************************************************

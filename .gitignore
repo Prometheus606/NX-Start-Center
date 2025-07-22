@@ -13,3 +13,4 @@ view/__pycache__
 model/__pycache__
 nuitka-crash-report.xml
 mom_information.out
+dbc_information.out
