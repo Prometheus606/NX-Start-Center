@@ -49,6 +49,7 @@ class NXStart:
         ]
 
         try:
+            # to debug an batch file, rename the file suffix for test
             if script.endswith(".bat"):
                 # .bat wird asynchron gestartet, GUI friert nicht ein
                 subprocess.Popen(command, shell=False, creationflags=subprocess.CREATE_NO_WINDOW)

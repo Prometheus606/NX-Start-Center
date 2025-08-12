@@ -3,6 +3,7 @@ venv
 output/exe
 output/installer/Output
 output/NX Start Center
+output/spec
 build
 NX Start Center.spec
 .idea
