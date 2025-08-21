@@ -170,12 +170,12 @@ class CreateNewCustomer:
     def create_readme_file(self):
         try:
             with open(fr"{self.machine_dir}\README.md", "w") as readme_file:
-                readme_file.write(f"# {self.new_machine}\n")
-                readme_file.write(f"\nMaschine: {self.new_machine}")
-                readme_file.write(f"\nSteuerung: {self.machine_controller}")
-                readme_file.write(f"\nFirma: {self.new_customer}")
-                readme_file.write(f"\nPost Configurator: -")
-                readme_file.write(f"\nNX-Version: {self.new_version}")
+                readme_file.write(f"# {self.new_machine}  \n")
+                readme_file.write(f"\nMaschine: {self.new_machine}  ")
+                readme_file.write(f"\nSteuerung: {self.machine_controller}  ")
+                readme_file.write(f"\nFirma: {self.new_customer}  ")
+                readme_file.write(f"\nPost Configurator: -  ")
+                readme_file.write(f"\nNX-Version: {self.new_version}  ")
             return True
         except Exception as e:
             print("Fehler beim erzeugen der README.md Datei: ", e)
