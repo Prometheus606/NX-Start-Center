@@ -148,7 +148,7 @@ class CreateNewCustomer:
     def create_add_to_machine_database_file(self):
         try:
             with open(fr"{self.installed_machines_dir}\{self.new_machine}\add_to_machine_database.dat", "w") as dat_file:
-                dat_file.write("DATA|" + self.new_machine + "|" + self.machinetyp_ID + "|" + self.new_machine + "|" + self.machine_controller + "|Example|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}" + self.new_machine + "/" + self.new_machine + ".dat|1.000000|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}" + self.new_machine + "/graphics/" + self.new_machine + "_SIM")
+                dat_file.write("DATA|" + self.new_machine + "|" + self.machinetyp_ID + "|" + self.new_machine + "|" + self.machine_controller + "|Example|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}" + self.new_machine + "\\" + self.new_machine + ".dat|1.000000|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}" + self.new_machine + "\\graphics\\" + self.new_machine + "_SIM")
             return True
 
         except Exception as e:
@@ -159,7 +159,7 @@ class CreateNewCustomer:
     def add_to_ascii_file(self):
         try:
             with open(fr"{self.customer_path}/5_Umgebung/{self.new_version}/MACH/resource/library/machine/ascii/machine_database.dat", "a") as dat_file:
-                dat_file.write("\nDATA|" + self.new_machine + "|" + self.machinetyp_ID + "|" + self.new_machine + "|" + self.machine_controller + "|Example|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}" + self.new_machine + "/" + self.new_machine + ".dat|1.000000|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}" + self.new_machine + "/graphics/" + self.new_machine + "_SIM")
+                dat_file.write("\nDATA|" + self.new_machine + "|" + self.machinetyp_ID + "|" + self.new_machine + "|" + self.machine_controller + "|Example|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}" + self.new_machine + "\\" + self.new_machine + ".dat|1.000000|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}" + self.new_machine + "\\graphics\\" + self.new_machine + "_SIM")
             return True
 
         except Exception as e:
