@@ -166,6 +166,17 @@ set UGII_CAM_IPW_SNAPSHOT=1
 rem *****************************************************************************
 rem 						Read CAM Batch file (custom_nx.bat)
 rem *****************************************************************************
+if exist %ENV_DIR%\%NX_VERSION%\start_apps\custom_nx_%KUNDENNAME%.bat (
+    set SPLM_SHR_DIR=%KUNDENPFAD%
+    set PLM_SHARE_DUH=%KUNDENPFAD%
+    set NX_Version_DUH=%NX_VERSION%
+    set NX_SHR_VERSION_DIR=%NX_VERSION%
+    set KUNDE_DUH=%KUNDENNAME%
+    set SIDT_PAR2="nx"
+    set UMGEBUNG=%ENV_FOLDER_NAME%
+    call %ENV_DIR%\%NX_VERSION%\start_apps\custom_nx_%KUNDENNAME%.bat
+)
+
 if exist %ENV_DIR%\%NX_VERSION%\start_apps\custom_nx.bat (
     set SPLM_SHR_DIR=%ENV_DIR%
     set PLM_SHARE_DUH=%ENV_DIR%
@@ -173,6 +184,7 @@ if exist %ENV_DIR%\%NX_VERSION%\start_apps\custom_nx.bat (
     set NX_SHR_VERSION_DIR=%NX_VERSION%
     set KUNDE_DUH=%KUNDENNAME%
     set SIDT_PAR2="nx"
+    set UMGEBUNG=%ENV_FOLDER_NAME%
     call %ENV_DIR%\%NX_VERSION%\start_apps\custom_nx.bat
 )
 
