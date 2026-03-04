@@ -20,6 +20,7 @@ class Model:
         self.load_feed = 0
         self.order_number = "0000"
         self.batchstart = 0
+        self.startNXWithDebug = False
         self.use_role = 1
         self.customers = self.get_customers()
         self.native_versions = self.get_native_versions()

@@ -29,26 +29,75 @@ def remove_readonly_recursive(path):
             dir_path = os.path.join(root, name)
             os.chmod(dir_path, stat.S_IWRITE)
 
+def find_executable(executables, fallback_paths=None):
+    """
+    Versucht ein Executable über PATH zu finden.
+    Falls nicht gefunden, werden Fallback-Pfade geprüft.
+    """
+    # 1. PATH prüfen
+    for exe in executables:
+        path = shutil.which(exe)
+        if path:
+            return path
+
+    # 2. Fallback-Pfade prüfen
+    if fallback_paths:
+        for path in fallback_paths:
+            if Path(path).exists():
+                return path
+
+    return None
+
+
 def open_editor(controller, file_path, editor="notepad"):
-    editor_command = {
-        'notepad': [r'C:\Windows\System32\notepad.exe', file_path],
-        'notepad++': [r'C:\Program Files\Notepad++\notepad++.exe', file_path],
-        'vscode': [fr'C:\Users\{getpass.getuser()}\AppData\Local\Programs\Microsoft VS Code\Code.exe', file_path]
+
+    user = getpass.getuser()
+
+    editor_config = {
+        "notepad": {
+            "executables": ["notepad.exe"],
+            "fallback": [r"C:\Windows\System32\notepad.exe"],
+        },
+        "notepad++": {
+            "executables": ["notepad++.exe"],
+            "fallback": [
+                r"C:\Program Files\Notepad++\notepad++.exe",
+                r"C:\Program Files (x86)\Notepad++\notepad++.exe",
+            ],
+        },
+        "vscode": {
+            "executables": ["code.cmd", "code.exe"],
+            "fallback": [
+                fr"C:\Users\{user}\AppData\Local\Programs\Microsoft VS Code\Code.exe",
+            ],
+        },
     }
 
-    if not Path(editor_command[editor][0]).exists():
-        print(f"Error: Editor not found: {editor_command[editor][0]}")
-        # messagebox.showerror("Fehler", f"Error: Editor not found: {editor_command[editor][0]}\nBitte wähle einen anderen Editor.")
-        controller.view.set_message(f"Editor nicht gefunden: {editor_command[editor][0]}\nBitte wähle einen anderen Editor.")
+    if editor not in editor_config:
+        controller.view.set_message(f"Unbekannter Editor: {editor}")
+        return
+
+    config = editor_config[editor]
+
+    exe_path = find_executable(
+        config["executables"],
+        config["fallback"]
+    )
+
+    if not exe_path:
+        controller.view.set_message(
+            f"Editor nicht gefunden ({editor}).\n"
+            "Bitte prüfe PATH oder Installation."
+        )
         return
 
     try:
-        subprocess.Popen(editor_command[editor])
+        subprocess.Popen([exe_path, file_path])
     except FileNotFoundError:
-        print(f"Error: The file {file_path} does not exist.")
-        # messagebox.showerror("Fehler", f"Error: The file {file_path} does not exist.")
-        controller.view.set_message(f"Die Datei {file_path} wurde nicht gefunden.")
+        controller.view.set_message(
+            f"Die Datei wurde nicht gefunden:\n{file_path}"
+        )
     except OSError as e:
-        print(f"Error: Unable to open the file {file_path}. {e}")
-        # messagebox.showerror("Fehler", f"Error: Unable to open the file {file_path}. {e}")
-        controller.view.set_message(f"Die Datei konnte nicht geöffnet werden:\n{file_path}")
+        controller.view.set_message(
+            f"Die Datei konnte nicht geöffnet werden:\n{file_path}\n{e}"
+        )

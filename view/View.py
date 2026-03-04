@@ -55,6 +55,7 @@ class View(tk.Tk):
         self.fork_path = tk.StringVar()
         self.theme = tk.StringVar()
         self.batchstart = ttk.BooleanVar()
+        self.startNXWithDebug = ttk.BooleanVar()
         self.editor = ttk.StringVar()
 
         # ==================================== menubar ====================================
@@ -75,10 +76,10 @@ class View(tk.Tk):
         # =================================== root frames ==================================
 
         self.left_frame = ttk.Frame(self)
-        self.left_frame.pack(side=ttk.LEFT, fill=ttk.BOTH, expand=False, padx=10, pady=10)
+        self.left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=False, padx=10, pady=10)
 
         self.right_frame = ttk.Frame(self)
-        self.right_frame.pack(side=ttk.RIGHT, fill=ttk.BOTH, expand=True, padx=10, pady=10)
+        self.right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=10, pady=10)
 
         # ==================================== Project Frame ====================================
 
@@ -146,23 +147,23 @@ class View(tk.Tk):
         # ==================================== Buttons at the bottom ====================================
 
         self.buttons_frame = ttk.Frame(self.left_frame)
-        self.buttons_frame.pack(side=ttk.BOTTOM, fill="both", expand=False)
+        self.buttons_frame.pack(side=tk.BOTTOM, fill="both", expand=False, pady=10)
 
         self.start_btn = ttk.Button(self.buttons_frame, text="NX Starten")
-        self.start_btn.pack(side=ttk.LEFT, padx=5, pady=20)
+        self.start_btn.pack(side=tk.LEFT, padx=5)
 
         self.pp_dir_btn = ttk.Button(self.buttons_frame, text="Ordner Öffnen")
-        self.pp_dir_btn.pack(side=ttk.LEFT, padx=5)
+        self.pp_dir_btn.pack(side=tk.LEFT, padx=5)
 
         self.vsCode_btn = ttk.Button(self.buttons_frame, text="PP Öffnen")
-        self.vsCode_btn.pack(side=ttk.LEFT, padx=5)
+        self.vsCode_btn.pack(side=tk.LEFT, padx=5)
 
         self.fork_btn = ttk.Button(self.buttons_frame, text="Fork Öffnen")
-        self.fork_btn.pack(side=ttk.LEFT, padx=5)
+        self.fork_btn.pack(side=tk.LEFT, padx=5)
 
         # ==================================== Setting Frame ====================================
 
-        self.setting_frame = SettingFrame(self, self.model, self.theme, self.nx_installation_path, self.customer_environment_path, self.licence_path, self.licence_server_path, "src/images/folder.png", self.editor, self.batchstart, self.roles_path, self.fork_path, text="Einstellungen")
+        self.setting_frame = SettingFrame(self, self.model, self.theme, self.nx_installation_path, self.customer_environment_path, self.licence_path, self.licence_server_path, "src/images/folder.png", self.editor, self.batchstart, self.startNXWithDebug, self.roles_path, self.fork_path, text="Einstellungen")
 
         self.style = ttk.Style(self.model.theme)
 

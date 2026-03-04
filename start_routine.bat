@@ -6,18 +6,16 @@ rem 					     WICHTIGER HINWEIS!!
 rem     Anpassungen an dieser Datei werden bei einem Update überschrieben!
 rem *****************************************************************************
 
-shift
-set KUNDENNAME=%1
-set NX_VERSION=%2
-set UGII_LANG=%3
-set KUNDENPFAD=%4
-set NXPFAD=%5
-set PPCHECK=%6
-set INSTALLED_MACHINES_CHECK=%7
-set TOOLCHECK=%8
-set DEVICECHECK=%9
-shift
-set FEEDSPEEDCHECK=%9
+set "KUNDENNAME=%~1"
+set "NX_VERSION=%~2"
+set "UGII_LANG=%~3"
+set "KUNDENPFAD=%~4"
+set "NXPFAD=%~5"
+set "PPCHECK=%~6"
+set "INSTALLED_MACHINES_CHECK=%~7"
+set "TOOLCHECK=%~8"
+set "DEVICECHECK=%~9"
+set "FEEDSPEEDCHECK=%~10"
 
 REM ------------------------------------------------------------------------------
 REM Folder structure in Customers ENV

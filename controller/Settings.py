@@ -1,5 +1,6 @@
 import ttkbootstrap as ttk
 from pathlib import Path
+import tkinter as tk
 from tkinter import filedialog
 from controller.Config_file_handler import save_config
 from controller.Utils import open_editor
@@ -25,6 +26,7 @@ class Settings:
         self.controller.view.theme.trace_add("write", self.on_theme_change)
         self.controller.view.editor.trace_add("write", self.on_editor_change)
         self.controller.view.setting_frame.batchstart_check.config(command=self.batchstart_modified)
+        self.controller.view.setting_frame.debugStart_check.config(command=self.startNXWithDebug_modified)
 
         self.controller.view.menubar.settings_menu[0]["command"] = self.show_settings
         self.controller.view.menubar.settings_menu[1]["command"] = self.edit_startbatch
@@ -63,14 +65,14 @@ class Settings:
 
         self.controller.view.set_message()
         self.controller.view.setting_frame.pack_forget()
-        self.controller.view.left_frame.pack(side=ttk.LEFT, fill=ttk.BOTH, expand=True, padx=10, pady=10)
-        self.controller.view.right_frame.pack(side=ttk.RIGHT, fill=ttk.BOTH, expand=True, padx=10, pady=10)
+        self.controller.view.left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=10, pady=10)
+        self.controller.view.right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=10, pady=10)
 
     def show_settings(self):
         self.controller.view.set_message()
         self.controller.view.left_frame.pack_forget()
         self.controller.view.right_frame.pack_forget()
-        self.controller.view.setting_frame.pack(side=ttk.TOP, fill=ttk.BOTH, expand=True, padx=10, pady=10)
+        self.controller.view.setting_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=10, pady=10)
 
     def on_theme_change(self, *args):
         self.controller.model.theme = self.controller.view.theme.get()
@@ -148,3 +150,11 @@ class Settings:
         self.controller.view.set_message()
         self.controller.model.batchstart = self.controller.view.batchstart.get()
         save_config(self.controller.model.config_file, "settings", batchstart=self.controller.model.batchstart)
+
+    def startNXWithDebug_modified(self):
+        """
+        Defines what happens if the startNXWithDebug Checkbox was modified
+        """
+        self.controller.view.set_message()
+        self.controller.model.startNXWithDebug = self.controller.view.startNXWithDebug.get()
+        save_config(self.controller.model.config_file, "settings", startNXWithDebug=self.controller.model.startNXWithDebug)

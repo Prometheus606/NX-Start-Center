@@ -19,7 +19,6 @@ class ProgressWindow(tk.Tk):
         self.lift()
         self.attributes("-topmost", False)
         self.geometry(f"{self.win_width}x{self.win_height}+{int(self.winfo_screenwidth() / 2 - self.win_width / 2)}+{int(self.winfo_screenheight() / 2 - self.win_height / 2)}")
-
         self.progress_var = tk.IntVar()
 
         self.progressbar = ttk.Progressbar(self, variable=self.progress_var, maximum=100, mode='determinate')

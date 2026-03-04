@@ -57,6 +57,13 @@ class SetLastConfig:
                 self.controller.view.batchstart.set(False)
                 self.controller.model.batchstart = self.controller.view.batchstart.get()
 
+            if self.controller.model.settings and self.controller.model.settings.get("startNXWithDebug") is not None:
+                self.controller.view.startNXWithDebug.set(self.controller.model.settings["startNXWithDebug"])
+                self.controller.model.startNXWithDebug = self.controller.view.startNXWithDebug.get()
+            else:
+                self.controller.view.startNXWithDebug.set(False)
+                self.controller.model.startNXWithDebug = self.controller.view.startNXWithDebug.get()
+
             if self.controller.model.settings and self.controller.model.settings.get("roles_path") is not None:
                 self.controller.view.roles_path.set(self.controller.model.settings["roles_path"])
                 self.controller.model.roles_path = self.controller.view.roles_path.get()

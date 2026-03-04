@@ -1,4 +1,5 @@
 import ttkbootstrap as ttk
+import tkinter as tk
 from pathlib import Path
 
 class UiChanges:
@@ -162,7 +163,7 @@ class UiChanges:
             return
 
         if e.x >= 131:
-            self.controller.view.buttons_frame.pack(side=ttk.TOP, fill="both", expand=False)
+            self.controller.view.buttons_frame.pack(side=tk.TOP, fill="both", expand=False)
             self.controller.view.pp_dir_btn.pack_forget()
             self.controller.view.vsCode_btn.pack_forget()
             self.controller.view.fork_btn.pack_forget()
@@ -178,10 +179,10 @@ class UiChanges:
             self.controller.view.register.new_machine_type_entry.grid_forget()
             self.controller.view.register.new_machine_controller_lbl.grid_forget()
             self.controller.view.register.new_machine_type_lbl.grid_forget()
-            self.controller.view.buttons_frame.pack(side=ttk.BOTTOM, fill="both", expand=False)
-            self.controller.view.pp_dir_btn.pack(side=ttk.LEFT, padx=5)
-            self.controller.view.vsCode_btn.pack(side=ttk.LEFT, padx=5)
-            self.controller.view.fork_btn.pack(side=ttk.LEFT, padx=5)
+            self.controller.view.buttons_frame.pack(side=tk.BOTTOM, fill="both", expand=False)
+            self.controller.view.pp_dir_btn.pack(side=tk.LEFT, padx=5)
+            self.controller.view.vsCode_btn.pack(side=tk.LEFT, padx=5)
+            self.controller.view.fork_btn.pack(side=tk.LEFT, padx=5)
             self.controller.view.start_btn.config(text="NX Starten", command=self.controller.start_nx.start_NX_customer)
             self.controller.view.option_frame.pack(fill="both", expand=False, pady=10)
             self.controller.view.language_frame.pack(fill="both", expand=False, pady=5)

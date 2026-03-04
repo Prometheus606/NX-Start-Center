@@ -3,7 +3,7 @@ import ttkbootstrap as ttk
 from PIL import Image, ImageTk
 
 class SettingFrame(ttk.LabelFrame):
-    def __init__(self, master, model, theme, nx_installation_path, customer_environment_path, licence_path, licence_server_path, icon, editor, batchstart, roles_path, fork_path, *args, **kwargs):
+    def __init__(self, master, model, theme, nx_installation_path, customer_environment_path, licence_path, licence_server_path, icon, editor, batchstart, startNXWithDebug, roles_path, fork_path, *args, **kwargs):
         super().__init__(master, *args, **kwargs)
 
         original_icon = Image.open(icon)
@@ -56,8 +56,12 @@ class SettingFrame(ttk.LabelFrame):
         self.editor_menu.configure(width=20)
         self.editor_menu.grid(row=7, column=1, sticky="w")
 
-        self.batchstart_check = ttk.Checkbutton(self, text="Mit Batch Datei starten (nicht empfohlen!)", variable=batchstart, bootstyle="round-toggle")
-        self.batchstart_check.grid(row=8, column=1, sticky="w", pady=15)
+        self.batchstart_check = ttk.Checkbutton(self, text="Mit Batch Datei starten (empfohlen!)", variable=batchstart, bootstyle="round-toggle")
+        self.batchstart_check.grid(row=8, column=1, sticky="w")
+
+        self.debugStart_check = ttk.Checkbutton(self, text="Start Datei Debuggen",
+                                                variable=startNXWithDebug, bootstyle="round-toggle")
+        self.debugStart_check.grid(row=9, column=1, sticky="w", pady=15)
 
         self.return_btn = tk.Button(self, text="Zurück", width=15)
         self.return_btn.grid(row=9, column=2, pady=10)
