@@ -1,21 +1,34 @@
-@echo OFF
-rem start nuitka --standalone --onefile --windows-console-mode=disable --enable-plugin=tk-inter --output-dir=output/exe --output-file=DUH_Startcenter.exe --windows-icon-from-ico=src/images/duhGroup_Logo.ico NX_Startcenter.py
+@echo off
+setlocal
 
+rem === Basis: Ordner der BAT (duh_startcenter) ===
+set "BASE=%~dp0"
+cd /d "%BASE%"
+
+rem === (Optional, aber empfohlen) venv aktivieren ===
+if exist "%BASE%venv\Scripts\activate.bat" (
+  call "%BASE%venv\Scripts\activate.bat"
+) else (
+  echo [WARN] Keine venv gefunden unter "%BASE%venv". Nutze System-Python.
+)
+
+rem === PyInstaller Build ===
 pyinstaller --noconfirm --onefile --windowed --name "DUH_Startcenter" ^
---icon "D:/Projekte/Projekte_Python/duh_startcenter/src/images/duhGroup_Logo.ico" ^
---add-data "D:/Projekte/Projekte_Python/duh_startcenter/controller;controller/" ^
---add-data "D:/Projekte/Projekte_Python/duh_startcenter/model;model/" ^
---add-data "D:/Projekte/Projekte_Python/duh_startcenter/view;view/" ^
---add-data "D:/Projekte/Projekte_Python/duh_startcenter/env.py;." ^
---add-data "C:/Users/niklas.beitler/AppData/Local/Programs/Python/Python312/Lib/site-packages/ttkbootstrap;ttkbootstrap/" ^
---add-data "C:/Users/niklas.beitler/AppData/Local/Programs/Python/Python312/Lib/site-packages/ttkcreator;ttkcreator/" ^
---add-data "C:/Users/niklas.beitler/AppData/Local/Programs/Python/Python312/Lib/tkinter;tkinter/" ^
---add-data "C:/Users/niklas.beitler/AppData/Local/Programs/Python/Python312/Lib/site-packages/PIL;PIL/" ^
---hidden-import "PIL._imagingft" --hidden-import "PIL._imaging" ^
---distpath "D:/Projekte/Projekte_Python/duh_startcenter/output/exe" ^
---workpath "D:/Projekte/Projekte_Python/duh_startcenter/output/build" ^
---specpath "D:/Projekte/Projekte_Python/duh_startcenter/output/spec" ^
-"D:/Projekte/Projekte_Python/duh_startcenter/NX_Startcenter.py"
+  --icon "%BASE%src\images\duhGroup_Logo.ico" ^
+  --add-data "%BASE%controller;controller/" ^
+  --add-data "%BASE%model;model/" ^
+  --add-data "%BASE%view;view/" ^
+  --add-data "%BASE%env.py;." ^
+  --collect-all tkinter ^
+  --collect-all ttkbootstrap ^
+  --collect-all ttkcreator ^
+  --collect-all PIL ^
+  --hidden-import "PIL._imagingft" --hidden-import "PIL._imaging" ^
+  --distpath "%BASE%output\exe" ^
+  --workpath "%BASE%output\build" ^
+  --specpath "%BASE%output\spec" ^
+  "%BASE%NX_Startcenter.py"
 
 pause
-exit
+endlocal
+exit /b

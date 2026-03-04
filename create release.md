@@ -2,7 +2,7 @@
 #### Alle Versionnummern an allen orten müssen mit v oder V beginnen!
 ### 1. neue versionsnummer und datum in env.py eintragen
 ### 2. exe datei erstellen mit der create_exe.bat:
-### 3. create_installer.iss mit Inno Setup öffnen und neu kompilieren (output/installer)
+### 3. create_installer.iss (liegt in output/installer) mit Inno Setup öffnen und neu kompilieren (build -> compile)
 ### 4. repo auf github pushen und tag erstellen mit neuer versionsnummer
 ~~~ Bash
 git add .
