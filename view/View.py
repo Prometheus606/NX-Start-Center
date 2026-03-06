@@ -18,9 +18,9 @@ class View(tk.Tk):
         self.model = model
         self.win_width = 700
         self.win_height = 550
-        self.duh_logo_png = fr'src/images/duhGroup_Logo.png'
-        self.duh_logo_ico = fr"src/images\duhGroup_Logo.ico"
-        self.folder_image = fr"src/images/folder.png"
+        self.duh_logo_png = fr'resources/images/duhGroup_Logo.png'
+        self.duh_logo_ico = fr"resources/images\duhGroup_Logo.ico"
+        self.folder_image = fr"resources/images/folder.png"
 
         self.customer = ttk.StringVar()
         self.customer.set(self.model.customer)
@@ -104,7 +104,7 @@ class View(tk.Tk):
         # ==================================== Error Message ====================================
 
         # Kopier-Icon laden (ersetze durch deinen eigenen Pfad oder nutze ein Tkinter-Symbol)
-        copy_icon_path = "src/images/copy_icon.png"  # Pfad zum Icon
+        copy_icon_path = "resources/images/copy_icon.png"  # Pfad zum Icon
         copy_image = Image.open(copy_icon_path).resize((16, 16))  # Größe anpassen
         copy_icon = ImageTk.PhotoImage(copy_image)
         self.copy_icon_hover = ImageTk.PhotoImage(copy_image.point(lambda p: min(255, p + 80)))  # Heller für Hover
@@ -163,7 +163,7 @@ class View(tk.Tk):
 
         # ==================================== Setting Frame ====================================
 
-        self.setting_frame = SettingFrame(self, self.model, self.theme, self.nx_installation_path, self.customer_environment_path, self.licence_path, self.licence_server_path, "src/images/folder.png", self.editor, self.batchstart, self.startNXWithDebug, self.roles_path, self.fork_path, text="Einstellungen")
+        self.setting_frame = SettingFrame(self, self.model, self.theme, self.nx_installation_path, self.customer_environment_path, self.licence_path, self.licence_server_path, "resources/images/folder.png", self.editor, self.batchstart, self.startNXWithDebug, self.roles_path, self.fork_path, text="Einstellungen")
 
         self.style = ttk.Style(self.model.theme)
 

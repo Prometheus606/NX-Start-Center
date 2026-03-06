@@ -10,7 +10,7 @@ class ProgressWindow(tk.Tk):
         # ==================================== General settings ====================================
         self.win_width = 300
         self.win_height = 100
-        self.duh_logo_ico = fr"src/images\duhGroup_Logo.ico"
+        self.duh_logo_ico = fr"resources/images\duhGroup_Logo.ico"
 
         self.title("NX Startcenter")
         self.resizable(width=False, height=False)

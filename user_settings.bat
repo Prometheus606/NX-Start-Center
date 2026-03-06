@@ -22,10 +22,11 @@ if "%KUNDENNAME%"=="Steinway" (
     set "UGII_BITMAP_PATH=%UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR%\ELHA_PKM_AB\Bitmap"
 )
 
+if "%KUNDENNAME%"=="Jokey" (
+    set "UGII_CAM_CSE_USER_DIR="
+)
+
 if "%KUNDENNAME%"=="WuH" (
-    REM WuH Settings
     set "UGII_CAM_CSE_USER_DIR=C:\temp\dmc340fd_4341_VNCK\cse_prog_projects"
     set "UGII_NCD_DIR=C:\temp\"
-) else (
-    set "UGII_CAM_CSE_USER_DIR=%KUNDENPFAD%\%KUNDENNAME%\2_Testdaten\Temp\"
 )

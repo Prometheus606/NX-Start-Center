@@ -1,0 +1,20 @@
+
+**/__pycache__/
+**/backup
+**/Backup
+**/BACKUP
+[sS]ample*/**
+[sS]amples*/**
+
+cse_driver/**/log.txt
+
+
+# Allow sample folder without any files
+![sS]ample*/
+![sS]ample*/**/
+![sS]amples*/
+![sS]amples*/**/
+
+# Allow .prt files in sample folder
+![sS]ample*/**/*.prt
+![sS]amples*/**/*.prt

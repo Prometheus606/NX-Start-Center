@@ -123,9 +123,9 @@ if Path(f"{UGII_DIR}cx_tools\\").exists():
 
 # NX title in Leiste schreiben und conmatix tab erstellen
 startup_path = f"{os.environ.get('CX_CUSTOM_DIRS')}\\startup"
-nxtitle_file = "src\\NX_UI\\nxtitel_configgroup.men"
-pp_tools_file = "src\\NX_UI\\CX_PP_tools.rtb"
-custom_dirs_file = "src\\NX_UI\\custom_dirs.dat"
+nxtitle_file = "resources\\NX_UI\\nxtitel_configgroup.men"
+pp_tools_file = "resources\\NX_UI\\CX_PP_tools.rtb"
+custom_dirs_file = "resources\\NX_UI\\custom_dirs.dat"
 if not Path(f"{startup_path}").exists():
     os.makedirs(f"{startup_path}")
 if not Path(f"{os.environ.get('CX_CUSTOM_DIRS')}\\custom_dirs.dat").exists():

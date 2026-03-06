@@ -46,16 +46,16 @@
     <Content Include="output\exe\src\images\duhGroup_Logo.png" />
     <Content Include="output\exe\src\images\folder.png" />
     <Content Include="README.md" />
-    <Content Include="src\.gitignore" />
-    <Content Include="src\images\copy_icon.png" />
-    <Content Include="src\images\duhGroup_Logo.ico" />
-    <Content Include="src\images\duhGroup_Logo.png" />
-    <Content Include="src\images\folder.png" />
-    <Content Include="src\Leistungsnachweis_AN000000.docx" />
-    <Content Include="src\NX_UI\custom_dirs.dat" />
-    <Content Include="src\NX_UI\CX_PP_tools.rtb" />
-    <Content Include="src\NX_UI\nxtitel_configgroup.men" />
-    <Content Include="src\Open_LMTools.bat" />
+    <Content Include="resources\.gitignore" />
+    <Content Include="resources\images\copy_icon.png" />
+    <Content Include="resources\images\duhGroup_Logo.ico" />
+    <Content Include="resources\images\duhGroup_Logo.png" />
+    <Content Include="resources\images\folder.png" />
+    <Content Include="resources\Leistungsnachweis_AN000000.docx" />
+    <Content Include="resources\NX_UI\custom_dirs.dat" />
+    <Content Include="resources\NX_UI\CX_PP_tools.rtb" />
+    <Content Include="resources\NX_UI\nxtitel_configgroup.men" />
+    <Content Include="resources\Open_LMTools.bat" />
     <Content Include="start_routine.bat" />
     <Content Include="USER_README.md" />
     <Content Include="user_settings.bat" />
@@ -112,9 +112,9 @@
     <Folder Include="output\exe\NX_Startcenter.onefile-build" />
     <Folder Include="output\exe\src\" />
     <Folder Include="output\exe\src\images" />
-    <Folder Include="src\" />
-    <Folder Include="src\images" />
-    <Folder Include="src\NX_UI\" />
+    <Folder Include="resources\" />
+    <Folder Include="resources\images\" />
+    <Folder Include="resources\NX_UI\" />
     <Folder Include="view" />
   </ItemGroup>
   <ItemGroup>

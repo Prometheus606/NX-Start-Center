@@ -113,7 +113,7 @@ class CreateNewCustomer:
         self.controller.model.customers = self.controller.model.get_customers()
         self.controller.view.register.customer_combobox['values'] = self.controller.model.customers
 
-        copy_file("./src/Leistungsnachweis_AN000000.docx", fr"{self.customer_path}/1_Kundendaten/")
+        copy_file("./resources/Leistungsnachweis_AN000000.docx", fr"{self.customer_path}/1_Kundendaten/")
 
         if self.new_machine:
             os.makedirs(self.pp_dir)
@@ -123,7 +123,7 @@ class CreateNewCustomer:
             os.makedirs(fr"{self.machine_dir}/graphics")
 
             self.create_readme_file()
-            copy_file("./src/.gitignore", self.machine_dir)
+            copy_file("./resources/.gitignore", self.machine_dir)
 
             remove_readonly_recursive(fr"{self.customer_path}/5_Umgebung/{self.new_version}/MACH/resource/library/machine/ascii")
 

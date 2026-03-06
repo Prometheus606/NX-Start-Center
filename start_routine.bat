@@ -144,9 +144,9 @@ if exist "%UGII_DIR%cx_tools\" (
 
 rem NX title in Leiste schreiben und conmatix tab erstellen
 set startup_path=%CX_CUSTOM_DIRS%\startup
-set nxtitle_file=src\NX_UI\nxtitel_configgroup.men
-set pp_tools_file=src\NX_UI\CX_PP_tools.rtb
-set custom_dirs_file=src\NX_UI\custom_dirs.dat
+set nxtitle_file=resources\NX_UI\nxtitel_configgroup.men
+set pp_tools_file=resources\NX_UI\CX_PP_tools.rtb
+set custom_dirs_file=resources\NX_UI\custom_dirs.dat
 if not exist "%startup_path%" (
     md "%startup_path%"
 )
