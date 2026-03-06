@@ -4,6 +4,7 @@ from controller.Copy_Roles import Copy_Roles
 import subprocess
 import winreg
 import sys
+import os
 
 
 class NXStart:
@@ -27,7 +28,13 @@ class NXStart:
         debug_terminal = self.controller.model.startNXWithDebug
 
         self.controller.view.set_message()
-        script = "start_routine.bat" if batchstart else "start_routine.py"
+
+        if getattr(sys, 'frozen', False):
+            base_path = ""  # PyInstaller temp folder
+        else:
+            base_path = "src"
+
+        script = os.path.join(base_path, "start_routine.bat" if batchstart else "start_routine.py")
 
         if not batchstart and not self.python_is_installed:
             self.controller.view.set_message("Python ist nicht installiert. Bitte Installiere Python oder Wähle Batch zum starten aus.")
