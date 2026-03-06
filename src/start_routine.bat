@@ -50,7 +50,10 @@ rem ***** UGII_ROOT_DIR wird nur bei bei NX-Versionen vor NX12 ben�tigt *****
 rem set UGII_ROOT_DIR=C:\Siemens\%NX_VERSION%\UGII
 
 rem ***** 5_Umgebung *****
-set CX_PP_TOOLS=%~dp0..
+set DUH_ToolBars_DIR=%~dp0..\NX_ToolBars\DUH_Group\
+set DUH_PP_TOOLS=%~dp0..\NX_ToolBars\DUH_Group\PP_Tools
+set DUH_TOOLS=%~dp0..\NX_ToolBars\DUH_Group\duh_tools
+set Siemens_ToolBars_DIR=%~dp0..\NX_ToolBars\Siemens
 set CX_CUSTOM_DIRS=%UGII_DIR%
 set UGII_CUSTOM_DIRECTORY_FILE=%UGII_DIR%custom_dirs.dat
 
@@ -145,7 +148,6 @@ if exist "%UGII_DIR%cx_tools\" (
 rem NX title in Leiste schreiben und conmatix tab erstellen
 set startup_path=%CX_CUSTOM_DIRS%\startup
 set nxtitle_file=resources\NX_UI\nxtitel_configgroup.men
-set pp_tools_file=resources\NX_UI\CX_PP_tools.rtb
 set custom_dirs_file=resources\NX_UI\custom_dirs.dat
 if not exist "%startup_path%" (
     md "%startup_path%"
@@ -153,10 +155,13 @@ if not exist "%startup_path%" (
 if not exist "%CX_CUSTOM_DIRS%\custom_dirs.dat" (
      copy "%~dp0%custom_dirs_file%" "%CX_CUSTOM_DIRS%\custom_dirs.dat"
 )
-copy "%~dp0%pp_tools_file%" "%startup_path%" /Y
-copy "%~dp0%nxtitle_file%" "%startup_path%" /Y
+
 rem in  "nxtitel_configgroup.men" letzte Zeile schreiben
-echo TITLE CAM - %NX_VERSION% %KUNDENNAME% >> "%startup_path%\"nxtitel_configgroup.men"
+(
+echo VERSION 121
+echo EDIT UG_GATEWAY_MAIN_MENUBAR
+echo TITLE CAM - %NX_VERSION% %KUNDENNAME%
+) >> "%startup_path%\nxtitel_configgroup.men"
 
 rem nur bei Externer Simulation verwendbar
 set UGII_CAM_IPW_SNAPSHOT=1
