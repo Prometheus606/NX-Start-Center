@@ -19,7 +19,10 @@
     <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="create_exe.bat" />
+    <Content Include="data\config.json" />
+    <Content Include="docs\create release.md" />
+    <Content Include="docs\README.md" />
+    <Content Include="docs\USER_README.md" />
     <Content Include="LICENSE.txt" />
     <Content Include="output\build\DUH_Startcenter\warn-DUH_Startcenter.txt" />
     <Content Include="output\build\DUH_Startcenter\xref-DUH_Startcenter.html" />
@@ -45,7 +48,6 @@
     <Content Include="output\exe\src\images\duhGroup_Logo.ico" />
     <Content Include="output\exe\src\images\duhGroup_Logo.png" />
     <Content Include="output\exe\src\images\folder.png" />
-    <Content Include="README.md" />
     <Content Include="resources\.gitignore" />
     <Content Include="resources\images\copy_icon.png" />
     <Content Include="resources\images\duhGroup_Logo.ico" />
@@ -56,8 +58,8 @@
     <Content Include="resources\NX_UI\CX_PP_tools.rtb" />
     <Content Include="resources\NX_UI\nxtitel_configgroup.men" />
     <Content Include="resources\Open_LMTools.bat" />
+    <Content Include="scripts\create_exe.bat" />
     <Content Include="src\start_routine.bat" />
-    <Content Include="USER_README.md" />
     <Content Include="src\user_settings.bat" />
   </ItemGroup>
   <ItemGroup>
@@ -98,6 +100,9 @@
     <Compile Include="src\view\View.py" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="data\" />
+    <Folder Include="docs\" />
+    <Folder Include="scripts\" />
     <Folder Include="src\controller\" />
     <Folder Include="src\model\" />
     <Folder Include="output\" />

@@ -13,26 +13,27 @@ NX_StartCenter ist ein Python-Tool, das die Verwaltung und den Start von Siemens
 
    
 ## Installation
-1. Installieren Sie Python und setzen Sie den Haken bei "Hinzufügen zu PATH":
-~~~ bash
-https://www.python.org/downloads/windows/
-~~~
-2. Installieren Sie Visual Studio Code und setzen Sie den Haken bei "Hinzufügen zu PATH":
+
+1. Installieren Sie Visual Studio Code und setzen Sie den Haken bei "Hinzufügen zu PATH":
 ~~~ bash
 https://code.visualstudio.com/
 ~~~
+2. (Optional) Installieren Sie Python und setzen Sie den Haken bei "Hinzufügen zu PATH":
+~~~ bash
+https://www.python.org/downloads/windows/
+~~~
 4. Starten Sie die Datei DUH_Startcenter-installer.exe
-5. Passen SIe die EInstellungen an.
+5. Merken Sie sich den Installationsort
 
 ## Verwendung
 
-1. Starten Sie das Tool:
+1. Starten Sie die Datei aus dem installationsort:
     ```bash
-    DUH_Startcenter-installer.exe
+    DUH_Startcenter.exe
     ```
-2. Wählen Sie die gewünschte Siemens NX-Version oder Kundenumgebung aus.
-3. Starten Sie Siemens NX, den Explorer oder VSCode mit den ausgewählten Einstellungen.
-4. Passen Sie bei Bedarf die Einstellungen im Einstellungsfenster an.
+2. Passen Sie bei Bedarf die Einstellungen im Einstellungsfenster an.
+3. Wählen Sie die gewünschte Siemens NX-Version oder Kundenumgebung aus.
+4. Starten Sie Siemens NX, den Explorer oder VSCode mit den ausgewählten Einstellungen.
 
 ## Einstellungen
 
@@ -42,10 +43,10 @@ Im Einstellungsfenster können Sie:
 
 ## Anpassung der Start-Batch
 
-Änderungen an der Startlogik und weiteren Einstellungen können in der Datei `startbatch.py` oder `startbatch.bat` vorgenommen werden. 
+Änderungen an der Startlogik und weiteren Einstellungen können in der Datei `start_routine.py` oder `start_routine.bat` vorgenommen werden. 
 Hier können Sie die Batch-Befehle und andere Konfigurationen anpassen, um das Tool an Ihre spezifischen Anforderungen anzupassen. 
 ACHTUNG! Diese Änderungen werden bei Updates Überschrieben! 
-Anpassungen die nicht überschrieben werden sollen, können in "user_settings.py" gemacht werden.
+Anpassungen die nicht überschrieben werden sollen, können in "user_settings.py" bzw. "user_settings.bat" gemacht werden.
 
 ## Lizenz
 

@@ -1,5 +1,6 @@
 import json
 from tkinter import messagebox
+import os
 
 def load_config(config_file: str, setting: str):
     """
@@ -32,6 +33,7 @@ def load_config(config_file: str, setting: str):
 
         except FileNotFoundError:
             # Wenn die Datei nicht gefunden wird, erstelle eine neue Konfigurationsdatei
+            os.mkdir("data")
             with open(config_file, 'w') as f:
                 json.dump({}, f, indent=4)
             print(f"Die Datei '{config_file}' wurde nicht gefunden. Sie wurde neu erzeugt. Bitte überprüfe deine Einstellungen.")

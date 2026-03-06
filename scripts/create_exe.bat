@@ -1,11 +1,12 @@
 @echo off
 setlocal
 
-rem === Basis: Ordner der BAT (duh_startcenter) ===
-set "BASE=%~dp0"
+rem === Basis Ordner (duh_startcenter) ===
+set "BASE=%~dp0..\"
+for %%i in ("%BASE%") do set "BASE=%%~fi"
 cd /d "%BASE%"
 
-rem === (Optional, aber empfohlen) venv aktivieren ===
+rem === venv aktivieren ===
 if exist "%BASE%venv\Scripts\activate.bat" (
   call "%BASE%venv\Scripts\activate.bat"
 ) else (
