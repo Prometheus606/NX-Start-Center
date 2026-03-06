@@ -88,6 +88,7 @@ class Model:
             for i in folder_content:
                 if Path(f"{base_path}\\{i}").is_dir() and i.lower().startswith("nx"):
                     version_list.append(i)
+            version_list = version_list[::-1]
             if self.last_configuration and self.last_configuration.get("last_native_version") is not None and self.last_configuration.get("last_native_version") in version_list:
                 self.native_version = self.last_configuration["last_native_version"]
             else:
@@ -136,6 +137,7 @@ class Model:
             if len(version_list) == 0:
                 print("Keine Version angelegt.")
                 return []
+            version_list = version_list[::-1]
             if self.last_configuration and self.last_configuration.get("last_version") is not None and self.last_configuration.get("last_version") in version_list:
                 self.version = self.last_configuration["last_version"]
             else:
