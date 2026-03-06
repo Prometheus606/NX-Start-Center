@@ -14,11 +14,11 @@ if exist "%BASE%venv\Scripts\activate.bat" (
 
 rem === PyInstaller Build ===
 pyinstaller --noconfirm --onefile --windowed --name "DUH_Startcenter" ^
-  --icon "%BASE%src\images\duhGroup_Logo.ico" ^
-  --add-data "%BASE%controller;controller/" ^
-  --add-data "%BASE%model;model/" ^
-  --add-data "%BASE%view;view/" ^
-  --add-data "%BASE%env.py;." ^
+  --icon "%BASE%resources\images\duhGroup_Logo.ico" ^
+  --add-data "%BASE%src\controller;controller/" ^
+  --add-data "%BASE%src\model;model/" ^
+  --add-data "%BASE%src\view;view/" ^
+  --add-data "%BASE%src\env.py;." ^
   --collect-all tkinter ^
   --collect-all ttkbootstrap ^
   --collect-all ttkcreator ^
@@ -27,7 +27,7 @@ pyinstaller --noconfirm --onefile --windowed --name "DUH_Startcenter" ^
   --distpath "%BASE%output\exe" ^
   --workpath "%BASE%output\build" ^
   --specpath "%BASE%output\spec" ^
-  "%BASE%NX_Startcenter.py"
+  "%BASE%src\NX_Startcenter.py"
 
 pause
 endlocal

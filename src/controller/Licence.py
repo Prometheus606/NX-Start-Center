@@ -23,7 +23,7 @@ class Licence:
         file_path = self.controller.model.licence_server_path
         try:
             print(os.getcwd())
-            subprocess.Popen([f"{os.getcwd()}\resources\Open_LMTools.bat", file_path])
+            subprocess.Popen([fr"{os.getcwd()}\resources\Open_LMTools.bat", file_path])
         except FileNotFoundError:
             print(f"Der Pfad {file_path} wurde nicht gefunden.")
             # messagebox.showerror("Fehler", f"Der Pfad {file_path} wurde nicht gefunden.")

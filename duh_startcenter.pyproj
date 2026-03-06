@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{a63a8ae0-9ebb-433b-b5b5-51bc4f74b025}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>NX_Startcenter.py</StartupFile>
+    <StartupFile>src\NX_Startcenter.py</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -56,50 +56,50 @@
     <Content Include="resources\NX_UI\CX_PP_tools.rtb" />
     <Content Include="resources\NX_UI\nxtitel_configgroup.men" />
     <Content Include="resources\Open_LMTools.bat" />
-    <Content Include="start_routine.bat" />
+    <Content Include="src\start_routine.bat" />
     <Content Include="USER_README.md" />
-    <Content Include="user_settings.bat" />
+    <Content Include="src\user_settings.bat" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="controller\Config_file_handler.py" />
-    <Compile Include="controller\Controller.py" />
-    <Compile Include="controller\Copy_Roles.py" />
-    <Compile Include="controller\CreateNewCustomer.py" />
-    <Compile Include="controller\Fork.py" />
-    <Compile Include="controller\Licence.py" />
-    <Compile Include="controller\NativeStart.py" />
-    <Compile Include="controller\NXStart.py" />
-    <Compile Include="controller\OpenExplorer.py" />
-    <Compile Include="controller\PostbuilderStart.py" />
-    <Compile Include="controller\SetLastConfig.py" />
-    <Compile Include="controller\Settings.py" />
-    <Compile Include="controller\UiChanges.py" />
-    <Compile Include="controller\Update.py" />
-    <Compile Include="controller\Utils.py" />
-    <Compile Include="controller\VSCode.py" />
-    <Compile Include="env.py" />
-    <Compile Include="model\Model.py" />
-    <Compile Include="NX_Startcenter.py" />
+    <Compile Include="src\controller\Config_file_handler.py" />
+    <Compile Include="src\controller\Controller.py" />
+    <Compile Include="src\controller\Copy_Roles.py" />
+    <Compile Include="src\controller\CreateNewCustomer.py" />
+    <Compile Include="src\controller\Fork.py" />
+    <Compile Include="src\controller\Licence.py" />
+    <Compile Include="src\controller\NativeStart.py" />
+    <Compile Include="src\controller\NXStart.py" />
+    <Compile Include="src\controller\OpenExplorer.py" />
+    <Compile Include="src\controller\PostbuilderStart.py" />
+    <Compile Include="src\controller\SetLastConfig.py" />
+    <Compile Include="src\controller\Settings.py" />
+    <Compile Include="src\controller\UiChanges.py" />
+    <Compile Include="src\controller\Update.py" />
+    <Compile Include="src\controller\Utils.py" />
+    <Compile Include="src\controller\VSCode.py" />
+    <Compile Include="src\env.py" />
+    <Compile Include="src\model\Model.py" />
+    <Compile Include="src\NX_Startcenter.py" />
     <Compile Include="output\exe\NX_Startcenter.build\scons-debug.py" />
     <Compile Include="output\exe\NX_Startcenter.build\tkinter-preLoad.py" />
     <Compile Include="output\exe\NX_Startcenter.onefile-build\scons-debug.py" />
     <Compile Include="output\exe\start_routine.py" />
     <Compile Include="output\exe\user_settings.py" />
-    <Compile Include="start_routine.py" />
-    <Compile Include="user_settings.py" />
-    <Compile Include="view\CustomMenuBar.py" />
-    <Compile Include="view\ImageFrame.py" />
-    <Compile Include="view\LanguageFrame.py" />
-    <Compile Include="view\NativStartFrame.py" />
-    <Compile Include="view\ProgressWindow.py" />
-    <Compile Include="view\ProjectFrame.py" />
-    <Compile Include="view\ProjectOptionFrame.py" />
-    <Compile Include="view\SettingFrame.py" />
-    <Compile Include="view\View.py" />
+    <Compile Include="src\start_routine.py" />
+    <Compile Include="src\user_settings.py" />
+    <Compile Include="src\view\CustomMenuBar.py" />
+    <Compile Include="src\view\ImageFrame.py" />
+    <Compile Include="src\view\LanguageFrame.py" />
+    <Compile Include="src\view\NativStartFrame.py" />
+    <Compile Include="src\view\ProgressWindow.py" />
+    <Compile Include="src\view\ProjectFrame.py" />
+    <Compile Include="src\view\ProjectOptionFrame.py" />
+    <Compile Include="src\view\SettingFrame.py" />
+    <Compile Include="src\view\View.py" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="controller" />
-    <Folder Include="model" />
+    <Folder Include="src\controller\" />
+    <Folder Include="src\model\" />
     <Folder Include="output\" />
     <Folder Include="output\build\" />
     <Folder Include="output\build\DUH_Startcenter" />
@@ -115,7 +115,8 @@
     <Folder Include="resources\" />
     <Folder Include="resources\images\" />
     <Folder Include="resources\NX_UI\" />
-    <Folder Include="view" />
+    <Folder Include="src\" />
+    <Folder Include="src\view\" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="venv\">
