@@ -1,18 +1,16 @@
-config.json
+data
 venv
-output/exe
-output/installer/Output
-output/NX Start Center
-output/spec
+output
 build
-NX Start Center.spec
 .idea
-env.py
 __pycache__
 controller/__pycache__
 view/__pycache__
+env.py
 model/__pycache__
 nuitka-crash-report.xml
 mom_information.out
 dbc_information.out
+src/mom_information.out
+src/dbc_information.out
 .vs
