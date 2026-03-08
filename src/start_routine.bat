@@ -152,16 +152,17 @@ set custom_dirs_file=resources\NX_UI\custom_dirs.dat
 if not exist "%startup_path%" (
     md "%startup_path%"
 )
-if not exist "%CX_CUSTOM_DIRS%\custom_dirs.dat" (
-     copy "%~dp0%custom_dirs_file%" "%CX_CUSTOM_DIRS%\custom_dirs.dat"
-)
+
+copy "%~dp0%custom_dirs_file%" "%CX_CUSTOM_DIRS%\custom_dirs.dat"
 
 rem in  "nxtitel_configgroup.men" letzte Zeile schreiben
-(
-echo VERSION 121
-echo EDIT UG_GATEWAY_MAIN_MENUBAR
-echo TITLE CAM - %NX_VERSION% %KUNDENNAME%
-) >> "%startup_path%\nxtitel_configgroup.men"
+if not exist "%startup_path%\nxtitel_configgroup.men" (
+    (
+    echo VERSION 121
+    echo EDIT UG_GATEWAY_MAIN_MENUBAR
+    echo TITLE CAM - %NX_VERSION% %KUNDENNAME%
+    ) >> "%startup_path%\nxtitel_configgroup.men"
+)
 
 rem nur bei Externer Simulation verwendbar
 set UGII_CAM_IPW_SNAPSHOT=1

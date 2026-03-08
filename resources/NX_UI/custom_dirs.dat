@@ -44,3 +44,7 @@
 # Customer modifications can follow on here
 #
 $CX_CUSTOM_DIRS
+$DUH_ToolBars_DIR
+$DUH_PP_TOOLS
+$DUH_TOOLS
+$Siemens_ToolBars_DIR
