@@ -12,7 +12,7 @@ def Copy_Roles(controller, nx_version):
         roles = roles.split(";")
         destination = f"C:\\Users\\{username}\\AppData\\Local\\Siemens\\{nx_version}\\roles\\"
         if not Path(destination).exists() or not Path(destination).is_dir():
-            os.mkdir(destination)
+            os.makedirs(destination, exist_ok=True)
         for role in roles:
             if role != "" and Path(role).exists() and Path(role).is_file():
                 shutil.copy(role, destination)

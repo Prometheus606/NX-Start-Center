@@ -56,13 +56,19 @@ class NXStart:
             str(int(self.controller.model.load_feed)),
         ]
 
+
         try:
             # to debug an batch file, rename the file suffix for test
             if script.endswith(".bat"):
                 cmd = [script] + args
 
                 if debug_terminal:
-                    subprocess.Popen(["cmd.exe", "/k", script] + args, shell=False)
+                    cmdline = subprocess.list2cmdline([script] + args)
+                    subprocess.Popen(
+                        f'start "NX Debug" cmd /k {cmdline}',
+                        shell=True
+                    )
+                    # subprocess.Popen(["cmd.exe", "/k", script] + args, shell=False)
                 else:
                     subprocess.Popen(cmd, shell=False, creationflags=subprocess.CREATE_NO_WINDOW)
 
@@ -94,6 +100,8 @@ class NXStart:
 
         except FileNotFoundError:
             messagebox.showerror("Fehler", f"Die Datei {script} konnte nicht gefunden werden.")
+        except Exception as ex:
+            messagebox.showerror("Fehler", ex)
 
         save_config(
             self.controller.model.config_file,
