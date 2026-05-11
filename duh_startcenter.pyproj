@@ -87,8 +87,6 @@
     <Compile Include="output\exe\NX_Startcenter.onefile-build\scons-debug.py" />
     <Compile Include="output\exe\start_routine.py" />
     <Compile Include="output\exe\user_settings.py" />
-    <Compile Include="src\start_routine.py" />
-    <Compile Include="src\user_settings.py" />
     <Compile Include="src\view\CustomMenuBar.py" />
     <Compile Include="src\view\ImageFrame.py" />
     <Compile Include="src\view\LanguageFrame.py" />
