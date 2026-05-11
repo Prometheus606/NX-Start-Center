@@ -3,6 +3,7 @@ import tkinter as tk
 import ttkbootstrap as ttk
 from view.CustomMenuBar import CustomMenuBar
 from view.SettingFrame import SettingFrame
+from core.settings_schema import SETTINGS
 from view.NativStartFrame import NativStartFrame
 from view.ImageFrame import ImageFrame
 from view.ProjectFrame import ProjectFrame
@@ -47,16 +48,19 @@ class View(tk.Tk):
         self.native_version = ttk.StringVar()
         self.postbuilder_version = ttk.StringVar()
 
-        self.nx_installation_path = tk.StringVar()
-        self.customer_environment_path = tk.StringVar()
-        self.licence_path = tk.StringVar()
-        self.licence_server_path = tk.StringVar()
-        self.roles_path = tk.StringVar()
-        self.fork_path = tk.StringVar()
-        self.theme = tk.StringVar()
-        self.batchstart = ttk.BooleanVar()
-        self.startNXWithDebug = ttk.BooleanVar()
-        self.editor = ttk.StringVar()
+        self.setting_vars = {}
+        for setting in SETTINGS:
+            variable = ttk.BooleanVar() if setting.widget == "checkbox" else tk.StringVar()
+            variable.set(getattr(self.model, setting.key))
+            self.setting_vars[setting.key] = variable
+
+        # Compatibility aliases used by existing controllers.
+        # They are generated from the schema, so a new setting does not need
+        # another manual line in the view.
+        for setting in SETTINGS:
+            setattr(self, setting.key, self.setting_vars[setting.key])
+            for alias in setting.variable_aliases:
+                setattr(self, alias, self.setting_vars[setting.key])
 
         # ==================================== menubar ====================================
 
@@ -163,7 +167,7 @@ class View(tk.Tk):
 
         # ==================================== Setting Frame ====================================
 
-        self.setting_frame = SettingFrame(self, self.model, self.theme, self.nx_installation_path, self.customer_environment_path, self.licence_path, self.licence_server_path, "resources/images/folder.png", self.editor, self.batchstart, self.startNXWithDebug, self.roles_path, self.fork_path, text="Einstellungen")
+        self.setting_frame = SettingFrame(self, self.model, self.setting_vars, "resources/images/folder.png", text="Einstellungen")
 
         self.style = ttk.Style(self.model.theme)
 

@@ -9,12 +9,14 @@ from controller.Fork import Fork
 from controller.OpenExplorer import OpenExplorer
 from controller.SetLastConfig import SetLastConfig
 from controller.Licence import Licence
+from core.state_service import StateService
 
 
 class Controller:
     def __init__(self, model, view):
         self.model = model
         self.view = view
+        self.state = StateService(model, view)
 
         self.start_native = NativeStart(self)
         self.start_nx = NXStart(self)

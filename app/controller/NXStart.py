@@ -24,7 +24,6 @@ class NXStart:
             return False
 
     def start_NX_customer(self):
-        batchstart = self.controller.model.batchstart
         debug_terminal = self.controller.model.startNXWithDebug
 
         self.controller.view.set_message()
@@ -32,13 +31,9 @@ class NXStart:
         if getattr(sys, 'frozen', False):
             base_path = ""  # PyInstaller temp folder
         else:
-            base_path = "src"
+            base_path = "app"
 
-        script = os.path.join(base_path, "start_routine.bat" if batchstart else "start_routine.py")
-
-        if not batchstart and not self.python_is_installed:
-            self.controller.view.set_message("Python ist nicht installiert. Bitte Installiere Python oder Wähle Batch zum starten aus.")
-            return
+        script = os.path.join(base_path, "start_routine.bat")
 
         # Rolle(n)in die jeweilige NX version kopieren
         Copy_Roles(self.controller, self.controller.model.version)
