@@ -4,27 +4,21 @@ from typing import Any, Iterable, Optional, Tuple
 
 @dataclass(frozen=True)
 class SettingDefinition:
-    """
-    Single source of truth for one application setting.
-
-    Add a new setting here and it is automatically available in:
-    - default config migration
-    - model.settings and model.<key>
-    - view StringVar/BooleanVar creation
-    - settings form rendering
-    - settings controller save/browse behaviour
-    - Visual Studio project listing, when the .pyproj is kept in sync
-    """
-
     key: str
     label: str
     default: Any = ""
-    widget: str = "entry"              # entry, option, checkbox
-    dialog: Optional[str] = None        # directory, file, files
+
+    widget: str = "entry"
+
+    dialog: Optional[str] = None
     filetypes: Tuple[Tuple[str, str], ...] = ()
+
     options_attr: Optional[str] = None
+    options: Tuple[str, ...] = ()
+
     save_on_change: bool = False
     row_padding: int = 15
+
     variable_aliases: Tuple[str, ...] = field(default_factory=tuple)
     widget_alias: Optional[str] = None
 
@@ -69,6 +63,15 @@ SETTINGS: tuple[SettingDefinition, ...] = (
         default="",
         dialog="files",
         filetypes=(("MTX Dateien", "*.mtx"),),
+    ),
+    SettingDefinition(
+        key="team",
+        label="Team:",
+        default="PP",
+        widget="option",
+        options=("CAM", "PP"),
+        save_on_change=True,
+        widget_alias="team_menu",
     ),
     SettingDefinition(
         key="preferred_theme",

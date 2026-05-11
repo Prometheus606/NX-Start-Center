@@ -56,8 +56,6 @@
     <Content Include="resources\images\folder.png" />
     <Content Include="resources\Leistungsnachweis_AN000000.docx" />
     <Content Include="resources\NX_UI\custom_dirs.dat" />
-    <Content Include="resources\NX_UI\CX_PP_tools.rtb" />
-    <Content Include="resources\NX_UI\nxtitel_configgroup.men" />
     <Content Include="resources\Open_LMTools.bat" />
     <Content Include="scripts\create_exe.bat" />
     <Content Include="app\start_routine.bat" />
