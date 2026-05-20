@@ -166,7 +166,7 @@ if not exist "%startup_path%\nxtitel_configgroup.men" (
 
 rem nur bei Externer Simulation verwendbar
 set UGII_CAM_IPW_SNAPSHOT=1
-pause
+rem pause
 
 rem *****************************************************************************
 rem 						Read CAM Batch file (custom_nx.bat)

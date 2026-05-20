@@ -5,6 +5,7 @@ import subprocess
 import winreg
 import sys
 import os
+from pathlib import Path
 
 
 class NXStart:
@@ -33,7 +34,7 @@ class NXStart:
         else:
             base_path = "app"
 
-        script = os.path.join(base_path, "start_routine.bat")
+        script = os.path.join(os.getcwd(), base_path, "start_routine.bat")
 
         # Rolle(n)in die jeweilige NX version kopieren
         Copy_Roles(self.controller, self.controller.model.version)
@@ -54,44 +55,24 @@ class NXStart:
 
         try:
             # to debug an batch file, rename the file suffix for test
-            if script.endswith(".bat"):
                 cmd = [script] + args
+                workdir = Path(
+                    self.controller.model.settings.get("customer_environment_path"),
+                    self.controller.model.customer
+                ).resolve()
+                cmd = [str(script)] + [str(a) for a in args]
+                cmdline = subprocess.list2cmdline([str(script)] + [str(a) for a in args])
 
                 if debug_terminal:
-                    cmdline = subprocess.list2cmdline([script] + args)
+                    debug_cmd = subprocess.list2cmdline(cmd)
+
                     subprocess.Popen(
-                        f'start "NX Debug" cmd /k {cmdline}',
-                        shell=True
+                        ["cmd.exe", "/k", debug_cmd],
+                        cwd=str(workdir),
+                        creationflags=subprocess.CREATE_NEW_CONSOLE
                     )
-                    # subprocess.Popen(["cmd.exe", "/k", script] + args, shell=False)
                 else:
-                    subprocess.Popen(cmd, shell=False, creationflags=subprocess.CREATE_NO_WINDOW)
-
-            else:
-                cmd = [sys.executable, "-u", script] + args
-
-                if debug_terminal:
-                    subprocess.Popen(["cmd.exe", "/k"] + cmd, shell=False)
-                else:
-                    process = subprocess.run(cmd, shell=False, capture_output=True, text=True)
-                    stdout = process.stdout
-                    stderr = process.stderr
-                    if stdout:
-                        stdout_clean = ""
-                        for line in stdout.strip().split("\n"):
-                            if "1 Datei(en) kopiert" not in line:
-                                stdout_clean += f"\n{line}"
-                        print(stdout_clean)
-                        messagebox.showinfo("Info", f"{stdout_clean}")
-
-                    if process.returncode == 3:
-                        print("Fehler beim starten von NX")
-                        messagebox.showerror("Fehler",
-                                             f"Die Datei 'ugraf.exe' konnte nicht gefunden werden.\nBitte überprüfe den Pfad in der startbatch.")
-                    elif process.returncode != 0:
-                        print("Fehler beim starten von NX")
-                        print(stderr)
-                        messagebox.showerror("Fehler", f"Fehler beim starten von NX:\n{stderr}")
+                    subprocess.Popen(cmd, shell=False, creationflags=subprocess.CREATE_NO_WINDOW, cwd=str(workdir))
 
         except FileNotFoundError:
             messagebox.showerror("Fehler", f"Die Datei {script} konnte nicht gefunden werden.")

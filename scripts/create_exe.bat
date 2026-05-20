@@ -16,10 +16,10 @@ if exist "%BASE%venv\Scripts\activate.bat" (
 rem === PyInstaller Build ===
 pyinstaller --noconfirm --onefile --windowed --name "DUH_Startcenter" ^
   --icon "%BASE%resources\images\duhGroup_Logo.ico" ^
-  --add-data "%BASE%src\controller;controller/" ^
-  --add-data "%BASE%src\model;model/" ^
-  --add-data "%BASE%src\view;view/" ^
-  --add-data "%BASE%src\env.py;." ^
+  --add-data "%BASE%app\controller;controller/" ^
+  --add-data "%BASE%app\model;model/" ^
+  --add-data "%BASE%app\view;view/" ^
+  --add-data "%BASE%app\env.py;." ^
   --collect-all tkinter ^
   --collect-all ttkbootstrap ^
   --collect-all ttkcreator ^
@@ -28,7 +28,7 @@ pyinstaller --noconfirm --onefile --windowed --name "DUH_Startcenter" ^
   --distpath "%BASE%output\exe" ^
   --workpath "%BASE%output\build" ^
   --specpath "%BASE%output\spec" ^
-  "%BASE%src\NX_Startcenter.py"
+  "%BASE%app\NX_Startcenter.py"
   
 "C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\signtool.exe" sign /sha1 "25b8123c7ea491f66dc913e37d668a7297f35ab6" /t http://time.certum.pl /fd SHA256 /v %BASE%output\exe\DUH_Startcenter.exe
 
