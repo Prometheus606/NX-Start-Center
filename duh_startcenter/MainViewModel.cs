@@ -390,6 +390,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
     private void RefreshCollectionsFromModel()
     {
+        Console.WriteLine("NIKLAS");
         var oldCustomer = SelectedCustomer;
         var oldVersion = SelectedVersion;
         var oldMachine = SelectedMachine;

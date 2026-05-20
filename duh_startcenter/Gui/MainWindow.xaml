@@ -183,18 +183,21 @@
 
                                 <TextBlock Text="Kunde:" Grid.Row="0" Grid.Column="0"/>
                                 <ComboBox ItemsSource="{Binding Customers}"
+                                          ScrollViewer.CanContentScroll="True"
                       SelectedItem="{Binding SelectedCustomer}"
                       Grid.Row="0"
                       Grid.Column="1"/>
 
                                 <TextBlock Text="NX-Version:" Grid.Row="1" Grid.Column="0"/>
                                 <ComboBox ItemsSource="{Binding Versions}"
+                                          ScrollViewer.CanContentScroll="True"
                       SelectedItem="{Binding SelectedVersion}"
                       Grid.Row="1"
                       Grid.Column="1"/>
 
                                 <TextBlock Text="Maschine:" Grid.Row="2" Grid.Column="0"/>
                                 <ComboBox ItemsSource="{Binding Machines}"
+                                          ScrollViewer.CanContentScroll="True"
                       SelectedItem="{Binding SelectedMachine}"
                       Grid.Row="2"
                       Grid.Column="1"/>
@@ -287,6 +290,7 @@
                                            Grid.Column="0"/>
 
                                 <ComboBox ItemsSource="{Binding NativeVersions}"
+                                          ScrollViewer.CanContentScroll="True"
                                           SelectedItem="{Binding SelectedNativeVersion}"
                                           Grid.Column="1"/>
 
@@ -309,7 +313,8 @@
 
                                 <ComboBox ItemsSource="{Binding PostbuilderVersions}"
                                           SelectedItem="{Binding SelectedPostbuilderVersion}"
-                                          Grid.Column="1"/>
+                                          Grid.Column="1"
+                                          ScrollViewer.CanContentScroll="True"/>
 
                                 <Button Content="Postbuilder"
                                         Command="{Binding StartPostbuilderCommand}"
@@ -340,6 +345,7 @@
                         <ComboBox ItemsSource="{Binding Customers}"
                                   Text="{Binding NewCustomer, UpdateSourceTrigger=PropertyChanged}"
                                   IsEditable="True"
+                                  ScrollViewer.CanContentScroll="True"
                                   Grid.Row="0"
                                   Grid.Column="1" Margin="4,4,3,3" SelectionChanged="ComboBox_SelectionChanged"/>
 
@@ -347,6 +353,7 @@
                         <ComboBox ItemsSource="{Binding NativeVersions}"
                                   Text="{Binding NewVersion, UpdateSourceTrigger=PropertyChanged}"
                                   IsEditable="True"
+                                  ScrollViewer.CanContentScroll="True"
                                   Grid.Row="1"
                                   Grid.Column="1" Margin="4,3,3,4"/>
 

@@ -114,6 +114,8 @@
             <Setter Property="Height" Value="30"/>
             <Setter Property="Margin" Value="3.5"/>
             <Setter Property="Padding" Value="14,0"/>
+            <EventSetter Event="PreviewMouseWheel"
+                 Handler="ComboBox_PreviewMouseWheel"/>
 
             <Setter Property="Template">
                 <Setter.Value>
@@ -156,17 +158,24 @@
                             </ToggleButton>
 
                             <Popup IsOpen="{TemplateBinding IsDropDownOpen}"
-                           Placement="Bottom"
-                           AllowsTransparency="True"
-                           Focusable="False">
+       Placement="Bottom"
+       AllowsTransparency="True"
+       Focusable="True">
+
                                 <Border MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
-                                MaxHeight="320"
-                                Background="{StaticResource BgInput}"
-                                BorderBrush="{StaticResource BorderSoft}"
-                                BorderThickness="1">
-                                    <ScrollViewer Background="{StaticResource BgInput}"
-                                          Foreground="{StaticResource TextMain}">
+            MaxHeight="320"
+            Background="{StaticResource BgInput}"
+            BorderBrush="{StaticResource BorderSoft}"
+            BorderThickness="1">
+
+                                    <ScrollViewer x:Name="DropDownScrollViewer"
+                      VerticalScrollBarVisibility="Auto"
+                      CanContentScroll="True"
+                      PanningMode="VerticalOnly"
+                      Background="{StaticResource BgInput}">
+
                                         <ItemsPresenter/>
+
                                     </ScrollViewer>
                                 </Border>
                             </Popup>
