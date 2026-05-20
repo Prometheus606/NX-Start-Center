@@ -75,6 +75,29 @@ public sealed class NxService(AppModel model)
         return "Lizenzdatei geöffnet.";
     }
 
+    public string OpenMainBatch()
+    {
+        return OpenFile("app/start_routine.bat");
+    }
+
+    public string OpenCustomerBatch()
+    {
+        return OpenFile(Path.Combine(model.Settings.CustomerEnvironmentPath, model.Customer, "5_Umgebung", model.VersionName, "start_apps", $"custom_nx_{model.Customer}.bat"));
+    }
+
+    public string OpenDeveloperBatch()
+    {
+        return OpenFile("app/user_settings.bat");
+    }
+
+    public string OpenFile(string path)
+    {
+        var editor = ProcessService.FindEditor(model.Settings.Editor) ?? "notepad.exe";
+        if (!File.Exists(model.Settings.LicencePath)) return $"Die Datei '{path}' wurde nicht gefunden:";
+        ProcessService.StartFile(editor, $"\"{path}\"");
+        return "Datei geöffnet.";
+    }
+
     public string StartLmTools()
     {
         if (!File.Exists(model.Settings.LicenceServerPath)) return "Der Pfad wurde nicht gefunden:\n" + model.Settings.LicenceServerPath;

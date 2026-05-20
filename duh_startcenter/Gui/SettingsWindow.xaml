@@ -6,7 +6,9 @@
         Width="850"
         MinHeight="500"
         MinWidth="760"
-        WindowStartupLocation="CenterOwner">
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource BgMain}"
+        Foreground="White">
 
     <DockPanel Margin="12">
 
@@ -33,7 +35,6 @@
                 </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -82,27 +83,22 @@
                           Grid.Row="6"
                           Grid.Column="1"/>
 
-                <TextBlock Text="Theme:" Grid.Row="7" Grid.Column="0"/>
-                <ComboBox ItemsSource="{Binding Themes}"
-                          SelectedItem="{Binding Settings.PreferredTheme}"
-                          Grid.Row="7"
-                          Grid.Column="1"/>
 
                 <TextBlock Text="Editor:" Grid.Row="8" Grid.Column="0"/>
                 <ComboBox ItemsSource="{Binding Editors}"
                           SelectedItem="{Binding Settings.Editor}"
-                          Grid.Row="8"
+                          Grid.Row="7"
                           Grid.Column="1"/>
 
                 <CheckBox Content="Startdatei debuggen"
                           IsChecked="{Binding Settings.StartNxWithDebug}"
-                          Grid.Row="9"
+                          Grid.Row="8"
                           Grid.Column="1"
                           Margin="0,8"/>
 
                 <TextBlock Text="Config:" Grid.Row="10" Grid.Column="0"/>
                 <TextBlock Text="{Binding ConfigPath}"
-                           Grid.Row="10"
+                           Grid.Row="9"
                            Grid.Column="1"
                            TextWrapping="Wrap"/>
             </Grid>

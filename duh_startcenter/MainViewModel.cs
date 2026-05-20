@@ -53,6 +53,9 @@ public sealed class MainViewModel : INotifyPropertyChanged
         OpenExplorerCommand = new RelayCommand(() => RunAction(_nxService.OpenMachineFolder));
         OpenVsCodeCommand = new RelayCommand(() => RunAction(_nxService.OpenVsCode));
         OpenForkCommand = new RelayCommand(() => RunAction(_nxService.OpenFork));
+        OpenMainBatch = new RelayCommand(() => RunAction(_nxService.OpenMainBatch));
+        OpenCustomerBatch = new RelayCommand(() => RunAction(_nxService.OpenCustomerBatch));
+        OpenDeveloperBatch = new RelayCommand(() => RunAction(_nxService.OpenDeveloperBatch));
         OpenLicenseFileCommand = new RelayCommand(() => RunAction(_nxService.OpenLicenseFile));
         StartLmToolsCommand = new RelayCommand(() => RunAction(_nxService.StartLmTools));
         SaveSettingsCommand = new RelayCommand(SaveSettings);
@@ -61,7 +64,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
         OpenSettingsCommand = new RelayCommand(OpenSettings);
         ShowInfoCommand = new RelayCommand(ShowInfo);
 
-        RefreshCollectionsFromModel();
+    RefreshCollectionsFromModel();
 
         NewCustomer = SelectedCustomer;
         NewVersion = SelectedVersion;
@@ -100,6 +103,9 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public ICommand RefreshCommand { get; }
     public ICommand CreateProjectCommand { get; }
     public ICommand OpenSettingsCommand { get; }
+    public ICommand OpenMainBatch { get; }
+    public ICommand OpenCustomerBatch { get; }
+    public ICommand OpenDeveloperBatch { get; }
     public ICommand ShowInfoCommand { get; }
 
     public string StatusText

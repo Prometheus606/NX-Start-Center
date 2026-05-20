@@ -5,28 +5,105 @@
         Height="630"
         Width="733"
         WindowStartupLocation="CenterScreen"
-        Background="{StaticResource BgMain}">
+        Background="{StaticResource BgMain}"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        AllowsTransparency="False">
 
-    <DockPanel>
+    <Border BorderBrush="#3A3A3A"
+        BorderThickness="1"
+        CornerRadius="10"
+        Background="Transparent"
+        ClipToBounds="True">
+        <Grid>
 
-        <DockPanel.Background>
-            <VisualBrush Stretch="Fill">
-                <VisualBrush.Visual>
+            <Grid>
+                <Image Source="/resources/images/duhGroup_Logo.png"
+               Stretch="UniformToFill"/>
 
-                    <Grid Background="#1A1A1A">
+                <DockPanel Background="Transparent">
+                    <!-- Titelleiste und restlicher Inhalt -->
+                </DockPanel>
+            </Grid>
+            
+        <DockPanel>
+            <Grid DockPanel.Dock="Top"
+      Height="36"
+      Background="#1E1E1E"
+      MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
 
-                        <Image Source="/resources/images/duhGroup_Logo.png"
-                           Stretch="Uniform"
-                           Opacity="0.18"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Width="600"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="45"/>
+                <ColumnDefinition Width="45"/>
+            </Grid.ColumnDefinitions>
 
-                    </Grid>
+            <TextBlock Text="NX Start Center"
+               VerticalAlignment="Center"
+               Margin="12,0,0,0"
+               Foreground="White"
+               FontWeight="SemiBold"/>
 
-                </VisualBrush.Visual>
-            </VisualBrush>
-        </DockPanel.Background>
+            <Button Grid.Column="1"
+            Content="—"
+            FontSize="16"
+            Background="Transparent"
+            Foreground="White"
+            BorderThickness="0"
+            Click="Minimize_Click">
+
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2D2D2D"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+
+            <Button Grid.Column="2"
+            Content="✕"
+            FontSize="14"
+            Background="Transparent"
+            Foreground="White"
+            BorderThickness="0"
+            Click="Close_Click">
+
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#C42B1C"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
 
 
         <Menu DockPanel.Dock="Top">
@@ -44,6 +121,12 @@
             <MenuItem Header="Einstellungen">
                 <MenuItem Header="Einstellungen öffnen" Command="{Binding OpenSettingsCommand}"/>
                 <MenuItem Header="Einstellungen speichern" Command="{Binding SaveSettingsCommand}"/>
+            </MenuItem>
+
+            <MenuItem Header="Start Batches">
+                <MenuItem Header="Startbatch öffnen" Command="{Binding OpenMainBatch}"/>
+                        <MenuItem Header="Kundenbatch öffnen" Command="{Binding OpenCustomerBatch}"/>
+                        <MenuItem Header="Developerbatch öffnen" Command="{Binding OpenMainBatch}"/>
             </MenuItem>
 
             <MenuItem Header="Info" Command="{Binding ShowInfoCommand}"/>
@@ -76,7 +159,7 @@
 
         <Grid Margin="14">
 
-            <TabControl>
+            <TabControl Margin="0,-14,0,-14">
 
                 <TabItem Header="NX Starten">
                     <Grid Margin="8">
@@ -314,4 +397,6 @@
             </TabControl>
         </Grid>
     </DockPanel>
+            </Grid>
+    </Border>
 </Window>

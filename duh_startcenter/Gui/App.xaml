@@ -4,7 +4,7 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
-        <SolidColorBrush x:Key="BgMain" Color="#181818"/>
+        <SolidColorBrush x:Key="BgMain" Color="#2B2B2B"/>
         <SolidColorBrush x:Key="BgTop" Color="#111111"/>
         <SolidColorBrush x:Key="BgPanel" Color="#242424"/>
         <SolidColorBrush x:Key="BgPanel2" Color="#303030"/>
@@ -14,8 +14,8 @@
         <SolidColorBrush x:Key="TextMuted" Color="#C9C9C9"/>
         <SolidColorBrush x:Key="AccentBlue" Color="#0B84E5"/>
         <SolidColorBrush x:Key="AccentBlueDark" Color="#086BB8"/>
-        <SolidColorBrush x:Key="TooltipBg" Color="#F2F2F2"/>
-        <SolidColorBrush x:Key="TooltipText" Color="#111111"/>
+        <SolidColorBrush x:Key="TooltipBg" Color="#2F2F2F"/>
+        <SolidColorBrush x:Key="TooltipText" Color="#FFFFFF"/>
 
         <Style TargetType="Window">
             <Setter Property="Background" Value="{StaticResource BgMain}"/>
@@ -33,14 +33,6 @@
             <Setter Property="Background" Value="{StaticResource BgMain}"/>
             <Setter Property="Foreground" Value="{StaticResource TextMain}"/>
             <Setter Property="Height" Value="42"/>
-        </Style>
-
-        <Style TargetType="ToolTip">
-            <Setter Property="Background" Value="{StaticResource TooltipBg}"/>
-            <Setter Property="Foreground" Value="{StaticResource TooltipText}"/>
-            <Setter Property="BorderBrush" Value="#AAAAAA"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Padding" Value="8,4"/>
         </Style>
 
         <Style TargetType="MenuItem">
@@ -199,7 +191,7 @@
         </Style>
 
         <Style TargetType="TabControl">
-            <Setter Property="Background" Value="{StaticResource BgMain}"/>
+            <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
 
@@ -263,6 +255,14 @@
             <Setter Property="Background" Value="{StaticResource BgMain}"/>
             <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
             <Setter Property="Padding" Value="2,0"/>
+        </Style>
+
+        <Style TargetType="ToolTip">
+            <Setter Property="Background" Value="{StaticResource TooltipBg}"/>
+            <Setter Property="Foreground" Value="{StaticResource TooltipText}"/>
+            <Setter Property="BorderBrush" Value="#AAAAAA"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,4"/>
         </Style>
 
     </Application.Resources>
