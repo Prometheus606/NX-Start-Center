@@ -1,0 +1,22 @@
+<Application x:Class="NXStartCenter.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Margin" Value="0,4"/>
+            <Setter Property="Padding" Value="12,4"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="8"/>
+            <Setter Property="Padding" Value="8"/>
+        </Style>
+    </Application.Resources>
+</Application>

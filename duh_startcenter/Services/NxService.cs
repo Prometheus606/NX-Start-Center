@@ -1,4 +1,8 @@
+using System.IO;
+using System.Windows;
+
 namespace NXStartCenter.Services;
+
 
 public sealed class NxService(AppModel model)
 {

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows</TargetFramework>
-    <UseWindowsForms>true</UseWindowsForms>
+     <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>14.0</LangVersion>
@@ -13,6 +13,12 @@
     <Compile Remove="data\**" />
     <EmbeddedResource Remove="data\**" />
     <None Remove="data\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Remove="Gui\App.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="Gui\App.xaml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app\start_routine.bat" CopyToOutputDirectory="PreserveNewest" />
