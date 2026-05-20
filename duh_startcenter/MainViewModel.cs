@@ -16,6 +16,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
     private readonly ProjectService _projectService;
 
     private string _statusText = "Bereit";
+    private string _statusColor = "#C9C9C9";
+    private string _statusState = "ok";
     private string _newCustomer = string.Empty;
     private string _newVersion = string.Empty;
     private string _newMachine = string.Empty;
@@ -109,6 +111,34 @@ public sealed class MainViewModel : INotifyPropertyChanged
     {
         get => _statusText;
         private set => SetField(ref _statusText, value);
+    }
+
+    public string StatusColor
+    {
+        get => _statusColor;
+        private set => SetField(ref _statusColor, value);
+    }
+    public string StatusState
+    {
+        get => _statusState;
+        private set
+        {
+            SetField(ref _statusState, value);
+            switch (_statusState)
+            {
+                case "error":
+                {
+                        StatusColor= "#cc3527";
+                    break;
+                }
+                case "ok":
+                    StatusColor= "#4ead2b";
+                    break;
+                default:
+                    StatusColor= "#C9C9C9";
+                    break;
+            }
+        }
     }
 
     public string SelectedCustomer
@@ -343,19 +373,26 @@ public sealed class MainViewModel : INotifyPropertyChanged
         try
         {
             var message = action();
-            StatusText = message;
 
             if (message.Contains("nicht", StringComparison.OrdinalIgnoreCase) ||
                 message.Contains("Fehler", StringComparison.OrdinalIgnoreCase) ||
+                message.Contains("muss", StringComparison.OrdinalIgnoreCase) ||
                 message.Contains("Achtung", StringComparison.OrdinalIgnoreCase))
             {
+                StatusState = "error";
+                StatusText = message;
                 MessageBox.Show(message, "NX Start Center", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
             }
+
+            StatusState = "ok";
+            StatusText = message;
 
             OnPropertyChanged(nameof(CurrentProjectPath));
         }
         catch (Exception ex)
         {
+            StatusState = "error";
             StatusText = "Fehler: " + ex.Message;
             MessageBox.Show(ex.Message, "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
         }
@@ -390,7 +427,6 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
     private void RefreshCollectionsFromModel()
     {
-        Console.WriteLine("NIKLAS");
         var oldCustomer = SelectedCustomer;
         var oldVersion = SelectedVersion;
         var oldMachine = SelectedMachine;

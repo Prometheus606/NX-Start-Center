@@ -15,6 +15,10 @@
     <None Remove="data\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="resources\images\duhGroup_Logo.ico" />
+    <None Remove="resources\images\duhGroup_Logo.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Page Remove="Gui\App.xaml" />
   </ItemGroup>
   <ItemGroup>
@@ -23,5 +27,33 @@
   <ItemGroup>
     <None Include="app\start_routine.bat" CopyToOutputDirectory="PreserveNewest" />
     <None Include="app\user_settings.bat" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="resources\images\duhGroup_Logo.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="resources\images\duhGroup_Logo.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="resources\.gitignore">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="resources\images\copy_icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="resources\images\folder.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="resources\Leistungsnachweis_AN000000.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="resources\NX_UI\custom_dirs.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="resources\Open_LMTools.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

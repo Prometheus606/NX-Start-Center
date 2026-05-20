@@ -84,13 +84,13 @@
                           Grid.Column="1"/>
 
 
-                <TextBlock Text="Editor:" Grid.Row="8" Grid.Column="0"/>
+                <TextBlock Text="Editor:" Grid.Row="7" Grid.Column="0"/>
                 <ComboBox ItemsSource="{Binding Editors}"
                           SelectedItem="{Binding Settings.Editor}"
                           Grid.Row="7"
                           Grid.Column="1"/>
 
-                <CheckBox Content="Startdatei debuggen"
+                <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Startdatei debuggen"
                           IsChecked="{Binding Settings.StartNxWithDebug}"
                           Grid.Row="8"
                           Grid.Column="1"
