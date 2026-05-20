@@ -65,9 +65,6 @@ public sealed class MainViewModel : INotifyPropertyChanged
         ShowInfoCommand = new RelayCommand(ShowInfo);
 
     RefreshCollectionsFromModel();
-
-        NewCustomer = SelectedCustomer;
-        NewVersion = SelectedVersion;
     }
 
     public AppSettings Settings => _model.Settings;
@@ -382,8 +379,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
             $"Version: {AppInfo.Version}\n" +
             $"Datum: {AppInfo.AppDate}\n" +
             $"Autor: {AppInfo.Author}\n" +
-            $"Support: {AppInfo.SupportMail}\n" +
-            $"Update URL: {AppInfo.UpdateUrl}";
+            $"Support: {AppInfo.SupportMail}\n";
 
         MessageBox.Show(
             message,

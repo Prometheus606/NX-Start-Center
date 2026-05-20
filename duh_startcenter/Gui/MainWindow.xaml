@@ -133,7 +133,7 @@
         </Menu>
 
         <StatusBar DockPanel.Dock="Bottom">
-            <StatusBarItem Width="90">
+            <StatusBarItem Width="250">
                 <TextBlock Text="{Binding StatusText}"
                    Foreground="{StaticResource TextMuted}"
                    TextTrimming="CharacterEllipsis"
@@ -142,19 +142,13 @@
 
             <Separator/>
 
-            <StatusBarItem Width="430">
+            <StatusBarItem >
                 <TextBlock Text="{Binding CurrentProjectPath}"
                    Foreground="{StaticResource TextMuted}"
                    TextTrimming="CharacterEllipsis"
                    ToolTip="{Binding CurrentProjectPath}"/>
             </StatusBarItem>
 
-            <StatusBarItem HorizontalAlignment="Right" Width="140">
-                <TextBlock Text="{Binding CurrentUser}"
-                   Foreground="{StaticResource TextMuted}"
-                   TextTrimming="CharacterEllipsis"
-                   ToolTip="{Binding CurrentUser}"/>
-            </StatusBarItem>
         </StatusBar>
 
         <Grid Margin="14">
@@ -209,15 +203,15 @@
 
                         <GroupBox Header="Ladeoptionen" Grid.Row="1" Grid.Column="0" Margin="6,0,6,12">
                             <StackPanel>
-                                <CheckBox Content="Installed Machines laden"
+                                        <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Installed Machines laden"
                       IsChecked="{Binding LoadInstalledMachines}"/>
-                                <CheckBox Content="Postprozessor Ordner laden"
+                                        <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Postprozessor Ordner laden"
                       IsChecked="{Binding LoadPp}"/>
-                                <CheckBox Content="Werkzeuge laden"
+                                        <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Werkzeuge laden"
                       IsChecked="{Binding LoadTool}"/>
-                                <CheckBox Content="Device laden"
+                                        <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Device laden"
                       IsChecked="{Binding LoadDevice}"/>
-                                <CheckBox Content="Speed/Feed laden"
+                                        <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Speed/Feed laden"
                       IsChecked="{Binding LoadFeed}"/>
                             </StackPanel>
                         </GroupBox>
@@ -232,13 +226,13 @@
                 Height="30"
                 VerticalAlignment="Center">
 
-                                <RadioButton Content="Deutsch"
+                                        <RadioButton Style="{StaticResource ModernRadioButtonStyle}" Content="Deutsch"
                      GroupName="Language"
                      IsChecked="{Binding IsGermanSelected}"
                      Margin="0,0,24,0"
                      VerticalAlignment="Center"/>
 
-                                <RadioButton Content="Englisch"
+                                        <RadioButton Style="{StaticResource ModernRadioButtonStyle}" Content="Englisch"
                      GroupName="Language"
                      IsChecked="{Binding IsEnglishSelected}"
                      Margin="0"
@@ -347,7 +341,7 @@
                                   Text="{Binding NewCustomer, UpdateSourceTrigger=PropertyChanged}"
                                   IsEditable="True"
                                   Grid.Row="0"
-                                  Grid.Column="1" Margin="4,4,3,3"/>
+                                  Grid.Column="1" Margin="4,4,3,3" SelectionChanged="ComboBox_SelectionChanged"/>
 
                         <TextBlock Text="NX-Version:" Grid.Row="1" Grid.Column="0" Height="19"/>
                         <ComboBox ItemsSource="{Binding NativeVersions}"
