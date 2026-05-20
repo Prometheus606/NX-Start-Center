@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>14.0</LangVersion>
+    <AssemblyName>NXStartCenter</AssemblyName>
+    <RootNamespace>NXStartCenter</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="data\**" />
+    <EmbeddedResource Remove="data\**" />
+    <None Remove="data\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app\start_routine.bat" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="app\user_settings.bat" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
