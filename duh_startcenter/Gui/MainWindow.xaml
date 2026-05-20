@@ -8,90 +8,61 @@
         MinWidth="950"
         WindowStartupLocation="CenterScreen">
 
-    <DockPanel>
+    <DockPanel Background="{StaticResource BgMain}">
 
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_Datei">
+            <MenuItem Header="Datei">
                 <MenuItem Header="Aktualisieren" Command="{Binding RefreshCommand}"/>
                 <Separator/>
                 <MenuItem Header="Beenden" Click="Exit_Click"/>
             </MenuItem>
 
-            <MenuItem Header="_Tools">
-                <MenuItem Header="Maschinenordner öffnen" Command="{Binding OpenExplorerCommand}"/>
-                <MenuItem Header="Postprocessor in VS Code öffnen" Command="{Binding OpenVsCodeCommand}"/>
-                <MenuItem Header="Fork öffnen" Command="{Binding OpenForkCommand}"/>
-            </MenuItem>
-
-            <MenuItem Header="_Lizenz">
+            <MenuItem Header="Lizenz">
                 <MenuItem Header="Lizenzdatei öffnen" Command="{Binding OpenLicenseFileCommand}"/>
                 <MenuItem Header="LMTools starten" Command="{Binding StartLmToolsCommand}"/>
             </MenuItem>
 
-            <MenuItem Header="_Einstellungen">
+            <MenuItem Header="Einstellungen">
                 <MenuItem Header="Einstellungen öffnen" Command="{Binding OpenSettingsCommand}"/>
                 <MenuItem Header="Einstellungen speichern" Command="{Binding SaveSettingsCommand}"/>
             </MenuItem>
 
-            <MenuItem Header="_Hilfe">
-                <MenuItem Header="Info" Command="{Binding ShowInfoCommand}"/>
-            </MenuItem>
+            <MenuItem Header="Info" Command="{Binding ShowInfoCommand}"/>
         </Menu>
-
-        <Border DockPanel.Dock="Top" Padding="16" Background="#1F2937">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <StackPanel>
-                    <TextBlock Text="NX Start Center"
-                               FontSize="26"
-                               FontWeight="Bold"
-                               Foreground="White"/>
-
-                    <TextBlock Text="{Binding HeaderInfo}"
-                               Foreground="#D1D5DB"
-                               Margin="0,4,0,0"/>
-                </StackPanel>
-
-                <Button Grid.Column="1"
-                        Content="Aktualisieren"
-                        Command="{Binding RefreshCommand}"
-                        Width="140"/>
-            </Grid>
-        </Border>
 
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem>
-                <TextBlock Text="{Binding StatusText}"/>
+                <TextBlock Text="{Binding StatusText}" Foreground="{StaticResource TextMuted}"/>
             </StatusBarItem>
             <Separator/>
             <StatusBarItem>
-                <TextBlock Text="{Binding CurrentUser}"/>
+                <TextBlock Text="{Binding CurrentUser}" Foreground="{StaticResource TextMuted}"/>
             </StatusBarItem>
         </StatusBar>
 
-        <TabControl Margin="12">
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="410"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-            <TabItem Header="Projektauswahl">
-                <Grid Margin="12">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-                    <GroupBox Header="Bestehendes Projekt auswählen">
-                        <Grid Margin="8">
+            <!-- LINKE SEITE -->
+            <StackPanel Grid.Column="0">
+
+                <TabControl>
+                    <TabItem Header="Projekt weiterarbeiten">
+                        <Grid Margin="6">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="90"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="160"/>
                             </Grid.ColumnDefinitions>
 
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -99,108 +70,37 @@
 
                             <TextBlock Text="Kunde:" Grid.Row="0" Grid.Column="0"/>
                             <ComboBox ItemsSource="{Binding Customers}"
-                                      SelectedItem="{Binding SelectedCustomer}"
-                                      Grid.Row="0"
-                                      Grid.Column="1"/>
-
-                            <Button Content="Aktualisieren"
-                                    Command="{Binding RefreshCommand}"
-                                    Grid.Row="0"
-                                    Grid.Column="2"
-                                    Margin="8,4,0,4"/>
+                                  SelectedItem="{Binding SelectedCustomer}"
+                                      Background="{StaticResource BgInput}"
+          Foreground="{StaticResource TextMain}"
+          TextElement.Foreground="{StaticResource TextMain}"
+                                  Grid.Row="0"
+                                  Grid.Column="1"/>
 
                             <TextBlock Text="NX-Version:" Grid.Row="1" Grid.Column="0"/>
                             <ComboBox ItemsSource="{Binding Versions}"
-                                      SelectedItem="{Binding SelectedVersion}"
-                                      Grid.Row="1"
-                                      Grid.Column="1"/>
+                                  SelectedItem="{Binding SelectedVersion}"
+                                      Background="{StaticResource BgInput}"
+          Foreground="{StaticResource TextMain}"
+          TextElement.Foreground="{StaticResource TextMain}"
+                                  Grid.Row="1"
+                                  Grid.Column="1"/>
 
                             <TextBlock Text="Maschine:" Grid.Row="2" Grid.Column="0"/>
                             <ComboBox ItemsSource="{Binding Machines}"
-                                      SelectedItem="{Binding SelectedMachine}"
-                                      Grid.Row="2"
-                                      Grid.Column="1"/>
-
-                            <TextBlock Text="Projektpfad:" Grid.Row="3" Grid.Column="0"/>
-                            <TextBlock Text="{Binding CurrentProjectPath}"
-                                       Grid.Row="3"
-                                       Grid.Column="1"
-                                       Grid.ColumnSpan="2"
-                                       TextWrapping="Wrap"/>
+                                  SelectedItem="{Binding SelectedMachine}"
+                                      Background="{StaticResource BgInput}"
+          Foreground="{StaticResource TextMain}"
+          TextElement.Foreground="{StaticResource TextMain}"
+                                  Grid.Row="2"
+                                  Grid.Column="1"/>
                         </Grid>
-                    </GroupBox>
-                </Grid>
-            </TabItem>
+                    </TabItem>
 
-            <TabItem Header="NX Start">
-                <Grid Margin="12">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <GroupBox Header="NX starten" Grid.Column="0">
-                        <StackPanel Margin="8">
-                            <TextBlock Text="Sprache:"/>
-                            <ComboBox ItemsSource="{Binding Languages}"
-                                      SelectedItem="{Binding SelectedLanguage}"
-                                      Margin="0,4,0,12"/>
-
-                            <TextBlock Text="Native-Version:"/>
-                            <ComboBox ItemsSource="{Binding NativeVersions}"
-                                      SelectedItem="{Binding SelectedNativeVersion}"
-                                      Margin="0,4,0,12"/>
-
-                            <TextBlock Text="Postbuilder-Version:"/>
-                            <ComboBox ItemsSource="{Binding PostbuilderVersions}"
-                                      SelectedItem="{Binding SelectedPostbuilderVersion}"
-                                      Margin="0,4,0,12"/>
-
-                            <Button Content="Kunden-NX starten"
-                                    Command="{Binding StartCustomerNxCommand}"/>
-
-                            <Button Content="NX Native starten"
-                                    Command="{Binding StartNxNativeCommand}"/>
-
-                            <Button Content="Postbuilder starten"
-                                    Command="{Binding StartPostbuilderCommand}"/>
-                        </StackPanel>
-                    </GroupBox>
-
-                    <GroupBox Header="Startoptionen" Grid.Column="1">
-                        <StackPanel Margin="8">
-                            <CheckBox Content="PP laden"
-                                      IsChecked="{Binding LoadPp}"
-                                      Margin="0,6"/>
-
-                            <CheckBox Content="Installed Machines laden"
-                                      IsChecked="{Binding LoadInstalledMachines}"
-                                      Margin="0,6"/>
-
-                            <CheckBox Content="Tool laden"
-                                      IsChecked="{Binding LoadTool}"
-                                      Margin="0,6"/>
-
-                            <CheckBox Content="Device laden"
-                                      IsChecked="{Binding LoadDevice}"
-                                      Margin="0,6"/>
-
-                            <CheckBox Content="Feed laden"
-                                      IsChecked="{Binding LoadFeed}"
-                                      Margin="0,6"/>
-                        </StackPanel>
-                    </GroupBox>
-                </Grid>
-            </TabItem>
-
-            <TabItem Header="Neues Projekt">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <GroupBox Header="Neues Projekt anlegen" Margin="12">
-                        <Grid Margin="8">
+                    <TabItem Header="Neues Projekt anlegen">
+                        <Grid Margin="6">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="160"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="110"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
@@ -214,60 +114,138 @@
 
                             <TextBlock Text="Kunde:" Grid.Row="0" Grid.Column="0"/>
                             <ComboBox ItemsSource="{Binding Customers}"
-                                      Text="{Binding NewCustomer, UpdateSourceTrigger=PropertyChanged}"
-                                      IsEditable="True"
-                                      Grid.Row="0"
-                                      Grid.Column="1"/>
+                                  Text="{Binding NewCustomer}"
+                                  IsEditable="True"
+                                  Grid.Row="0"
+                                  Grid.Column="1"/>
 
                             <TextBlock Text="NX-Version:" Grid.Row="1" Grid.Column="0"/>
                             <ComboBox ItemsSource="{Binding NativeVersions}"
-                                      Text="{Binding NewVersion, UpdateSourceTrigger=PropertyChanged}"
-                                      IsEditable="True"
-                                      Grid.Row="1"
-                                      Grid.Column="1"/>
+                                  Text="{Binding NewVersion}"
+                                  IsEditable="True"
+                                  Grid.Row="1"
+                                  Grid.Column="1"/>
 
                             <TextBlock Text="Maschine:" Grid.Row="2" Grid.Column="0"/>
-                            <TextBox Text="{Binding NewMachine, UpdateSourceTrigger=PropertyChanged}"
-                                     Grid.Row="2"
-                                     Grid.Column="1"/>
+                            <TextBox Text="{Binding NewMachine}" Grid.Row="2" Grid.Column="1"/>
 
-                            <TextBlock Text="Auftragsnummer:" Grid.Row="3" Grid.Column="0"/>
-                            <TextBox Text="{Binding NewOrderNumber, UpdateSourceTrigger=PropertyChanged}"
-                                     Grid.Row="3"
-                                     Grid.Column="1"/>
-
-                            <TextBlock Text="Maschinentyp:"
-                                       Grid.Row="0"
-                                       Grid.Column="2"
-                                       Margin="20,0,0,0"/>
-
-                            <ComboBox ItemsSource="{Binding MachineTypes}"
-                                      SelectedItem="{Binding SelectedMachineType}"
-                                      Grid.Row="0"
-                                      Grid.Column="3"/>
-
-                            <TextBlock Text="Steuerung:"
-                                       Grid.Row="1"
-                                       Grid.Column="2"
-                                       Margin="20,0,0,0"/>
-
-                            <ComboBox ItemsSource="{Binding MachineControllers}"
-                                      SelectedItem="{Binding SelectedController}"
-                                      Grid.Row="1"
-                                      Grid.Column="3"/>
+                            <TextBlock Text="Auftrag:" Grid.Row="3" Grid.Column="0"/>
+                            <TextBox Text="{Binding NewOrderNumber}" Grid.Row="3" Grid.Column="1"/>
 
                             <Button Content="Projekt erstellen"
-                                    Command="{Binding CreateProjectCommand}"
-                                    Grid.Row="4"
-                                    Grid.Column="1"
-                                    Width="180"
-                                    HorizontalAlignment="Left"
-                                    Margin="0,12,0,0"/>
+                                Command="{Binding CreateProjectCommand}"
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                HorizontalAlignment="Left"/>
                         </Grid>
-                    </GroupBox>
-                </ScrollViewer>
-            </TabItem>
+                    </TabItem>
+                </TabControl>
 
-        </TabControl>
+                <GroupBox Header="Ladeoptionen">
+                    <StackPanel>
+                        <CheckBox Content="Installed Machines laden"
+                              IsChecked="{Binding LoadInstalledMachines}"/>
+                        <CheckBox Content="Postprozessor ordner laden"
+                              IsChecked="{Binding LoadPp}"/>
+                        <CheckBox Content="Werkzeuge laden"
+                              IsChecked="{Binding LoadTool}"/>
+                        <CheckBox Content="Device laden"
+                              IsChecked="{Binding LoadDevice}"/>
+                        <CheckBox Content="Speed/Feed laden"
+                              IsChecked="{Binding LoadFeed}"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Spracheinstellung">
+                    <StackPanel>
+                        <RadioButton Content="Deutsch"
+                                 IsChecked="{Binding IsGermanSelected}"/>
+                        <RadioButton Content="Englisch"
+                                 IsChecked="{Binding IsEnglishSelected}"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+
+            <!-- RECHTE SEITE -->
+            <Grid Grid.Column="1" Margin="16,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="150"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="d.u.h"
+                       FontSize="120"
+                       FontWeight="Light"
+                       Foreground="#0B6F94"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+
+                <Border Grid.Row="1"
+                    Background="{StaticResource BgPanel}"
+                    BorderBrush="{StaticResource BorderSoft}"
+                    BorderThickness="1"
+                    Padding="16"
+                    Margin="6">
+
+                    <TabControl>
+                        <TabItem Header="NX Native starten">
+                            <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+                                <TextBlock Text="NX-Version:" Margin="0,0,8,0"/>
+                                <ComboBox Width="160"
+                                      ItemsSource="{Binding NativeVersions}"
+                                      SelectedItem="{Binding SelectedNativeVersion}"/>
+                                <Button Content="NX Starten"
+                                    Command="{Binding StartNxNativeCommand}"
+                                    Margin="16,4,4,4"/>
+                            </StackPanel>
+                        </TabItem>
+
+                        <TabItem Header="Postbuilder starten">
+                            <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+                                <TextBlock Text="NX-Version:" Margin="0,0,8,0"/>
+                                <ComboBox Width="160"
+                                      ItemsSource="{Binding PostbuilderVersions}"
+                                      SelectedItem="{Binding SelectedPostbuilderVersion}"/>
+                                <Button Content="Postbuilder"
+                                    Command="{Binding StartPostbuilderCommand}"
+                                    Margin="16,4,4,4"/>
+                            </StackPanel>
+                        </TabItem>
+                    </TabControl>
+                </Border>
+            </Grid>
+
+            <!-- UNTEN BUTTONLEISTE -->
+            <StackPanel Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    Orientation="Horizontal"
+                    Margin="0,12,0,0">
+
+                <Button Content="NX Starten"
+                    Command="{Binding StartCustomerNxCommand}"
+                    Width="120"/>
+
+                <Button Content="Ordner Öffnen"
+                    Command="{Binding OpenExplorerCommand}"
+                    Width="130"/>
+
+                <Button Content="PP Öffnen"
+                    Command="{Binding OpenVsCodeCommand}"
+                    Width="120"/>
+
+                <Button Content="Fork Öffnen"
+                    Command="{Binding OpenForkCommand}"
+                    Width="120"/>
+
+                <Button Content="Aktualisieren"
+                    Command="{Binding RefreshCommand}"
+                    Width="130"/>
+            </StackPanel>
+
+        </Grid>
     </DockPanel>
 </Window>
