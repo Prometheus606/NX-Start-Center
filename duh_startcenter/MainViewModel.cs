@@ -58,6 +58,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
         SaveSettingsCommand = new RelayCommand(SaveSettings);
         RefreshCommand = new RelayCommand(RefreshAll);
         CreateProjectCommand = new RelayCommand(CreateProject);
+        OpenSettingsCommand = new RelayCommand(OpenSettings);
+        ShowInfoCommand = new RelayCommand(ShowInfo);
 
         RefreshCollectionsFromModel();
 
@@ -97,6 +99,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public ICommand SaveSettingsCommand { get; }
     public ICommand RefreshCommand { get; }
     public ICommand CreateProjectCommand { get; }
+    public ICommand OpenSettingsCommand { get; }
+    public ICommand ShowInfoCommand { get; }
 
     public string StatusText
     {
@@ -354,13 +358,58 @@ public sealed class MainViewModel : INotifyPropertyChanged
         }
     }
 
+    private void OpenSettings()
+    {
+        var window = new SettingsWindow
+        {
+            DataContext = this,
+            Owner = Application.Current.MainWindow
+        };
+
+        window.ShowDialog();
+    }
+
+    private void ShowInfo()
+    {
+        var message =
+            $"NX Start Center\n\n" +
+            $"Version: {AppInfo.Version}\n" +
+            $"Datum: {AppInfo.AppDate}\n" +
+            $"Autor: {AppInfo.Author}\n" +
+            $"Support: {AppInfo.SupportMail}\n" +
+            $"Update URL: {AppInfo.UpdateUrl}";
+
+        MessageBox.Show(
+            message,
+            "Info",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+    }
+
     private void RefreshCollectionsFromModel()
     {
+        var oldCustomer = SelectedCustomer;
+        var oldVersion = SelectedVersion;
+        var oldMachine = SelectedMachine;
+        var oldNativeVersion = SelectedNativeVersion;
+        var oldPostbuilderVersion = SelectedPostbuilderVersion;
+
         ReplaceCollection(Customers, _model.Customers);
+        SelectedCustomer = PickExistingOrFirst(Customers, oldCustomer);
+
+        _model.RefreshVersions();
         ReplaceCollection(Versions, _model.Versions);
+        SelectedVersion = PickExistingOrFirst(Versions, oldVersion);
+
+        _model.RefreshMachines();
         ReplaceCollection(Machines, _model.Machines);
+        SelectedMachine = PickExistingOrFirst(Machines, oldMachine);
+
         ReplaceCollection(NativeVersions, _model.NativeVersions);
+        SelectedNativeVersion = PickExistingOrFirst(NativeVersions, oldNativeVersion);
+
         ReplaceCollection(PostbuilderVersions, _model.PostbuilderVersions);
+        SelectedPostbuilderVersion = PickExistingOrFirst(PostbuilderVersions, oldPostbuilderVersion);
 
         OnPropertyChanged(nameof(SelectedCustomer));
         OnPropertyChanged(nameof(SelectedVersion));
@@ -378,16 +427,30 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
     private void RefreshVersionsAndMachinesFromModel()
     {
+        var oldVersion = SelectedVersion;
+        var oldMachine = SelectedMachine;
+
         ReplaceCollection(Versions, _model.Versions);
+        SelectedVersion = PickExistingOrFirst(Versions, oldVersion);
+
+        _model.RefreshMachines();
         ReplaceCollection(Machines, _model.Machines);
+        SelectedMachine = PickExistingOrFirst(Machines, oldMachine);
+
         OnPropertyChanged(nameof(SelectedVersion));
         OnPropertyChanged(nameof(SelectedMachine));
+        OnPropertyChanged(nameof(CurrentProjectPath));
     }
 
     private void RefreshMachinesFromModel()
     {
+        var oldMachine = SelectedMachine;
+
         ReplaceCollection(Machines, _model.Machines);
+        SelectedMachine = PickExistingOrFirst(Machines, oldMachine);
+
         OnPropertyChanged(nameof(SelectedMachine));
+        OnPropertyChanged(nameof(CurrentProjectPath));
     }
 
     private static void ReplaceCollection<T>(ObservableCollection<T> target, IEnumerable<T> source)
@@ -395,6 +458,16 @@ public sealed class MainViewModel : INotifyPropertyChanged
         target.Clear();
         foreach (var item in source)
             target.Add(item);
+    }
+
+    private static string PickExistingOrFirst(
+    ObservableCollection<string> values,
+    string oldValue)
+    {
+        if (!string.IsNullOrWhiteSpace(oldValue) && values.Contains(oldValue))
+            return oldValue;
+
+        return values.FirstOrDefault() ?? string.Empty;
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
