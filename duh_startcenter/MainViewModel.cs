@@ -1,141 +1,102 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using NXStartCenter.Configuration;
+using NXStartCenter.Services;
 
 namespace NXStartCenter;
 
 public sealed class MainViewModel : INotifyPropertyChanged
 {
-    private readonly ConfigService _configService = new();
+    private readonly AppModel _model;
+    private readonly NxService _nxService;
+    private readonly ProjectService _projectService;
 
-    private string _selectedCustomer = "";
-    private string _selectedVersion = "";
-    private string _selectedMachine = "";
-    private string _newCustomer = "";
-    private string _newVersion = "";
-    private string _newMachine = "";
-    private string _newOrderNumber = "0000";
-    private string _currentProjectPath = "";
     private string _statusText = "Bereit";
+    private string _newCustomer = string.Empty;
+    private string _newVersion = string.Empty;
+    private string _newMachine = string.Empty;
+    private string _newOrderNumber = "0000";
+    private string _selectedMachineType = "Mill machine";
+    private string _selectedController = "Sinumerik";
 
     public MainViewModel()
     {
-        Settings = _configService.Config.Settings;
+        var configPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "NXStartCenter",
+            "config.json");
+
+        _model = AppModel.Load(configPath);
+        _nxService = new NxService(_model);
+        _projectService = new ProjectService(_model);
 
         Customers = new ObservableCollection<string>();
         Versions = new ObservableCollection<string>();
         Machines = new ObservableCollection<string>();
         NativeVersions = new ObservableCollection<string>();
+        PostbuilderVersions = new ObservableCollection<string>();
 
         Teams = ["CAM", "PP"];
         Themes = ["cosmo", "flatly", "minty", "pulse", "lumen", "solar", "darkly", "cyborg"];
         Editors = ["Notepad", "Notepad++", "VSCode"];
+        Languages = ["german", "english"];
+        MachineTypes = _model.MachineTypes.Keys.ToArray();
+        MachineControllers = _model.MachineControllers;
 
-        RefreshCustomersCommand = new RelayCommand(RefreshCustomers);
+        StartNxNativeCommand = new RelayCommand(() => RunAction(_nxService.StartNativeNx));
+        StartCustomerNxCommand = new RelayCommand(() => RunAction(_nxService.StartCustomerNx));
+        StartPostbuilderCommand = new RelayCommand(() => RunAction(_nxService.StartPostbuilder));
+        OpenExplorerCommand = new RelayCommand(() => RunAction(_nxService.OpenMachineFolder));
+        OpenVsCodeCommand = new RelayCommand(() => RunAction(_nxService.OpenVsCode));
+        OpenForkCommand = new RelayCommand(() => RunAction(_nxService.OpenFork));
+        OpenLicenseFileCommand = new RelayCommand(() => RunAction(_nxService.OpenLicenseFile));
+        StartLmToolsCommand = new RelayCommand(() => RunAction(_nxService.StartLmTools));
         SaveSettingsCommand = new RelayCommand(SaveSettings);
+        RefreshCommand = new RelayCommand(RefreshAll);
         CreateProjectCommand = new RelayCommand(CreateProject);
-        StartCustomerNxCommand = new RelayCommand(StartCustomerNx);
 
-        RefreshAll();
-
-        SelectedCustomer = PickLast(Customers, _configService.Config.LastConfiguration.LastCustomer);
-        SelectedVersion = PickLast(Versions, _configService.Config.LastConfiguration.LastVersion);
-        SelectedMachine = PickLast(Machines, _configService.Config.LastConfiguration.LastMachine);
+        RefreshCollectionsFromModel();
 
         NewCustomer = SelectedCustomer;
-        NewVersion = PickLast(NativeVersions, _configService.Config.LastConfiguration.LastNativeVersion);
+        NewVersion = SelectedVersion;
     }
 
-    public AppSettings Settings { get; }
+    public AppSettings Settings => _model.Settings;
+    public AppInfo AppInfo => _model.AppInfo;
+
+    public string HeaderInfo => $"{AppMetadata.Version} | {AppMetadata.AppDate}";
+    public string CurrentUser => Environment.UserDomainName + "\\" + Environment.UserName;
+    public string CurrentProjectPath => string.IsNullOrWhiteSpace(SelectedMachine) ? string.Empty : Path.Combine(_model.GetInstalledMachinesPath(), SelectedMachine);
+    public string ConfigPath => _model.ConfigPath;
 
     public ObservableCollection<string> Customers { get; }
     public ObservableCollection<string> Versions { get; }
     public ObservableCollection<string> Machines { get; }
     public ObservableCollection<string> NativeVersions { get; }
+    public ObservableCollection<string> PostbuilderVersions { get; }
 
     public IReadOnlyList<string> Teams { get; }
     public IReadOnlyList<string> Themes { get; }
     public IReadOnlyList<string> Editors { get; }
+    public IReadOnlyList<string> Languages { get; }
+    public IReadOnlyList<string> MachineTypes { get; }
+    public IReadOnlyList<string> MachineControllers { get; }
 
-    public ICommand RefreshCustomersCommand { get; }
-    public ICommand SaveSettingsCommand { get; }
-    public ICommand CreateProjectCommand { get; }
+    public ICommand StartNxNativeCommand { get; }
     public ICommand StartCustomerNxCommand { get; }
-
-    public string SelectedCustomer
-    {
-        get => _selectedCustomer;
-        set
-        {
-            if (!SetField(ref _selectedCustomer, value))
-                return;
-
-            RefreshVersions();
-            SelectedVersion = PickLast(Versions, _configService.Config.LastConfiguration.LastVersion);
-            SaveLastSelection();
-        }
-    }
-
-    public string SelectedVersion
-    {
-        get => _selectedVersion;
-        set
-        {
-            if (!SetField(ref _selectedVersion, value))
-                return;
-
-            RefreshMachines();
-            SelectedMachine = PickLast(Machines, _configService.Config.LastConfiguration.LastMachine);
-            SaveLastSelection();
-        }
-    }
-
-    public string SelectedMachine
-    {
-        get => _selectedMachine;
-        set
-        {
-            if (!SetField(ref _selectedMachine, value))
-                return;
-
-            CurrentProjectPath = GetMachinePath();
-            SaveLastSelection();
-        }
-    }
-
-    public string NewCustomer
-    {
-        get => _newCustomer;
-        set => SetField(ref _newCustomer, value);
-    }
-
-    public string NewVersion
-    {
-        get => _newVersion;
-        set => SetField(ref _newVersion, value);
-    }
-
-    public string NewMachine
-    {
-        get => _newMachine;
-        set => SetField(ref _newMachine, value);
-    }
-
-    public string NewOrderNumber
-    {
-        get => _newOrderNumber;
-        set => SetField(ref _newOrderNumber, value);
-    }
-
-    public string CurrentProjectPath
-    {
-        get => _currentProjectPath;
-        private set => SetField(ref _currentProjectPath, value);
-    }
+    public ICommand StartPostbuilderCommand { get; }
+    public ICommand OpenExplorerCommand { get; }
+    public ICommand OpenVsCodeCommand { get; }
+    public ICommand OpenForkCommand { get; }
+    public ICommand OpenLicenseFileCommand { get; }
+    public ICommand StartLmToolsCommand { get; }
+    public ICommand SaveSettingsCommand { get; }
+    public ICommand RefreshCommand { get; }
+    public ICommand CreateProjectCommand { get; }
 
     public string StatusText
     {
@@ -143,197 +104,297 @@ public sealed class MainViewModel : INotifyPropertyChanged
         private set => SetField(ref _statusText, value);
     }
 
+    public string SelectedCustomer
+    {
+        get => _model.Customer;
+        set
+        {
+            if (_model.Customer == value) return;
+            _model.Customer = value ?? string.Empty;
+            _model.RefreshVersions();
+            RefreshVersionsAndMachinesFromModel();
+            SaveLastSelection();
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(CurrentProjectPath));
+        }
+    }
+
+    public string SelectedVersion
+    {
+        get => _model.VersionName;
+        set
+        {
+            if (_model.VersionName == value) return;
+            _model.VersionName = value ?? string.Empty;
+            _model.RefreshMachines();
+            RefreshMachinesFromModel();
+            SaveLastSelection();
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(CurrentProjectPath));
+        }
+    }
+
+    public string SelectedMachine
+    {
+        get => _model.Machine;
+        set
+        {
+            if (_model.Machine == value) return;
+            _model.Machine = value ?? string.Empty;
+            SaveLastSelection();
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(CurrentProjectPath));
+        }
+    }
+
+    public string SelectedNativeVersion
+    {
+        get => _model.NativeVersion;
+        set
+        {
+            if (_model.NativeVersion == value) return;
+            _model.NativeVersion = value ?? string.Empty;
+            _model.Last.LastNativeVersion = _model.NativeVersion;
+            _model.Save();
+            OnPropertyChanged();
+        }
+    }
+
+    public string SelectedPostbuilderVersion
+    {
+        get => _model.PostbuilderVersion;
+        set
+        {
+            if (_model.PostbuilderVersion == value) return;
+            _model.PostbuilderVersion = value ?? string.Empty;
+            _model.Last.LastPostbuilderVersion = _model.PostbuilderVersion;
+            _model.Save();
+            OnPropertyChanged();
+        }
+    }
+
+    public string SelectedLanguage
+    {
+        get => _model.Last.LastLanguage;
+        set
+        {
+            if (_model.Last.LastLanguage == value) return;
+            _model.Last.LastLanguage = string.IsNullOrWhiteSpace(value) ? "german" : value;
+            _model.Save();
+            OnPropertyChanged();
+        }
+    }
+
+    public bool LoadPp
+    {
+        get => _model.Last.LastLoadPp != 0;
+        set
+        {
+            var intValue = value ? 1 : 0;
+            if (_model.Last.LastLoadPp == intValue) return;
+            _model.Last.LastLoadPp = intValue;
+            _model.Save();
+            OnPropertyChanged();
+        }
+    }
+
+    public bool LoadInstalledMachines
+    {
+        get => _model.Last.LastLoadInstalledMachines != 0;
+        set
+        {
+            var intValue = value ? 1 : 0;
+            if (_model.Last.LastLoadInstalledMachines == intValue) return;
+            _model.Last.LastLoadInstalledMachines = intValue;
+            _model.Save();
+            OnPropertyChanged();
+        }
+    }
+
+    public bool LoadTool
+    {
+        get => _model.Last.LastLoadTool != 0;
+        set
+        {
+            var intValue = value ? 1 : 0;
+            if (_model.Last.LastLoadTool == intValue) return;
+            _model.Last.LastLoadTool = intValue;
+            _model.Save();
+            OnPropertyChanged();
+        }
+    }
+
+    public bool LoadDevice
+    {
+        get => _model.Last.LastLoadDevice != 0;
+        set
+        {
+            var intValue = value ? 1 : 0;
+            if (_model.Last.LastLoadDevice == intValue) return;
+            _model.Last.LastLoadDevice = intValue;
+            _model.Save();
+            OnPropertyChanged();
+        }
+    }
+
+    public bool LoadFeed
+    {
+        get => _model.Last.LastLoadFeed != 0;
+        set
+        {
+            var intValue = value ? 1 : 0;
+            if (_model.Last.LastLoadFeed == intValue) return;
+            _model.Last.LastLoadFeed = intValue;
+            _model.Save();
+            OnPropertyChanged();
+        }
+    }
+
+    public string NewCustomer
+    {
+        get => _newCustomer;
+        set => SetField(ref _newCustomer, value ?? string.Empty);
+    }
+
+    public string NewVersion
+    {
+        get => _newVersion;
+        set => SetField(ref _newVersion, value ?? string.Empty);
+    }
+
+    public string NewMachine
+    {
+        get => _newMachine;
+        set => SetField(ref _newMachine, value ?? string.Empty);
+    }
+
+    public string NewOrderNumber
+    {
+        get => _newOrderNumber;
+        set => SetField(ref _newOrderNumber, value ?? string.Empty);
+    }
+
+    public string SelectedMachineType
+    {
+        get => _selectedMachineType;
+        set => SetField(ref _selectedMachineType, value ?? "Mill machine");
+    }
+
+    public string SelectedController
+    {
+        get => _selectedController;
+        set => SetField(ref _selectedController, value ?? "Sinumerik");
+    }
+
     private void RefreshAll()
     {
-        RefreshNativeVersions();
-        RefreshCustomers();
-    }
-
-    private void RefreshCustomers()
-    {
-        ReplaceCollection(Customers, GetDirectories(Settings.CustomerEnvironmentPath));
-        StatusText = $"Kunden geladen: {Customers.Count}";
-    }
-
-    private void RefreshVersions()
-    {
-        Versions.Clear();
-
-        if (string.IsNullOrWhiteSpace(SelectedCustomer))
-            return;
-
-        var path = Path.Combine(
-            Settings.CustomerEnvironmentPath,
-            SelectedCustomer,
-            "5_Umgebung");
-
-        ReplaceCollection(Versions, GetNxDirectories(path));
-    }
-
-    private void RefreshMachines()
-    {
-        Machines.Clear();
-
-        if (string.IsNullOrWhiteSpace(SelectedCustomer) ||
-            string.IsNullOrWhiteSpace(SelectedVersion))
-            return;
-
-        ReplaceCollection(Machines, GetDirectories(GetInstalledMachinesPath()));
-    }
-
-    private void RefreshNativeVersions()
-    {
-        ReplaceCollection(NativeVersions, GetNxDirectories(Settings.NxInstallationPath));
-    }
-
-    private string GetInstalledMachinesPath()
-    {
-        var basePath = Path.Combine(
-            Settings.CustomerEnvironmentPath,
-            SelectedCustomer,
-            "5_Umgebung",
-            SelectedVersion,
-            "MACH",
-            "resource",
-            "library",
-            "machine",
-            "installed_machines");
-
-        var customerSpecificPath = basePath + "_" + SelectedCustomer;
-
-        return Directory.Exists(customerSpecificPath)
-            ? customerSpecificPath
-            : basePath;
-    }
-
-    private string GetMachinePath()
-    {
-        if (string.IsNullOrWhiteSpace(SelectedMachine))
-            return "";
-
-        return Path.Combine(GetInstalledMachinesPath(), SelectedMachine);
+        _model.RefreshAll();
+        RefreshCollectionsFromModel();
+        StatusText = "Daten aktualisiert.";
     }
 
     private void SaveSettings()
     {
-        _configService.Save();
-
-        RefreshAll();
-
+        _model.Save();
+        _model.RefreshAll();
+        RefreshCollectionsFromModel();
         StatusText = "Einstellungen gespeichert.";
-    }
-
-    private void SaveLastSelection()
-    {
-        if (string.IsNullOrWhiteSpace(SelectedCustomer))
-            return;
-
-        _configService.SaveLastSelection(
-            SelectedCustomer,
-            SelectedVersion,
-            SelectedMachine);
     }
 
     private void CreateProject()
     {
+        RunAction(() =>
+        {
+            var message = _projectService.CreateCustomerProject(
+                NewCustomer,
+                NewVersion,
+                NewMachine,
+                NewOrderNumber,
+                SelectedMachineType,
+                SelectedController);
+
+            _model.Customer = NewCustomer;
+            _model.VersionName = NewVersion;
+            _model.Machine = NewMachine;
+            SaveLastSelection();
+            _model.RefreshAll();
+            RefreshCollectionsFromModel();
+            return message;
+        });
+    }
+
+    private void SaveLastSelection()
+    {
+        _model.Last.LastCustomer = _model.Customer;
+        _model.Last.LastVersion = _model.VersionName;
+        _model.Last.LastMachine = _model.Machine;
+        _model.Save();
+    }
+
+    private void RunAction(Func<string> action)
+    {
         try
         {
-            if (string.IsNullOrWhiteSpace(NewCustomer))
-                throw new InvalidOperationException("Bitte Kunde auswählen oder eingeben.");
+            var message = action();
+            StatusText = message;
 
-            if (string.IsNullOrWhiteSpace(NewVersion))
-                throw new InvalidOperationException("Bitte NX-Version auswählen.");
+            if (message.Contains("nicht", StringComparison.OrdinalIgnoreCase) ||
+                message.Contains("Fehler", StringComparison.OrdinalIgnoreCase) ||
+                message.Contains("Achtung", StringComparison.OrdinalIgnoreCase))
+            {
+                MessageBox.Show(message, "NX Start Center", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
 
-            if (string.IsNullOrWhiteSpace(NewMachine))
-                throw new InvalidOperationException("Bitte Maschine eingeben.");
-
-            var customerPath = Path.Combine(Settings.CustomerEnvironmentPath, NewCustomer);
-            var versionPath = Path.Combine(customerPath, "5_Umgebung", NewVersion);
-            var machinePath = Path.Combine(
-                versionPath,
-                "MACH",
-                "resource",
-                "library",
-                "machine",
-                "installed_machines",
-                NewMachine);
-
-            Directory.CreateDirectory(machinePath);
-
-            SelectedCustomer = NewCustomer;
-            SelectedVersion = NewVersion;
-            SelectedMachine = NewMachine;
-
-            RefreshAll();
-
-            StatusText = $"Projekt erstellt: {machinePath}";
+            OnPropertyChanged(nameof(CurrentProjectPath));
         }
         catch (Exception ex)
         {
+            StatusText = "Fehler: " + ex.Message;
             MessageBox.Show(ex.Message, "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
-    private void StartCustomerNx()
+    private void RefreshCollectionsFromModel()
     {
-        if (string.IsNullOrWhiteSpace(SelectedCustomer) ||
-            string.IsNullOrWhiteSpace(SelectedVersion) ||
-            string.IsNullOrWhiteSpace(SelectedMachine))
-        {
-            MessageBox.Show("Bitte Kunde, Version und Maschine auswählen.");
-            return;
-        }
+        ReplaceCollection(Customers, _model.Customers);
+        ReplaceCollection(Versions, _model.Versions);
+        ReplaceCollection(Machines, _model.Machines);
+        ReplaceCollection(NativeVersions, _model.NativeVersions);
+        ReplaceCollection(PostbuilderVersions, _model.PostbuilderVersions);
 
-        SaveLastSelection();
-
-        StatusText = $"Starte NX für {SelectedCustomer} / {SelectedVersion} / {SelectedMachine}";
-
-        // Hier kommt später deine start_routine.bat-Logik rein.
+        OnPropertyChanged(nameof(SelectedCustomer));
+        OnPropertyChanged(nameof(SelectedVersion));
+        OnPropertyChanged(nameof(SelectedMachine));
+        OnPropertyChanged(nameof(SelectedNativeVersion));
+        OnPropertyChanged(nameof(SelectedPostbuilderVersion));
+        OnPropertyChanged(nameof(SelectedLanguage));
+        OnPropertyChanged(nameof(LoadPp));
+        OnPropertyChanged(nameof(LoadInstalledMachines));
+        OnPropertyChanged(nameof(LoadTool));
+        OnPropertyChanged(nameof(LoadDevice));
+        OnPropertyChanged(nameof(LoadFeed));
+        OnPropertyChanged(nameof(CurrentProjectPath));
     }
 
-    private static List<string> GetDirectories(string path)
+    private void RefreshVersionsAndMachinesFromModel()
     {
-        if (!Directory.Exists(path))
-            return [];
-
-        return Directory
-            .GetDirectories(path)
-            .Select(Path.GetFileName)
-            .Where(x => !string.IsNullOrWhiteSpace(x))
-            .Cast<string>()
-            .OrderBy(x => x)
-            .ToList();
+        ReplaceCollection(Versions, _model.Versions);
+        ReplaceCollection(Machines, _model.Machines);
+        OnPropertyChanged(nameof(SelectedVersion));
+        OnPropertyChanged(nameof(SelectedMachine));
     }
 
-    private static List<string> GetNxDirectories(string path)
+    private void RefreshMachinesFromModel()
     {
-        if (!Directory.Exists(path))
-            return [];
-
-        return Directory
-            .GetDirectories(path)
-            .Select(Path.GetFileName)
-            .Where(x => !string.IsNullOrWhiteSpace(x))
-            .Cast<string>()
-            .Where(x => x.StartsWith("NX", StringComparison.OrdinalIgnoreCase))
-            .OrderByDescending(x => x)
-            .ToList();
+        ReplaceCollection(Machines, _model.Machines);
+        OnPropertyChanged(nameof(SelectedMachine));
     }
 
     private static void ReplaceCollection<T>(ObservableCollection<T> target, IEnumerable<T> source)
     {
         target.Clear();
-
         foreach (var item in source)
             target.Add(item);
-    }
-
-    private static string PickLast(ObservableCollection<string> values, string last)
-    {
-        if (!string.IsNullOrWhiteSpace(last) && values.Contains(last))
-            return last;
-
-        return values.FirstOrDefault() ?? "";
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

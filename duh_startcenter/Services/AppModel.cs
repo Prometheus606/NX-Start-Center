@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.IO;
 
+using NXStartCenter;
 namespace NXStartCenter.Services;
 
 public sealed class AppModel

@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.IO;
 
+using NXStartCenter;
 namespace NXStartCenter.Services;
 
 public sealed partial class ProjectService(AppModel model)
@@ -57,7 +58,7 @@ public sealed partial class ProjectService(AppModel model)
             var typeId = model.MachineTypes.GetValueOrDefault(machineType, "MDM0101");
             File.WriteAllText(Path.Combine(machineDir, "README.md"), $"# {machine}  \n\nMaschine: {machine}  \nSteuerung: {controller}  \nFirma: {customer}  \nPost Configurator: -  \nNX-Version: {version}  \n");
             File.WriteAllText(Path.Combine(machineDir, machine + ".dat"), machine + ",${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\postprocessor\\" + machine + ".tcl,${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\postprocessor\\" + machine + ".def\nCSE_FILES, ${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\cse_driver\\" + controller + "\\" + machine + ".MCF");
-            var line = "DATA|" + machine + "|" + typeId + "|" + machine + "|" + controller + "|Example|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}" + machine + "\\" + machine + ".dat|1.000000|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}" + machine + "\\graphics\\" + machine + "_SIM";
+            var line = "DATA|" + machine + "|" + typeId + "|" + machine + "|" + controller + "|Example|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\" + machine + ".dat|1.000000|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\graphics\\" + machine + "_SIM";
             File.WriteAllText(Path.Combine(machineDir, "add_to_machine_database.dat"), line);
             var asciiFile = Path.Combine(customerPath, "5_Umgebung", version, "MACH", "resource", "library", "machine", "ascii", "machine_database.dat");
             File.AppendAllText(asciiFile, Environment.NewLine + line);

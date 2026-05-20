@@ -1,6 +1,7 @@
 using System.IO;
 using System.Windows;
 
+using NXStartCenter;
 namespace NXStartCenter.Services;
 
 
@@ -21,7 +22,7 @@ public sealed class NxService(AppModel model)
     {
         var batch = Path.Combine(AppContext.BaseDirectory, "app", "start_routine.bat");
         if (!File.Exists(batch)) return "start_routine.bat wurde nicht gefunden.";
-        var args = $"\"{model.Customer}\" \"{model.VersionName}\" \"german\" \"{model.Settings.CustomerEnvironmentPath}\" \"{model.Settings.NxInstallationPath}\" \"{Bool(model.Last.LastLoadPp)}\" \"{Bool(model.Last.LastLoadInstalledMachines)}\" \"{Bool(model.Last.LastLoadTool)}\" \"{Bool(model.Last.LastLoadDevice)}\" \"{Bool(model.Last.LastLoadFeed)}\"";
+        var args = $"\"{model.Customer}\" \"{model.VersionName}\" \"{model.Last.LastLanguage}\" \"{model.Settings.CustomerEnvironmentPath}\" \"{model.Settings.NxInstallationPath}\" \"{Bool(model.Last.LastLoadPp)}\" \"{Bool(model.Last.LastLoadInstalledMachines)}\" \"{Bool(model.Last.LastLoadTool)}\" \"{Bool(model.Last.LastLoadDevice)}\" \"{Bool(model.Last.LastLoadFeed)}\"";
         ProcessService.StartFile(batch, args, AppContext.BaseDirectory);
         model.Last.LastCustomer = model.Customer;
         model.Last.LastVersion = model.VersionName;
