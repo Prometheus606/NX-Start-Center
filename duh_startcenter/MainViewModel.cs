@@ -171,10 +171,38 @@ public sealed class MainViewModel : INotifyPropertyChanged
             _model.Customer = value ?? string.Empty;
             _model.RefreshVersions();
             RefreshVersionsAndMachinesFromModel();
+            AutoSetLoadOptionsForCustomer();
             SaveLastSelection();
             OnPropertyChanged();
             OnPropertyChanged(nameof(CurrentProjectPath));
         }
+    }
+
+    private void AutoSetLoadOptionsForCustomer()
+    {
+        if (string.IsNullOrWhiteSpace(_model.Customer))
+            return;
+
+        // Vorerst Beispielpfad
+        var customerEnvironmentPath = Path.Combine(
+            _model.Settings.CustomerEnvironmentPath,
+            _model.Customer);
+
+        LoadInstalledMachines = Directory.Exists(
+            Path.Combine(customerEnvironmentPath, "5_Umgebung", _model.VersionName, "MACH", "resource", "library", "machine", "installed_machines")) || Directory.Exists(
+            Path.Combine(customerEnvironmentPath, "5_Umgebung", _model.VersionName, "MACH", "resource", "library", "machine", $"installed_machines_{_model.Customer}"));
+
+        LoadPp = Directory.Exists(
+            Path.Combine(customerEnvironmentPath, "5_Umgebung", _model.VersionName, "MACH", "resource", "postprocessor"));
+
+        LoadTool = Directory.Exists(
+            Path.Combine(customerEnvironmentPath, "5_Umgebung", _model.VersionName, "MACH", "resource", "library", "tool"));
+
+        LoadDevice = Directory.Exists(
+            Path.Combine(customerEnvironmentPath, "5_Umgebung", _model.VersionName, "MACH", "resource", "library", "device"));
+
+        LoadFeed = Directory.Exists(
+            Path.Combine(customerEnvironmentPath, "5_Umgebung", _model.VersionName, "MACH", "resource", "library", "feeds_speeds"));
     }
 
     public string SelectedVersion
