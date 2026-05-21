@@ -1,4 +1,8 @@
 @echo off
+rem *****************************************************************************
+rem 					     WICHTIGER HINWEIS!!
+rem     Anpassungen an dieser Datei werden bei einem Update überschrieben!
+rem *****************************************************************************
 
 
 set "DEBUG=%~6"
@@ -27,13 +31,10 @@ set "DEVICECHECK=%~1"
 set "FEEDSPEEDCHECK=%~2"
 set "CLOUD_LICENSE=%~3"
 set "MANAGED=%~4"
-set "SCRIPT_DIR=%~dp0"
-set "TC_PFAD=D:\Siemens\TC2512\portal\portal.bat"
+set "VORLAGE_ROOT=%~5"
+set "TC_PFAD=%~6"
 
-rem 
-rem  REV   	AUTHOR      DATE     	COMMENT for custom_nx.bat
-rem  ====   ========== 	==========	=============================================
-REM  ????	set DAI_CD_COMMAND_ADDON_IS_ACTIVE=0
+set "SCRIPT_DIR=%~dp0"
 
 rem ------------------------------------------------------------------------------
 rem Umgebungsvariablen setzen
@@ -46,7 +47,6 @@ rem ----------------------------------------------------------------------------
 	set UGII_CAM_CSE_USER_DIR=%PLM_SHARE_DUH%\%CUSTOMERNAME%\2_Testdaten\Temp\
 	set UGII_LOAD_OPTIONS=%PLM_SHARE_DUH%\Vorlage\load_options\load_options.def
 	set UGII_CAM_CUSTOM_DIR=UGII_CAM_RESOURCE_DIR
-	set VORLAGE_ROOT=C:\Users\niklas.beitler\Downloads\DUH_Umgebung\DUH_Umgebung\D\_Kunden
 	set DUH_ToolBars_DIR=%VORLAGE_ROOT%\ToolBars\DUH_Group	
 	set Siemens_ToolBars_DIR=%VORLAGE_ROOT%\ToolBars\Siemens
 	set SPLM_SHR_DIR=%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%
@@ -61,253 +61,7 @@ if "CLOUD_LICENSE" == "1" (
 REM DUH Pause %NX_Version_DUH%.bat 2
 if "%DEBUG%" == "1" Pause
 rem ------------------------------------------------------------------------------
-
-rem Umgebung erstellen
-rem ------------------------------------------------------------------------------
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME% mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\1_Kundendaten mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\1_Kundendaten
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\2_Testdaten mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\2_Testdaten
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\4_Calls mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\4_Calls
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG% mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH% mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\Reuse_Library mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\Reuse_Library
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\UGII mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\UGII
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\UGII\menus mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\UGII\menus
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource
-	if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library" (
-		xcopy %UGII_BASE_DIR%\MACH\resource %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource /D /E /I
-	
-	)
-	
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\machine\installed_machines (
-		mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\machine\installed_machines
-	)
-	
-	if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\templates" (	
-		xcopy %UGII_BASE_DIR%\MACH\templates %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\templates /D /E /I
-		copy %UGII_BASE_DIR%\UGII\templates\ugs_model_templates.pax %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\templates
-	)
-
-rem neue Umgebung
-	if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\ug_library_%CUSTOMERNAME%" (
-		xcopy %UGII_BASE_DIR%\MACH\resource\ug_library %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\ug_library_%CUSTOMERNAME% /D /E /I
-	)
-	if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\user_def_event_%CUSTOMERNAME%" (
-		xcopy %UGII_BASE_DIR%\MACH\resource\user_def_event %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\user_def_event_%CUSTOMERNAME% /D /E /I
-	)
-rem library
-
-	rem device
-	
-		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\device\ascii_%CUSTOMERNAME%" (
-			if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\device\ascii_%CUSTOMERNAME% mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\device\ascii_%CUSTOMERNAME%
-			xcopy %UGII_BASE_DIR%\MACH\resource\library\device\ascii\device_database.dat %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\device\ascii_%CUSTOMERNAME%  /E /I
-		)
-		if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\device\graphics_%CUSTOMERNAME% mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\device\graphics_%CUSTOMERNAME%
-
-	rem feeds_speeds
-		
-		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\feeds_speeds\ascii_%CUSTOMERNAME%" (
-			if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\feeds_speeds\ascii_%CUSTOMERNAME% mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\feeds_speeds\ascii_%CUSTOMERNAME%
-			xcopy %UGII_BASE_DIR%\MACH\resource\library\feeds_speeds\ascii\cut_methods.dat %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\feeds_speeds\ascii_%CUSTOMERNAME%  /E /I
-			xcopy %UGII_BASE_DIR%\MACH\resource\library\feeds_speeds\ascii\feeds_speeds.dat %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\feeds_speeds\ascii_%CUSTOMERNAME%  /E /I
-			xcopy %UGII_BASE_DIR%\MACH\resource\library\feeds_speeds\ascii\machining_data.dat %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\feeds_speeds\ascii_%CUSTOMERNAME%  /E /I
-			xcopy %UGII_BASE_DIR%\MACH\resource\library\feeds_speeds\ascii\part_materials.dat %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\feeds_speeds\ascii_%CUSTOMERNAME%  /E /I
-			xcopy %UGII_BASE_DIR%\MACH\resource\library\feeds_speeds\ascii\process_force_parameters.dat %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\feeds_speeds\ascii_%CUSTOMERNAME%  /E /I
-			xcopy %UGII_BASE_DIR%\MACH\resource\library\feeds_speeds\ascii\tool_machining_data.dat %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\feeds_speeds\ascii_%CUSTOMERNAME%  /E /I
-			xcopy %UGII_BASE_DIR%\MACH\resource\library\feeds_speeds\ascii\tool_materials.dat %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\feeds_speeds\ascii_%CUSTOMERNAME%  /E /I
-		)
-
-	rem machine
-	
-		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\machine\ascii_%CUSTOMERNAME%" (
-			if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\machine\ascii_%CUSTOMERNAME% mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\machine\ascii_%CUSTOMERNAME%
-			xcopy %UGII_BASE_DIR%\MACH\resource\library\machine\ascii\machine_database.dat %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\machine\ascii_%CUSTOMERNAME%  /E /I
-		)
-		if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\machine\installed_machines_%CUSTOMERNAME% mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\machine\installed_machines_%CUSTOMERNAME%		
-
-	rem tool
-	
-		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\tool\ascii_%CUSTOMERNAME%" (
-			xcopy %UGII_BASE_DIR%\MACH\resource\library\tool\ascii %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\tool\ascii_%CUSTOMERNAME%  /D /E /I
-		)
-		if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\tool\graphics_%CUSTOMERNAME% mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\tool\graphics_%CUSTOMERNAME%
-		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\tool\metric_%CUSTOMERNAME%" (
-			xcopy %UGII_BASE_DIR%\MACH\resource\library\tool\metric %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\tool\metric_%CUSTOMERNAME%  /D /E /I
-		)
-	rem fixture_automation
-	if "%NX_Version_DUH%"=="NX2512" (
-		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\fixture_automation\ascii_%CUSTOMERNAME%" (
-			xcopy %UGII_BASE_DIR%\MACH\resource\library\fixture_automation\ascii %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\fixture_automation\ascii_%CUSTOMERNAME%  /D /E /I
-		)
-		if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\fixture_automation\graphics_%CUSTOMERNAME% mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\fixture_automation\graphics_%CUSTOMERNAME%
-		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\fixture_automation\metric_%CUSTOMERNAME%" (
-			xcopy %UGII_BASE_DIR%\MACH\resource\library\fixture_automation\metric %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\library\fixture_automation\metric_%CUSTOMERNAME%  /D /E /I
-		)
-	)
-rem machining_knowledge
-		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\machining_knowledge\machining_knowledge_%CUSTOMERNAME%.dat" (
-echo	D| xcopy %UGII_BASE_DIR%\MACH\resource\machining_knowledge\machining_knowledge.dat %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\machining_knowledge\machining_knowledge_%CUSTOMERNAME%.dat  /d /Y
-		)
-		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\machining_knowledge\machining_knowledge_%CUSTOMERNAME%.xml" (
-echo		D|xcopy %UGII_BASE_DIR%\MACH\resource\machining_knowledge\machining_knowledge.xml %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\machining_knowledge\machining_knowledge_%CUSTOMERNAME%.xml  /d /Y
-		)
-		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\machining_knowledge\machining_knowledge_%CUSTOMERNAME%_tc.xml" (
-echo		D|xcopy %UGII_BASE_DIR%\MACH\resource\machining_knowledge\machining_knowledge_tc.xml %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\machining_knowledge\machining_knowledge_%CUSTOMERNAME%_tc.xml  /d /Y
-		)
-		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\machining_knowledge\machining_knowledge_%CUSTOMERNAME%_tc.dat" (
-echo		D|xcopy %UGII_BASE_DIR%\MACH\resource\machining_knowledge\machining_knowledge_part_planner.dat %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\machining_knowledge\machining_knowledge_%CUSTOMERNAME%_tc.dat  /d /Y
-		)
-
-rem postprocessor
-		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\postprocessor\template_post_%CUSTOMERNAME%.dat" (
-echo	D| xcopy %UGII_BASE_DIR%\MACH\resource\postprocessor\template_post.dat %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\postprocessor\template_post_%CUSTOMERNAME%.dat  /d /Y
-		)
-rem shop_docr
-		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\shop_doc\shop_doc_%CUSTOMERNAME%.dat" (
-echo	D| xcopy %UGII_BASE_DIR%\MACH\resource\shop_doc\shop_doc.dat %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\shop_doc\shop_doc_%CUSTOMERNAME%.dat  /d /Y
-		)
-rem template_set
-		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\template_set\cam_%CUSTOMERNAME%_native.opt" (
-echo	D| xcopy %UGII_BASE_DIR%\MACH\resource\template_set\cam_general.opt %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\template_set\cam_%CUSTOMERNAME%_native.opt  /d /Y
-		)
-		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\template_set\cam_%CUSTOMERNAME%_tc.opt" (
-echo	D| xcopy %UGII_BASE_DIR%\MACH\resource\template_set\cam_teamcenter_general.opt %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\template_set\cam_%CUSTOMERNAME%_tc.opt  /d /Y
-		)
-rem configuration
-if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\configuration" (
-echo	D| xcopy %UGII_BASE_DIR%\MACH\resource\configuration %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\configuration  /D /E /I
-		)
-
-@echo off
-setlocal EnableDelayedExpansion
-
-rem =========================
-rem Basis-Pfade
-rem =========================
-set "base=%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\configuration"
-
-set "quelle_native=%base%\cam_general.dat"
-set "ziel_native=%base%\cam_%CUSTOMERNAME%_native.dat"
-
-set "quelle_tc=%base%\cam_teamcenter_ascii_library.dat"
-set "ziel_tc=%base%\cam_%CUSTOMERNAME%_tc.dat"
-
-echo ================================
-echo Erzeuge Dateien (Debug-Ausgabe)
-echo Basis: %base%
-echo Quelle native: "%quelle_native%"
-echo Ziel native:   "%ziel_native%"
-echo Quelle tc:     "%quelle_tc%"
-echo Ziel tc:       "%ziel_tc%"
-echo ================================
-
-rem =========================
-rem Native-Datei erzeugen
-rem =========================
-call :CreateFile "%quelle_native%" "%ziel_native%" "_native"
-
-rem =========================
-rem TC-Datei erzeugen
-rem =========================
-call :CreateFile "%quelle_tc%" "%ziel_tc%" "_tc"
-
-goto :done
-
-rem =========================
-rem Subroutine: CreateFile
-rem   %1 = Quelldatei
-rem   %2 = Zieldatei
-rem   %3 = Suffix (_native/_tc)
-rem =========================
-:CreateFile
-set "a=%~1"
-set "b=%~2"
-set "c=%~3"
-
-echo.
-echo --- Verarbeitung: Quelle="%a%"  Ziel="%b%"  Suffix="%c%" ---
-
-if not exist "%a%" (
-  echo FEHLER: Quelldatei nicht gefunden: "%a%"
-  exit /b 0
-)
-
-if exist "%b%" (
-  echo Überspringe: Ziel existiert bereits: "%b%"
-  exit /b 0
-)
-
-rem Versuche die Zieldatei zu schreiben
-> "%b%" (
-  echo TEMPLATE_OPERATION,${UGII_CAM_TEMPLATE_SET_DIR}cam_%CUSTOMERNAME%%c%.opt
-  echo TEMPLATE_DOCUMENTATION,${UGII_CAM_SHOP_DOC_DIR}shop_doc_%CUSTOMERNAME%.dat
-  echo TEMPLATE_POST,${UGII_CAM_POST_DIR}template_post_%CUSTOMERNAME%.dat
-
-  rem jede Zeile (inkl. leer) nummerieren und ab Zeile 4 übernehmen
-  for /f "tokens=1* delims=:" %%A in ('findstr /n "^" "%a%"') do (
-    if %%A GEQ 4 echo %%B
-  )
-)
-
-rem Kontrolle, ob Datei erstellt wurde
-if exist "%b%" (
-  for %%S in ("%b%") do echo Datei erstellt: "%%~fS" (Größe: %%~zS bytes)
-) else (
-  echo FEHLER: Konnte Datei nicht erstellen: "%b%"
-)
-
-exit /b
-
-:done
-endlocal
-echo Fertig.
-if "%DEBUG%" == "1" echo on
-
-
-
-	rem auxiliary
-		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\auxiliary" (
-			if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\auxiliary mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\auxiliary
-			if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\auxiliary\tagging mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\auxiliary\tagging
-			if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\auxiliary\tagging\metric mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\auxiliary\tagging\metric
-echo	D| xcopy %UGII_BASE_DIR%\MACH\auxiliary\tagging\metric\tagging.dat %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\auxiliary\tagging\metric\tagging.dat  /d /Y
-echo	D| xcopy %UGII_BASE_DIR%\MACH\auxiliary\tagging\metric\tagging_fea.dat %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\auxiliary\tagging\metric\tagging_fea.dat  /d /Y
-		)
-
-rem template_dir
-		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\template_dir_%CUSTOMERNAME%" (
-		xcopy %UGII_BASE_DIR%\MACH\resource\template_dir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\resource\template_dir_%CUSTOMERNAME%  /D /E /I
-		)
-
-	rem CAM_POST_OUTPUT_DIR
-		if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\CAM_POST_OUTPUT_DIR mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\CAM_POST_OUTPUT_DIR
-
-	rem CAM_SETUP_ROOT_DIR
-		if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\CAM_SETUP_ROOT_DIR mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\MACH\CAM_SETUP_ROOT_DIR
-
-	rem duh_tools
-		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\duh_tools" (
-			xcopy %VORLAGE_ROOT%\Vorlage\duh_tools %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\duh_tools /D /E /I
-		)
-		
-
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\6_Custom mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\6_Custom
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\7_Dokumentation mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\7_Dokumentation
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\2_Testdaten\Temp mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\2_Testdaten\Temp
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\2_Testdaten\Temp\NX mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\2_Testdaten\Temp\NX
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\2_Testdaten\Shop_Doc mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\2_Testdaten\Shop_Doc
-
-
-
-rem ------------------------------------------------------------------------------
 	set UGII_TMP_DIR=%PLM_SHARE_DUH%\%CUSTOMERNAME%\2_Testdaten\temp\NX
-
-
-
-
 
 rem ------------------------------------------------------------------------------
 
@@ -358,17 +112,6 @@ rem ----------------------------------------------------------------------------
 	if EXIST %LOCALAPPDATA%\Siemens\%NX_Version_DUH%\NX_user.dpv del %LOCALAPPDATA%\Siemens\%NX_Version_DUH%\NX_user.dpv
 	if EXIST %LOCALAPPDATA%\Siemens\%NX_Version_DUH%\NX_user.xsl del %LOCALAPPDATA%\Siemens\%NX_Version_DUH%\NX_user.xsl
 	
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults mkdir %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults
-
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\Site (
-		xcopy %VORLAGE_ROOT%\Vorlage\%NX_Version_DUH%\CustomerDefaults\Site %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\Site /D /E /I
-	)
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\Group (
-		xcopy %VORLAGE_ROOT%\Vorlage\%NX_Version_DUH%\CustomerDefaults\Group %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\Group /D /E /I
-	)
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User (
-		xcopy %VORLAGE_ROOT%\Vorlage\%NX_Version_DUH%\CustomerDefaults\User %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User /D /E /I
-	)
 
 	set UGII_SITE_DIR=%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\Site
 	set UGII_GROUP_DIR=%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\Group
@@ -388,9 +131,6 @@ rem Provide .men file for NX app title
 
 rem Frühzugriffsfunktion
 rem ------------------------------------------------------------------------------
-	if NOT EXIST %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\EarlyAccessFeature (
-		xcopy %VORLAGE_ROOT%\Vorlage\%NX_Version_DUH%\CustomerDefaults\EarlyAccessFeature %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\EarlyAccessFeature /D /E /I
-	)
 	set UGII_LOCAL_USER_TOGGLE_DEFAULTS=%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\EarlyAccessFeature\feature_toggle_user.fcg
 
 rem ------------------------------------------------------------------------------

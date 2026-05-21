@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using System.IO;
 
 namespace NXStartCenter;
 
@@ -19,6 +20,12 @@ public sealed class AppSettings
 
     [JsonPropertyName("fork_path")]
     public string ForkPath { get; set; } = $@"C:\Users\{Environment.UserName}\AppData\Local\Fork\current\Fork.exe";
+
+    [JsonPropertyName("template_root_path")]
+    public string TemplateRoot { get; set; } = $@"{Directory.GetParent(AppContext.BaseDirectory)}\Startcenter_templates";
+
+    [JsonPropertyName("tc_path")]
+    public string TcPath { get; set; } = $@"D:\Siemens\TC2512\portal\portal.bat";
 
     [JsonPropertyName("roles_path")]
     public string RolesPath { get; set; } = string.Empty;

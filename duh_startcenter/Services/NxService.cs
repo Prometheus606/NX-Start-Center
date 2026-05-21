@@ -21,7 +21,7 @@ public sealed class NxService(AppModel model)
     public string StartCustomerNx()
     {
         bool debug = model.Settings.StartNxWithDebug;
-        string managed = model.StartNxManaged == "portal_client" ? "portal_client" : "portal_client";
+        string managed = model.StartNxManaged == "portal_client" ? "portal_client" : "nx";
         var batch = Path.Combine(AppContext.BaseDirectory, "app", "start_routine.bat");
         if (!File.Exists(batch)) return "start_routine.bat wurde nicht gefunden.";
         if (String.IsNullOrEmpty(model.Customer.Trim()) || String.IsNullOrEmpty(model.VersionName.Trim()))
@@ -41,7 +41,9 @@ public sealed class NxService(AppModel model)
             $" \"{Bool(model.Last.LastLoadDevice)}\" " +
             $" \"{Bool(model.Last.LastLoadFeed)}\"" +
             $" \"{Convert.ToInt16(model.StartNxWithCloudLicense)}\"" +
-            $" \"{managed}\"";
+            $" \"{managed}\"" +
+            $" \"{model.Settings.TemplateRoot}\"" +
+            $" \"{model.Settings.TcPath}\"";
         ProcessService.StartBatch(
     batch,
     args,

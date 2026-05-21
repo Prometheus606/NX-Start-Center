@@ -24,13 +24,14 @@ public sealed class MainViewModel : INotifyPropertyChanged
     private string _newOrderNumber = "0000";
     private string _selectedMachineType = "Mill machine";
     private string _selectedController = "Sinumerik";
+    private bool _complexEnvRequired = true;
 
 
     public MainViewModel()
     {
         var configPath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "NXStartCenter",
+            AppContext.BaseDirectory,
+            "data",
             "config.json");
 
         _model = AppModel.Load(configPath);
@@ -348,6 +349,12 @@ public sealed class MainViewModel : INotifyPropertyChanged
         set => SetField(ref _newOrderNumber, value ?? string.Empty);
     }
 
+    public bool ComplexEnvRequired
+    {
+        get => _complexEnvRequired;
+        set => SetField(ref _complexEnvRequired, value);
+    }
+
     public string SelectedMachineType
     {
         get => _selectedMachineType;
@@ -390,7 +397,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
                 NewMachine,
                 NewOrderNumber,
                 SelectedMachineType,
-                SelectedController);
+                SelectedController,
+                ComplexEnvRequired);
 
             _model.Customer = NewCustomer;
             _model.VersionName = NewVersion;
