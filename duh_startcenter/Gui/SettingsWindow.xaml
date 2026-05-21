@@ -45,6 +45,8 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <TextBlock Text="NX Installationspfad:" Grid.Row="0" Grid.Column="0"/>
@@ -57,48 +59,58 @@
                          Grid.Row="1"
                          Grid.Column="1"/>
 
-                <TextBlock Text="Lizenzdatei:" Grid.Row="2" Grid.Column="0"/>
+                <TextBlock Text="Vorlage &amp; Toolbars:" Grid.Row="2" Grid.Column="0"/>
+                <TextBox Text="{Binding Settings.TemplateRoot, UpdateSourceTrigger=PropertyChanged}"
+         Grid.Row="2"
+         Grid.Column="1"/>
+
+                <TextBlock Text="Portal.bat (Teamcenter):" Grid.Row="3" Grid.Column="0"/>
+                <TextBox Text="{Binding Settings.TcPath, UpdateSourceTrigger=PropertyChanged}"
+         Grid.Row="3"
+         Grid.Column="1"/>
+
+                <TextBlock Text="Lizenzdatei:" Grid.Row="4" Grid.Column="0"/>
                 <TextBox Text="{Binding Settings.LicencePath, UpdateSourceTrigger=PropertyChanged}"
-                         Grid.Row="2"
-                         Grid.Column="1"/>
-
-                <TextBlock Text="LMTools:" Grid.Row="3" Grid.Column="0"/>
-                <TextBox Text="{Binding Settings.LicenceServerPath, UpdateSourceTrigger=PropertyChanged}"
-                         Grid.Row="3"
-                         Grid.Column="1"/>
-
-                <TextBlock Text="Fork.exe:" Grid.Row="4" Grid.Column="0"/>
-                <TextBox Text="{Binding Settings.ForkPath, UpdateSourceTrigger=PropertyChanged}"
                          Grid.Row="4"
                          Grid.Column="1"/>
 
-                <TextBlock Text="Rollenpfade (; getrennt):" Grid.Row="5" Grid.Column="0"/>
-                <TextBox Text="{Binding Settings.RolesPath, UpdateSourceTrigger=PropertyChanged}"
+                <TextBlock Text="LMTools:" Grid.Row="5" Grid.Column="0"/>
+                <TextBox Text="{Binding Settings.LicenceServerPath, UpdateSourceTrigger=PropertyChanged}"
                          Grid.Row="5"
                          Grid.Column="1"/>
 
-                <TextBlock Text="Team:" Grid.Row="6" Grid.Column="0"/>
+                <TextBlock Text="Fork.exe:" Grid.Row="6" Grid.Column="0"/>
+                <TextBox Text="{Binding Settings.ForkPath, UpdateSourceTrigger=PropertyChanged}"
+                         Grid.Row="6"
+                         Grid.Column="1"/>
+
+                <TextBlock Text="Rollenpfade (; getrennt):" Grid.Row="7" Grid.Column="0"/>
+                <TextBox Text="{Binding Settings.RolesPath, UpdateSourceTrigger=PropertyChanged}"
+                         Grid.Row="7"
+                         Grid.Column="1"/>
+
+                <TextBlock Text="Team:" Grid.Row="8" Grid.Column="0"/>
                 <ComboBox ItemsSource="{Binding Teams}"
                           SelectedItem="{Binding Settings.Team}"
-                          Grid.Row="6"
+                          Grid.Row="8"
                           Grid.Column="1"/>
 
 
-                <TextBlock Text="Editor:" Grid.Row="7" Grid.Column="0"/>
+                <TextBlock Text="Editor:" Grid.Row="9" Grid.Column="0"/>
                 <ComboBox ItemsSource="{Binding Editors}"
                           SelectedItem="{Binding Settings.Editor}"
-                          Grid.Row="7"
+                          Grid.Row="9"
                           Grid.Column="1"/>
 
                 <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Startdatei debuggen"
                           IsChecked="{Binding Settings.StartNxWithDebug}"
-                          Grid.Row="8"
+                          Grid.Row="10"
                           Grid.Column="1"
                           Margin="0,8"/>
 
-                <TextBlock Text="Config:" Grid.Row="10" Grid.Column="0"/>
+                <TextBlock Text="Config:" Grid.Row="11" Grid.Column="0"/>
                 <TextBlock Text="{Binding ConfigPath}"
-                           Grid.Row="9"
+                           Grid.Row="11"
                            Grid.Column="1"
                            TextWrapping="Wrap"/>
             </Grid>

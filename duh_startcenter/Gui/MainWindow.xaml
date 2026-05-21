@@ -330,7 +330,8 @@ Panel.ZIndex="5"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
 
                         <TextBlock Text="Kunde:" Grid.Column="0" Height="19"/>
                         <ComboBox ItemsSource="{Binding Customers}"
@@ -377,10 +378,13 @@ Panel.ZIndex="5"/>
                                       SelectedItem="{Binding SelectedController}"
                                       Grid.Row="5"
                                       Grid.Column="3"/>
+                        
+                                <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Vollständige CAM Umgebung erzeugen"
+IsChecked="{Binding ComplexEnvRequired}" Grid.Row="6" Grid.Column="2" Margin="0,5,0,0"/>
 
-                        <Button Content="Projekt erstellen"
+                                <Button Content="Projekt erstellen"
                                 Command="{Binding CreateProjectCommand}"
-                                Grid.Row="6"
+                                Grid.Row="7"
                                 Grid.Column="1"
                                 Width="170"
                                 HorizontalAlignment="Left" Margin="6,27,0,6"/>
