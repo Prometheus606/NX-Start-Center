@@ -25,6 +25,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
     private string _selectedMachineType = "Mill machine";
     private string _selectedController = "Sinumerik";
 
+
     public MainViewModel()
     {
         var configPath = Path.Combine(
@@ -48,6 +49,12 @@ public sealed class MainViewModel : INotifyPropertyChanged
         Languages = ["german", "english"];
         MachineTypes = _model.MachineTypes.Keys.ToArray();
         MachineControllers = _model.MachineControllers;
+
+        if (_model.Last.LastLanguage != "english" && _model.Last.LastLanguage != "german")
+        {
+            _model.Last.LastLanguage = "german";
+            _model.Save();
+        }
 
         StartNxNativeCommand = new RelayCommand(() => RunAction(_nxService.StartNativeNx));
         StartCustomerNxCommand = new RelayCommand(() => RunAction(_nxService.StartCustomerNx));
@@ -205,18 +212,6 @@ public sealed class MainViewModel : INotifyPropertyChanged
             if (_model.PostbuilderVersion == value) return;
             _model.PostbuilderVersion = value ?? string.Empty;
             _model.Last.LastPostbuilderVersion = _model.PostbuilderVersion;
-            _model.Save();
-            OnPropertyChanged();
-        }
-    }
-
-    public string SelectedLanguage
-    {
-        get => _model.Last.LastLanguage;
-        set
-        {
-            if (_model.Last.LastLanguage == value) return;
-            _model.Last.LastLanguage = string.IsNullOrWhiteSpace(value) ? "german" : value;
             _model.Save();
             OnPropertyChanged();
         }
@@ -522,5 +517,48 @@ public sealed class MainViewModel : INotifyPropertyChanged
         field = value;
         OnPropertyChanged(propertyName);
         return true;
+    }
+
+    public string SelectedLanguage
+    {
+        get
+        {
+            var language = _model.Last.LastLanguage;
+            return language == "english" ? "english" : "german";
+        }
+        set
+        {
+            var language = value == "english" ? "english" : "german";
+
+            if (_model.Last.LastLanguage == language)
+                return;
+
+            _model.Last.LastLanguage = language;
+            _model.Save();
+
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(IsGermanSelected));
+            OnPropertyChanged(nameof(IsEnglishSelected));
+        }
+    }
+
+    public bool IsGermanSelected
+    {
+        get => SelectedLanguage == "german";
+        set
+        {
+            if (value)
+                SelectedLanguage = "german";
+        }
+    }
+
+    public bool IsEnglishSelected
+    {
+        get => SelectedLanguage == "english";
+        set
+        {
+            if (value)
+                SelectedLanguage = "english";
+        }
     }
 }

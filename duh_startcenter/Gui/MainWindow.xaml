@@ -23,7 +23,7 @@
            Height="120"
            HorizontalAlignment="Right"
            VerticalAlignment="Top"
-           Margin="0,35,70,0"
+           Margin="0,25,70,0"
            Opacity="0.80"
            IsHitTestVisible="False"
            Panel.ZIndex="2"/>
@@ -138,7 +138,7 @@ Panel.ZIndex="5"/>
 
             <TabControl Margin="0,-14,0,-14">
 
-                <TabItem Header="NX Starten">
+                <TabItem Header="Custom">
                     <Grid Margin="8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
