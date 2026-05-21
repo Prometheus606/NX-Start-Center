@@ -419,6 +419,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
             if (message.Contains("nicht", StringComparison.OrdinalIgnoreCase) ||
                 message.Contains("Fehler", StringComparison.OrdinalIgnoreCase) ||
                 message.Contains("muss", StringComparison.OrdinalIgnoreCase) ||
+                message.Contains("müssen", StringComparison.OrdinalIgnoreCase) ||
                 message.Contains("Achtung", StringComparison.OrdinalIgnoreCase))
             {
                 StatusState = "error";

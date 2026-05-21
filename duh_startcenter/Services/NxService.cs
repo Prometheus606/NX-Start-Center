@@ -21,9 +21,27 @@ public sealed class NxService(AppModel model)
     public string StartCustomerNx()
     {
         bool debug = model.Settings.StartNxWithDebug;
+        string managed = model.StartNxManaged == "portal_client" ? "portal_client" : "portal_client";
         var batch = Path.Combine(AppContext.BaseDirectory, "app", "start_routine.bat");
         if (!File.Exists(batch)) return "start_routine.bat wurde nicht gefunden.";
-        var args = $"\"{model.Customer}\" \"{model.VersionName}\" \"{model.Last.LastLanguage}\" \"{model.Settings.CustomerEnvironmentPath}\" \"{model.Settings.NxInstallationPath}\" \"{Bool(model.Last.LastLoadPp)}\" \"{Bool(model.Last.LastLoadInstalledMachines)}\" \"{Bool(model.Last.LastLoadTool)}\" \"{Bool(model.Last.LastLoadDevice)}\" \"{Bool(model.Last.LastLoadFeed)}\"";
+        if (String.IsNullOrEmpty(model.Customer.Trim()) || String.IsNullOrEmpty(model.VersionName.Trim()))
+        {
+            return "Kundenname und Version müssen angegeben werden!";
+        }
+        var args =
+            $"\"{model.Customer}\"" +
+            $" \"{model.VersionName}\"" +
+            $" \"{model.Last.LastLanguage}\"" +
+            $" \"{model.Settings.CustomerEnvironmentPath}\"" +
+            $" \"{model.Settings.NxInstallationPath}\"" +
+            $" \"{Convert.ToInt16(debug)}\"" +
+            $" \"{Bool(model.Last.LastLoadPp)}\" " +
+            $"\"{Bool(model.Last.LastLoadInstalledMachines)}\"" +
+            $" \"{Bool(model.Last.LastLoadTool)}\" " +
+            $" \"{Bool(model.Last.LastLoadDevice)}\" " +
+            $" \"{Bool(model.Last.LastLoadFeed)}\"" +
+            $" \"{Convert.ToInt16(model.StartNxWithCloudLicense)}\"" +
+            $" \"{managed}\"";
         ProcessService.StartBatch(
     batch,
     args,

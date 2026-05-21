@@ -22,6 +22,8 @@ public sealed class AppModel
     public string Machine { get; set; } = string.Empty;
     public string NativeVersion { get; set; } = string.Empty;
     public string PostbuilderVersion { get; set; } = string.Empty;
+    public bool StartNxWithCloudLicense { get; set; } = false;
+    public string StartNxManaged { get; set; } = "nx";
 
     public IReadOnlyList<string> Customers { get; private set; } = [];
     public IReadOnlyList<string> Versions { get; private set; } = [];
