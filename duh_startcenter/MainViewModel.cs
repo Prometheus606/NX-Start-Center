@@ -114,6 +114,20 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public ICommand OpenDeveloperBatch { get; }
     public ICommand ShowInfoCommand { get; }
 
+    private bool IsTeam(string team)
+    => string.Equals(Settings.Team, team, StringComparison.OrdinalIgnoreCase);
+
+    public Visibility CamVisibility
+    => IsTeam("CAM") ? Visibility.Visible : Visibility.Collapsed;
+
+    public Visibility PpVisibility
+        => IsTeam("PP") ? Visibility.Visible : Visibility.Collapsed;
+
+    public Visibility CamOrPpVisibility
+        => IsTeam("CAM") || IsTeam("PP")
+            ? Visibility.Visible
+            : Visibility.Collapsed;
+
     public string StatusText
     {
         get => _statusText;
@@ -330,6 +344,11 @@ public sealed class MainViewModel : INotifyPropertyChanged
         _model.Save();
         _model.RefreshAll();
         RefreshCollectionsFromModel();
+
+        OnPropertyChanged(nameof(CamVisibility));
+        OnPropertyChanged(nameof(PpVisibility));
+        OnPropertyChanged(nameof(CamOrPpVisibility));
+
         StatusText = "Einstellungen gespeichert.";
     }
 

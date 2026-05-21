@@ -187,23 +187,26 @@ Panel.ZIndex="5"/>
                             </Grid>
                         </GroupBox>
 
-                        <GroupBox Header="Ladeoptionen" Grid.Row="1" Grid.Column="0" Margin="6,0,6,12">
+                                <StackPanel Grid.Row="1"
+            Grid.Column="0">
+
+                                    <GroupBox Header="Ladeoptionen" Grid.Row="1" Grid.Column="0" Margin="6,0,6,12" Visibility="{Binding PpVisibility}">
                             <StackPanel>
                                         <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Installed Machines laden"
-                      IsChecked="{Binding LoadInstalledMachines}"/>
+                      IsChecked="{Binding LoadInstalledMachines}" Margin="0,2,0,2"/>
                                         <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Postprozessor Ordner laden"
-                      IsChecked="{Binding LoadPp}"/>
+                      IsChecked="{Binding LoadPp}" Margin="0,2,0,2"/>
                                         <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Werkzeuge laden"
-                      IsChecked="{Binding LoadTool}"/>
+                      IsChecked="{Binding LoadTool}" Margin="0,2,0,2"/>
                                         <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Device laden"
-                      IsChecked="{Binding LoadDevice}"/>
+                      IsChecked="{Binding LoadDevice}" Margin="0,2,0,2"/>
                                         <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Speed/Feed laden"
-                      IsChecked="{Binding LoadFeed}"/>
+                      IsChecked="{Binding LoadFeed}" Margin="0,2,0,2"/>
                             </StackPanel>
                         </GroupBox>
 
                         <GroupBox Header="Spracheinstellung"
-          Grid.Row="2"
+          Grid.Row="1"
           Grid.Column="0"
           Margin="6,6,6,6"
           Padding="8">
@@ -226,7 +229,10 @@ Panel.ZIndex="5"/>
                             </StackPanel>
                         </GroupBox>
 
-                        <StackPanel Grid.Row="0"
+
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="0"
                 Grid.RowSpan="2"
                 Grid.Column="1"
                 Margin="14,28,0,0"
@@ -241,36 +247,38 @@ Panel.ZIndex="5"/>
 
                             <Button Content="PP Öffnen"
                 Command="{Binding OpenVsCodeCommand}"
-                Margin="6,14,6,6"/>
+                                    Visibility="{Binding PpVisibility}"
+                Margin="6,14,6,6" Cursor="Hand"/>
 
                             <Button Content="Fork Öffnen"
                 Command="{Binding OpenForkCommand}"
+                                    Visibility="{Binding PpVisibility}"
                 Margin="6,14,6,6"/>
                         </StackPanel>
                     </Grid>
                 </TabItem>
 
-                <TabItem Header="NX Native">
-                    <Grid Margin="122,0,103,0">
+                <TabItem Header="OOTB">
+                    <Grid Margin="0,0,0,0" HorizontalAlignment="Center">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="504*"/>
-                            <ColumnDefinition Width="181*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <GroupBox Header="NX Native starten" Grid.Row="0" Grid.ColumnSpan="2" Margin="6,12,6,12">
+                        <GroupBox Header="NX Native starten" Grid.Row="0" Grid.ColumnSpan="2" Margin="6,29,6,12">
                             <Grid Margin="0">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="105"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="145"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Text="NX-Version:"
-                                           Grid.Column="0"/>
+                                           Grid.Column="0" Margin="0,0,20,0"/>
 
                                 <ComboBox ItemsSource="{Binding NativeVersions}"
                                           ScrollViewer.CanContentScroll="True"
@@ -279,20 +287,20 @@ Panel.ZIndex="5"/>
 
                                 <Button Content="NX Starten"
                                         Command="{Binding StartNxNativeCommand}"
-                                        Grid.Column="2"/>
+                                        Grid.Column="2" Margin="20,6,6,6"/>
                             </Grid>
                         </GroupBox>
 
-                        <GroupBox Header="Postbuilder starten" Grid.Row="1" Grid.ColumnSpan="2" Margin="6,12,6,12">
+                                <GroupBox Header="Postbuilder starten" Grid.Row="1" Grid.ColumnSpan="2" Margin="6,12,6,12" Visibility="{Binding PpVisibility}">
                             <Grid Margin="0">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="105"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="145"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Text="NX-Version:"
-                                           Grid.Column="0"/>
+                                <TextBlock Text="PB-Version:"
+                                           Grid.Column="0" Margin="0,0,20,0"/>
 
                                 <ComboBox ItemsSource="{Binding PostbuilderVersions}"
                                           SelectedItem="{Binding SelectedPostbuilderVersion}"
@@ -301,14 +309,14 @@ Panel.ZIndex="5"/>
 
                                 <Button Content="Postbuilder"
                                         Command="{Binding StartPostbuilderCommand}"
-                                        Grid.Column="2"/>
+                                        Grid.Column="2" Margin="20,6,6,6"/>
                             </Grid>
                         </GroupBox>
                     </Grid>
                 </TabItem>
 
                 <TabItem Header="Neues Projekt">
-                    <Grid Margin="8">
+                    <Grid Margin="8,0,8,0" Height="434">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="134"/>
                             <ColumnDefinition/>
