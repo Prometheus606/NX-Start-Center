@@ -36,4 +36,10 @@ public sealed class LastConfiguration
 
     [JsonPropertyName("last_load_feed")]
     public int LastLoadFeed { get; set; }
+
+    [JsonPropertyName("last_start_with_tc")]
+    public bool LastTcCheck { get; set; }
+
+    [JsonPropertyName("last_used_cloud_license")]
+    public bool LastCloudLicenseCheck { get; set; }
 }

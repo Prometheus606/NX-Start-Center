@@ -162,7 +162,10 @@ Panel.ZIndex="5"/>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+
+                                        </Grid.RowDefinitions>
 
                                 <TextBlock Text="Kunde:" Grid.Row="0" Grid.Column="0"/>
                                 <ComboBox ItemsSource="{Binding Customers}"
@@ -184,7 +187,20 @@ Panel.ZIndex="5"/>
                       SelectedItem="{Binding SelectedMachine}"
                       Grid.Row="2"
                       Grid.Column="1"/>
-                            </Grid>
+
+                                        <StackPanel Grid.Row="3"
+Grid.ColumnSpan="3"
+VerticalAlignment="Top" Height="AUTO" Orientation="Horizontal">
+
+                                            <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Mit NX X Lizenz"
+                      IsChecked="{Binding NxXCheck}" Margin="0,5,0,0"/>
+
+
+
+                                        <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Teamcenter"
+                      IsChecked="{Binding TcCheck}" Margin="50,5,0,0"/>
+                                            </StackPanel>
+                                    </Grid>
                         </GroupBox>
 
                                 <StackPanel Grid.Row="1"

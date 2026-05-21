@@ -179,6 +179,34 @@ public sealed class MainViewModel : INotifyPropertyChanged
         }
     }
 
+    public bool NxXCheck
+    {
+        get => _model.StartNxWithCloudLicense;
+        set
+        {
+            if (_model.StartNxWithCloudLicense == value) return;
+            _model.StartNxWithCloudLicense = value;
+
+
+            _model.Last.LastCloudLicenseCheck = _model.StartNxWithCloudLicense;
+            _model.Save();
+            OnPropertyChanged();
+        }
+    }
+
+    public bool TcCheck
+    {
+        get => _model.StartNxManaged;
+        set
+        {
+            if (_model.StartNxManaged == value) return;
+            _model.StartNxManaged = value;
+            _model.Last.LastTcCheck = _model.StartNxManaged;
+            _model.Save();
+            OnPropertyChanged();
+        }
+    }
+
     private void AutoSetLoadOptionsForCustomer()
     {
         if (string.IsNullOrWhiteSpace(_model.Customer))
