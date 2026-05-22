@@ -1,11 +1,16 @@
+using Microsoft.Win32;
+using NXStartCenter.Configuration;
+using NXStartCenter.Services;
+using Ookii.Dialogs.Wpf;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using NXStartCenter.Configuration;
-using NXStartCenter.Services;
+using static System.Net.WebRequestMethods;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace NXStartCenter;
 
@@ -14,6 +19,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
     private readonly AppModel _model;
     private readonly NxService _nxService;
     private readonly ProjectService _projectService;
+    private AppSettings? _settingsBackup;
 
     private string _statusText = "Bereit";
     private string _statusColor = "#C9C9C9";
@@ -72,7 +78,16 @@ public sealed class MainViewModel : INotifyPropertyChanged
         RefreshCommand = new RelayCommand(RefreshAll);
         CreateProjectCommand = new RelayCommand(CreateProject);
         OpenSettingsCommand = new RelayCommand(OpenSettings);
+        DiscardSettingsCommand = new RelayCommand(DiscardSettings);
         ShowInfoCommand = new RelayCommand(ShowInfo);
+        BrowseNxInstallationPathCommand = new RelayCommand(BrowseNxInstallationPath);
+        BrowseCustomerEnvironmentCommand = new RelayCommand(BrowseCustomerEnvironment);
+        BrowseTemplateRootCommand = new RelayCommand(BrowseTemplateRoot);
+        BrowseLicencePathCommand = new RelayCommand(BrowseLicencePath);
+        BrowseLicenceServerPathCommand = new RelayCommand(BrowseLicenceServerPath);
+        BrowseForkPathCommand = new RelayCommand(BrowseForkPath);
+        BrowseRolesPathCommand = new RelayCommand(BrowseRolesPath);
+        BrowseTcPathCommand = new RelayCommand(BrowseTcPath);
 
     RefreshCollectionsFromModel();
     }
@@ -110,10 +125,19 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public ICommand RefreshCommand { get; }
     public ICommand CreateProjectCommand { get; }
     public ICommand OpenSettingsCommand { get; }
+    public ICommand DiscardSettingsCommand { get; }
     public ICommand OpenMainBatch { get; }
     public ICommand OpenCustomerBatch { get; }
     public ICommand OpenDeveloperBatch { get; }
     public ICommand ShowInfoCommand { get; }
+    public ICommand BrowseNxInstallationPathCommand { get; }
+    public ICommand BrowseCustomerEnvironmentCommand { get; }
+    public ICommand BrowseTemplateRootCommand { get; }
+    public ICommand BrowseLicencePathCommand { get; }
+    public ICommand BrowseLicenceServerPathCommand { get; }
+    public ICommand BrowseForkPathCommand { get; }
+    public ICommand BrowseRolesPathCommand { get; }
+    public ICommand BrowseTcPathCommand { get; }
 
     private bool IsTeam(string team)
     => string.Equals(Settings.Team, team, StringComparison.OrdinalIgnoreCase);
@@ -534,6 +558,21 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
     private void OpenSettings()
     {
+        _settingsBackup = new AppSettings
+        {
+            NxInstallationPath = Settings.NxInstallationPath,
+            CustomerEnvironmentPath = Settings.CustomerEnvironmentPath,
+            TemplateRoot = Settings.TemplateRoot,
+            TcPath = Settings.TcPath,
+            LicencePath = Settings.LicencePath,
+            LicenceServerPath = Settings.LicenceServerPath,
+            ForkPath = Settings.ForkPath,
+            RolesPath = Settings.RolesPath,
+            Team = Settings.Team,
+            Editor = Settings.Editor,
+            StartNxWithDebug = Settings.StartNxWithDebug
+        };
+
         var window = new SettingsWindow
         {
             DataContext = this,
@@ -541,6 +580,28 @@ public sealed class MainViewModel : INotifyPropertyChanged
         };
 
         window.ShowDialog();
+    }
+
+    private void DiscardSettings()
+    {
+        if (_settingsBackup == null)
+            return;
+
+        Settings.NxInstallationPath = _settingsBackup.NxInstallationPath;
+        Settings.CustomerEnvironmentPath = _settingsBackup.CustomerEnvironmentPath;
+        Settings.TemplateRoot = _settingsBackup.TemplateRoot;
+        Settings.TcPath = _settingsBackup.TcPath;
+        Settings.LicencePath = _settingsBackup.LicencePath;
+        Settings.LicenceServerPath = _settingsBackup.LicenceServerPath;
+        Settings.ForkPath = _settingsBackup.ForkPath;
+        Settings.RolesPath = _settingsBackup.RolesPath;
+        Settings.Team = _settingsBackup.Team;
+        Settings.Editor = _settingsBackup.Editor;
+        Settings.StartNxWithDebug = _settingsBackup.StartNxWithDebug;
+
+        OnPropertyChanged(nameof(Settings));
+
+        StatusText = "Änderungen verworfen.";
     }
 
     private void ShowInfo()
@@ -699,5 +760,86 @@ public sealed class MainViewModel : INotifyPropertyChanged
             if (value)
                 SelectedLanguage = "english";
         }
+    }
+
+    private void BrowseNxInstallationPath()
+    {
+        _model.Settings.NxInstallationPath = BrowseForFoldersOrFiles(description: "NX Installationsordner auswählen") ?? _model.Settings.NxInstallationPath;
+        OnPropertyChanged(nameof(Settings));
+    }
+
+    private void BrowseCustomerEnvironment()
+    {
+        _model.Settings.CustomerEnvironmentPath = BrowseForFoldersOrFiles(description: "Kundenumgebungsordner auswählen") ?? _model.Settings.CustomerEnvironmentPath;
+        OnPropertyChanged(nameof(Settings));
+    }
+
+    private void BrowseTemplateRoot()
+    {
+        _model.Settings.TemplateRoot = BrowseForFoldersOrFiles(description: "Templates Ordner auswählen (Vorlage und Toolbars)") ?? _model.Settings.TemplateRoot;
+        OnPropertyChanged(nameof(Settings));
+    }
+
+    private void BrowseTcPath()
+    {
+        _model.Settings.TcPath = BrowseForFoldersOrFiles(type: "file", description: "Portal.bat auswählen", filers: "Batch Dateien (*.bat)|*.bat") ?? _model.Settings.TcPath;
+        OnPropertyChanged(nameof(Settings));
+    }
+
+    private void BrowseLicencePath()
+    {
+        _model.Settings.LicencePath = BrowseForFoldersOrFiles(type: "file", description: "lizenz Datei auswählen", filers: "Batch Dateien (*.lic)|*.lic|Alle Dateien (*.*)|*.*") ?? _model.Settings.LicencePath;
+        OnPropertyChanged(nameof(Settings));
+    }
+
+    private void BrowseLicenceServerPath()
+    {
+        _model.Settings.LicenceServerPath = BrowseForFoldersOrFiles(type: "file", description: "LMTools.exe auswählen", filers: "Ausführbare Dateien (*.exe)|*.exe") ?? _model.Settings.LicenceServerPath;
+        OnPropertyChanged(nameof(Settings));
+    }
+
+    private void BrowseForkPath()
+    {
+        _model.Settings.ForkPath = BrowseForFoldersOrFiles(type: "file", description: "Fork.exe auswählen", filers: "Ausführbare Dateien (*.exe)|*.exe") ?? _model.Settings.ForkPath;
+        OnPropertyChanged(nameof(Settings));
+    }
+
+    private void BrowseRolesPath()
+    {
+        _model.Settings.RolesPath = BrowseForFoldersOrFiles(type: "file", description: "Rollen Dateien auswählen", filers: "NX Rollen Dateien (*.mtx)|*.mtx", multiSelect: true) ?? _model.Settings.RolesPath;
+        OnPropertyChanged(nameof(Settings));
+    }
+
+    private string BrowseForFoldersOrFiles(string type = "folder", string description = "Pfad Auswählen", string filers = "Alle Dateien (*.*)|*.*", bool multiSelect = false)
+    {
+        if (type == "folder")
+        {
+            var dialog = new VistaFolderBrowserDialog
+            {
+                Description = description,
+                UseDescriptionForTitle = true
+            };
+            if (dialog.ShowDialog(Application.Current.MainWindow) == true)
+            {
+                return dialog.SelectedPath;
+            }
+        }
+        else
+        {
+            var dialog = new OpenFileDialog
+            {
+                Title = description,
+                Filter = filers,
+                Multiselect = multiSelect,
+                CheckFileExists = true
+            };
+            if (dialog.ShowDialog(Application.Current.MainWindow) == true)
+            {
+                return multiSelect
+                    ? string.Join(";", dialog.FileNames)
+                    : dialog.FileName;
+            }
+        }
+        return null;
     }
 }

@@ -15,7 +15,20 @@
         <StackPanel DockPanel.Dock="Bottom"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right"
-                    Margin="0,16,0,0">
+                    Margin="0,16,0,0" Cursor="">
+
+            <Button Content="Verwerfen"
+        Command="{Binding DiscardSettingsCommand}"
+        Width="140"
+        Margin="0,0,8,0" Background="#FFAD2A2A">
+
+                <Button.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="Black"/>
+                    </Style>
+                </Button.Resources>
+
+            </Button>
 
             <Button Content="Speichern"
                     Command="{Binding SaveSettingsCommand}"
@@ -29,6 +42,7 @@
 
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <Grid Margin="8">
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="220"/>
                     <ColumnDefinition Width="*"/>
@@ -49,70 +63,260 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="NX Installationspfad:" Grid.Row="0" Grid.Column="0"/>
-                <TextBox Text="{Binding Settings.NxInstallationPath, UpdateSourceTrigger=PropertyChanged}"
-                         Grid.Row="0"
-                         Grid.Column="1"/>
+                <!-- NX Installationspfad -->
+                <TextBlock Text="NX Installationspfad:"
+                           Grid.Row="0"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"/>
 
-                <TextBlock Text="Kundenumgebungen:" Grid.Row="1" Grid.Column="0"/>
-                <TextBox Text="{Binding Settings.CustomerEnvironmentPath, UpdateSourceTrigger=PropertyChanged}"
-                         Grid.Row="1"
-                         Grid.Column="1"/>
+                <Grid Grid.Row="0" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Vorlage &amp; Toolbars:" Grid.Row="2" Grid.Column="0"/>
-                <TextBox Text="{Binding Settings.TemplateRoot, UpdateSourceTrigger=PropertyChanged}"
-         Grid.Row="2"
-         Grid.Column="1"/>
+                    <TextBox Text="{Binding Settings.NxInstallationPath, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Column="0"/>
 
-                <TextBlock Text="Portal.bat (Teamcenter):" Grid.Row="3" Grid.Column="0"/>
-                <TextBox Text="{Binding Settings.TcPath, UpdateSourceTrigger=PropertyChanged}"
-         Grid.Row="3"
-         Grid.Column="1"/>
+                    <Button Grid.Column="1"
+                            Background="Transparent"
+                            Width="Auto"
+                            Height="Auto"
+                            Margin="6,0,0,0"
+                            ToolTip="Ordner auswählen"
+                            Command="{Binding BrowseNxInstallationPathCommand}">
+                        <TextBlock Text="📁"
+                                   FontSize="14"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Button>
+                </Grid>
 
-                <TextBlock Text="Lizenzdatei:" Grid.Row="4" Grid.Column="0"/>
-                <TextBox Text="{Binding Settings.LicencePath, UpdateSourceTrigger=PropertyChanged}"
-                         Grid.Row="4"
-                         Grid.Column="1"/>
+                <!-- Kundenumgebungen -->
+                <TextBlock Text="Kundenumgebungen:"
+                           Grid.Row="1"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"/>
 
-                <TextBlock Text="LMTools:" Grid.Row="5" Grid.Column="0"/>
-                <TextBox Text="{Binding Settings.LicenceServerPath, UpdateSourceTrigger=PropertyChanged}"
-                         Grid.Row="5"
-                         Grid.Column="1"/>
+                <Grid Grid.Row="1" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Fork.exe:" Grid.Row="6" Grid.Column="0"/>
-                <TextBox Text="{Binding Settings.ForkPath, UpdateSourceTrigger=PropertyChanged}"
-                         Grid.Row="6"
-                         Grid.Column="1"/>
+                    <TextBox Text="{Binding Settings.CustomerEnvironmentPath, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Column="0"/>
 
-                <TextBlock Text="Rollenpfade (; getrennt):" Grid.Row="7" Grid.Column="0"/>
-                <TextBox Text="{Binding Settings.RolesPath, UpdateSourceTrigger=PropertyChanged}"
-                         Grid.Row="7"
-                         Grid.Column="1"/>
+                    <Button Grid.Column="1"
+                                                        Background="Transparent"
+                            Width="Auto"
+Height="Auto"
+                            Margin="6,0,0,0"
+                            ToolTip="Ordner auswählen"
+                            Command="{Binding BrowseCustomerEnvironmentCommand}">
+                        <TextBlock Text="📁" FontSize="14"/>
+                    </Button>
+                </Grid>
 
-                <TextBlock Text="Team:" Grid.Row="8" Grid.Column="0"/>
+                <!-- Vorlage & Toolbars -->
+                <TextBlock Text="Vorlage &amp; Toolbars:"
+                           Grid.Row="2"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"/>
+
+                <Grid Grid.Row="2" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Text="{Binding Settings.TemplateRoot, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Column="0"/>
+
+                    <Button Grid.Column="1"
+                                                        Background="Transparent"
+                            Width="Auto"
+Height="Auto"
+                            Margin="6,0,0,0"
+                            ToolTip="Ordner auswählen"
+                            Command="{Binding BrowseTemplateRootCommand}">
+                        <TextBlock Text="📁" FontSize="14"/>
+                    </Button>
+                </Grid>
+
+                <!-- Portal.bat -->
+                <TextBlock Text="Portal.bat (Teamcenter):"
+                           Grid.Row="3"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"/>
+
+                <Grid Grid.Row="3" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Text="{Binding Settings.TcPath, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Column="0"/>
+
+                    <Button Grid.Column="1"
+                                                        Background="Transparent"
+                            Width="Auto"
+Height="Auto"
+                            Margin="6,0,0,0"
+                            ToolTip="Datei auswählen"
+                            Command="{Binding BrowseTcPathCommand}">
+                        <TextBlock Text="📄" FontSize="14"/>
+                    </Button>
+                </Grid>
+
+                <!-- Lizenzdatei -->
+                <TextBlock Text="Lizenzdatei:"
+                           Grid.Row="4"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"/>
+
+                <Grid Grid.Row="4" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Text="{Binding Settings.LicencePath, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Column="0"/>
+
+                    <Button Grid.Column="1"
+                                                        Background="Transparent"
+                            Width="Auto"
+Height="Auto"
+                            Margin="6,0,0,0"
+                            ToolTip="Datei auswählen"
+                            Command="{Binding BrowseLicencePathCommand}">
+                        <TextBlock Text="📄" FontSize="14"/>
+                    </Button>
+                </Grid>
+
+                <!-- LMTools -->
+                <TextBlock Text="LMTools:"
+                           Grid.Row="5"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"/>
+
+                <Grid Grid.Row="5" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Text="{Binding Settings.LicenceServerPath, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Column="0"/>
+
+                    <Button Grid.Column="1"
+                                                        Background="Transparent"
+                            Width="Auto"
+Height="Auto"
+                            Margin="6,0,0,0"
+                            ToolTip="Datei auswählen"
+                            Command="{Binding BrowseLicenceServerPathCommand}">
+                        <TextBlock Text="📄" FontSize="14"/>
+                    </Button>
+                </Grid>
+
+                <!-- Fork.exe -->
+                <TextBlock Text="Fork.exe:"
+                           Grid.Row="6"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"/>
+
+                <Grid Grid.Row="6" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="AUto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Text="{Binding Settings.ForkPath, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Column="0"/>
+
+                    <Button Grid.Column="1"
+                                                        Background="Transparent"
+                            Width="Auto"
+Height="Auto"
+                            Margin="6,0,0,0"
+                            ToolTip="Datei auswählen"
+                            Command="{Binding BrowseForkPathCommand}">
+                        <TextBlock Text="📄" FontSize="14"/>
+                    </Button>
+                </Grid>
+
+                <!-- Rollenpfade -->
+                <TextBlock Text="Rollenpfade (; getrennt):"
+                           Grid.Row="7"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"/>
+
+                <Grid Grid.Row="7" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="AUto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Text="{Binding Settings.RolesPath, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Column="0"/>
+
+                    <Button Grid.Column="1"
+                                                        Background="Transparent"
+                            Width="Auto"
+Height="Auto"
+                            Margin="6,0,0,0"
+                            ToolTip="Ordner auswählen"
+                            Command="{Binding BrowseRolesPathCommand}">
+                        <TextBlock Text="📁" FontSize="14"/>
+                    </Button>
+                </Grid>
+
+                <!-- Team -->
+                <TextBlock Text="Team:"
+                           Grid.Row="8"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"/>
+
                 <ComboBox ItemsSource="{Binding Teams}"
+                          Width="250"
                           SelectedItem="{Binding Settings.Team}"
                           Grid.Row="8"
-                          Grid.Column="1"/>
+                          Grid.Column="1" HorizontalAlignment="Left"/>
 
+                <!-- Editor -->
+                <TextBlock Text="Editor:"
+                           Grid.Row="9"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"/>
 
-                <TextBlock Text="Editor:" Grid.Row="9" Grid.Column="0"/>
                 <ComboBox ItemsSource="{Binding Editors}"
+                          Width="250"
                           SelectedItem="{Binding Settings.Editor}"
                           Grid.Row="9"
-                          Grid.Column="1"/>
+                          Grid.Column="1" HorizontalAlignment="Left"/>
 
-                <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Startdatei debuggen"
+                <!-- Debug -->
+                <CheckBox Style="{StaticResource ModernCheckBoxStyle}"
+                          Content="Startdatei debuggen"
                           IsChecked="{Binding Settings.StartNxWithDebug}"
                           Grid.Row="10"
                           Grid.Column="1"
                           Margin="0,8"/>
 
-                <TextBlock Text="Config:" Grid.Row="11" Grid.Column="0"/>
+                <!-- Config -->
+                <TextBlock Text="Config:"
+                           Grid.Row="11"
+                           Grid.Column="0"
+                           VerticalAlignment="Top"/>
+
                 <TextBlock Text="{Binding ConfigPath}"
                            Grid.Row="11"
                            Grid.Column="1"
                            TextWrapping="Wrap"/>
+
             </Grid>
         </ScrollViewer>
     </DockPanel>

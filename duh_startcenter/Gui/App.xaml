@@ -125,7 +125,6 @@
             <Setter Property="BorderBrush" Value="{StaticResource AccentBlueDark}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Height" Value="42"/>
-            <Setter Property="MinWidth" Value="110"/>
             <Setter Property="Padding" Value="14,6"/>
             <Setter Property="Margin" Value="6"/>
             <Setter Property="FontSize" Value="14"/>
