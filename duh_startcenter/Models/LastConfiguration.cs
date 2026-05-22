@@ -23,23 +23,26 @@ public sealed class LastConfiguration
     public string LastLanguage { get; set; } = "german";
 
     [JsonPropertyName("last_load_pp")]
-    public int LastLoadPp { get; set; }
+    public bool LastLoadPp { get; set; }
 
     [JsonPropertyName("last_load_installed_machines")]
-    public int LastLoadInstalledMachines { get; set; } = 1;
+    public bool LastLoadInstalledMachines { get; set; }
 
     [JsonPropertyName("last_load_tool")]
-    public int LastLoadTool { get; set; }
+    public bool LastLoadTool { get; set; }
 
     [JsonPropertyName("last_load_device")]
-    public int LastLoadDevice { get; set; }
+    public bool LastLoadDevice { get; set; }
 
     [JsonPropertyName("last_load_feed")]
-    public int LastLoadFeed { get; set; }
+    public bool LastLoadFeed { get; set; }
 
     [JsonPropertyName("last_start_with_tc")]
     public bool LastTcCheck { get; set; }
 
     [JsonPropertyName("last_used_cloud_license")]
     public bool LastCloudLicenseCheck { get; set; }
+
+    [JsonPropertyName("last_load_full_resource_folder")]
+    public bool LastLoadFullResourceDir { get; set; }
 }

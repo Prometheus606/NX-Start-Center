@@ -12,8 +12,8 @@
         <SolidColorBrush x:Key="BorderSoft" Color="#3E3E3E"/>
         <SolidColorBrush x:Key="TextMain" Color="#F2F2F2"/>
         <SolidColorBrush x:Key="TextMuted" Color="#C9C9C9"/>
-        <SolidColorBrush x:Key="AccentBlue" Color="#0B84E5"/>
-        <SolidColorBrush x:Key="AccentBlueDark" Color="#086BB8"/>
+        <SolidColorBrush x:Key="AccentBlueDark" Color="#0B84E5"/>
+        <SolidColorBrush x:Key="AccentBlueDarkDark" Color="#086BB8"/>
         <SolidColorBrush x:Key="TooltipBg" Color="#2F2F2F"/>
         <SolidColorBrush x:Key="TooltipText" Color="#FFFFFF"/>
 
@@ -121,8 +121,8 @@
 
         <Style TargetType="Button">
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Background" Value="{StaticResource AccentBlue}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource AccentBlue}"/>
+            <Setter Property="Background" Value="{StaticResource AccentBlueDark}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource AccentBlueDark}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Height" Value="42"/>
             <Setter Property="MinWidth" Value="110"/>
@@ -291,7 +291,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsHighlighted" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="{StaticResource AccentBlue}"/>
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource AccentBlueDark}"/>
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter TargetName="Border" Property="Background" Value="#155C8A"/>
@@ -343,11 +343,11 @@
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter TargetName="TabBorder"
                                 Property="Background"
-                                Value="#0B84F3"/>
+                                Value="{StaticResource AccentBlueDark}"/>
 
                                 <Setter TargetName="TabBorder"
                                 Property="BorderBrush"
-                                Value="#0B84F3"/>
+                                Value="{StaticResource AccentBlueDark}"/>
 
                                 <Setter Property="Foreground"
                                 Value="White"/>

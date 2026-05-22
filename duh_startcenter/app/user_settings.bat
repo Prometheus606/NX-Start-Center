@@ -1,6 +1,6 @@
 @echo off
-if "%DEBUG%" == "1" echo on
-if "%DEBUG%" == "1" Pause
+if "%DEBUG%" == "True" echo on
+if "%DEBUG%" == "True" Pause
 REM # *****************************************************************************
 REM # 					        WICHTIGER HINWEIS!!
 REM #
@@ -33,4 +33,4 @@ if "%CUSTOMERNAME%"=="WuH" (
     set "UGII_NCD_DIR=C:\temp\"
 )
 
-if "%DEBUG%" == "1" Pause
+if "%DEBUG%" == "True" Pause

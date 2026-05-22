@@ -25,8 +25,9 @@ public sealed partial class ProjectService(AppModel model)
     private string machineDir = "";
     private string TemplateRootDir = "";
     private bool isNewCustomer = true;
+    private string envFolderName = "";
 
-    public string CreateCustomerProject(string customer, string version, string machine, string order, string machineType, string controller, bool complexEnvRequired)
+    public string CreateOrExtendCustomerEnvironment(string customer, string version, string machine, string order, string machineType, string controller, bool complexEnvRequired)
     {
         if (string.IsNullOrWhiteSpace(customer) || string.IsNullOrWhiteSpace(version)) return "Kundenname und Version muss angegeben sein!";
         if (new[] { customer, version, machine, order }.Any(x => x.Contains(' '))) return "Leerzeichen sind nicht zulässig!";
@@ -36,9 +37,10 @@ public sealed partial class ProjectService(AppModel model)
         var baseEnv = model.Settings.CustomerEnvironmentPath;
         var nxPath = model.Settings.NxInstallationPath;
         var customerPath = Path.Combine(baseEnv, customer);
-        var installedMachinesDir = Path.Combine(customerPath, "5_Umgebung", version, "MACH", "resource", "library", "machine", "installed_machines");
+        var installedMachinesDir = Path.Combine(customerPath, model.EnvFolderName, version, "MACH", "resource", "library", "machine", "installed_machines");
         var machineDir = Path.Combine(installedMachinesDir, machine);
         var isNewCustomer = !Directory.Exists(customerPath);
+        var isNewNxVersion = !Directory.Exists(Path.Combine(customerPath, model.EnvFolderName, version));
 
         if (!Directory.Exists(baseEnv)) return $"Kundenumgebung existiert nicht:\n{baseEnv}";
         if (!string.IsNullOrWhiteSpace(machine) && Directory.Exists(machineDir)) return "Maschine bereits angelegt!";
@@ -54,10 +56,10 @@ public sealed partial class ProjectService(AppModel model)
         this.customerPath = customerPath;
         this.installedMachinesDir = installedMachinesDir;
         this.machineDir = machineDir;
-        this.isNewCustomer = isNewCustomer;
         TemplateRootDir = model.Settings.TemplateRoot;
+        envFolderName = model.EnvFolderName;
 
-        if (isNewCustomer)
+        if (isNewCustomer || (!isNewCustomer && isNewNxVersion))
         {
             if (complexEnvRequired)
                 CreateComplexNxEnvironment();
@@ -108,7 +110,7 @@ public sealed partial class ProjectService(AppModel model)
             File.WriteAllText(Path.Combine(machineDir, machine + ".dat"), machine + ",${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\postprocessor\\" + machine + ".tcl,${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\postprocessor\\" + machine + ".def\nCSE_FILES, ${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\cse_driver\\" + controller + "\\" + machine + ".MCF");
             var line = "DATA|" + machine + "|" + typeId + "|" + machine + "|" + controller + "|Example|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\" + machine + ".dat|1.000000|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\graphics\\" + machine + "_SIM";
             File.WriteAllText(Path.Combine(machineDir, "add_to_machine_database.dat"), line);
-            var asciiFile = Path.Combine(customerPath, "5_Umgebung", version, "MACH", "resource", "library", "machine", "ascii", "machine_database.dat");
+            var asciiFile = Path.Combine(customerPath, model.EnvFolderName, version, "MACH", "resource", "library", "machine", "ascii", "machine_database.dat");
             File.AppendAllText(asciiFile, Environment.NewLine + line);
         }
     }
@@ -121,9 +123,9 @@ public sealed partial class ProjectService(AppModel model)
             Path.Combine(customerPath, "2_Testdaten", order),
             Path.Combine(customerPath, "3_Auslieferung", order),
             Path.Combine(customerPath, "4_Calls", order),
-            Path.Combine(customerPath, "5_Umgebung", version, "MACH", "resource", "usertools"),
-            Path.Combine(customerPath, "5_Umgebung", version, "MACH", "resource", "library", "machine", "ascii"),
-            Path.Combine(customerPath, "5_Umgebung", version, "MACH", "resource", "library", "machine", "inclass"),
+            Path.Combine(customerPath, model.EnvFolderName, version, "MACH", "resource", "usertools"),
+            Path.Combine(customerPath, model.EnvFolderName, version, "MACH", "resource", "library", "machine", "ascii"),
+            Path.Combine(customerPath, model.EnvFolderName, version, "MACH", "resource", "library", "machine", "inclass"),
             Path.Combine(customerPath, "6_Custom", order, version, "roles"),
             Path.Combine(customerPath, "6_Custom", order, version, "startup"),
             Path.Combine(customerPath, "7_Dokumentation", order),
@@ -133,8 +135,8 @@ public sealed partial class ProjectService(AppModel model)
 
         if (isNewCustomer)
         {
-            CopyDirectoryIfExists(Path.Combine(nxPath, version, "MACH", "resource", "library", "machine", "ascii"), Path.Combine(customerPath, "5_Umgebung", version, "MACH", "resource", "library", "machine", "ascii"));
-            CopyDirectoryIfExists(Path.Combine(nxPath, version, "MACH", "resource", "library", "machine", "inclass"), Path.Combine(customerPath, "5_Umgebung", version, "MACH", "resource", "library", "machine", "inclass"));
+            CopyDirectoryIfExists(Path.Combine(nxPath, version, "MACH", "resource", "library", "machine", "ascii"), Path.Combine(customerPath, model.EnvFolderName, version, "MACH", "resource", "library", "machine", "ascii"));
+            CopyDirectoryIfExists(Path.Combine(nxPath, version, "MACH", "resource", "library", "machine", "inclass"), Path.Combine(customerPath, model.EnvFolderName, version, "MACH", "resource", "library", "machine", "inclass"));
         }
 
         if (!string.IsNullOrWhiteSpace(machine))
@@ -151,7 +153,7 @@ public sealed partial class ProjectService(AppModel model)
             File.WriteAllText(Path.Combine(machineDir, machine + ".dat"), machine + ",${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\postprocessor\\" + machine + ".tcl,${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\postprocessor\\" + machine + ".def\nCSE_FILES, ${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\cse_driver\\" + controller + "\\" + machine + ".MCF");
             var line = "DATA|" + machine + "|" + typeId + "|" + machine + "|" + controller + "|Example|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\" + machine + ".dat|1.000000|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\graphics\\" + machine + "_SIM";
             File.WriteAllText(Path.Combine(machineDir, "add_to_machine_database.dat"), line);
-            var asciiFile = Path.Combine(customerPath, "5_Umgebung", version, "MACH", "resource", "library", "machine", "ascii", "machine_database.dat");
+            var asciiFile = Path.Combine(customerPath, model.EnvFolderName, version, "MACH", "resource", "library", "machine", "ascii", "machine_database.dat");
             File.AppendAllText(asciiFile, Environment.NewLine + line);
         }
     }
@@ -159,25 +161,22 @@ public sealed partial class ProjectService(AppModel model)
 
     public void CreateComplexNxEnvironment()
     {
-        string umgebung = "5_Umgebung";
-
         string ugiiBaseDir = Path.Combine(nxPath, version);
-        string customerRoot = Path.Combine(customerPath, customer);
-        string envRoot = Path.Combine(customerRoot, umgebung, version);
+        string envRoot = Path.Combine(customerPath, envFolderName, version);
         string machRoot = Path.Combine(envRoot, "MACH");
         string resourceRoot = Path.Combine(machRoot, "resource");
 
         // Basisordner
         CreateDirs(
-            customerRoot,
-            Path.Combine(customerRoot, "1_Kundendaten"),
-            Path.Combine(customerRoot, "2_Testdaten"),
-            Path.Combine(customerRoot, "2_Testdaten", "Temp"),
-            Path.Combine(customerRoot, "2_Testdaten", "Temp", "NX"),
-            Path.Combine(customerRoot, "2_Testdaten", "Shop_Doc"),
-            Path.Combine(customerRoot, "4_Calls"),
-            Path.Combine(customerRoot, "6_Custom"),
-            Path.Combine(customerRoot, "7_Dokumentation"),
+            customerPath,
+            Path.Combine(customerPath, "1_Kundendaten"),
+            Path.Combine(customerPath, "2_Testdaten"),
+            Path.Combine(customerPath, "2_Testdaten", "Temp"),
+            Path.Combine(customerPath, "2_Testdaten", "Temp", "NX"),
+            Path.Combine(customerPath, "2_Testdaten", "Shop_Doc"),
+            Path.Combine(customerPath, "4_Calls"),
+            Path.Combine(customerPath, "6_Custom"),
+            Path.Combine(customerPath, "7_Dokumentation"),
             envRoot,
             machRoot,
             Path.Combine(envRoot, "Reuse_Library"),

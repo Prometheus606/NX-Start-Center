@@ -218,20 +218,60 @@ public sealed class MainViewModel : INotifyPropertyChanged
             _model.Customer);
 
         LoadInstalledMachines = Directory.Exists(
-            Path.Combine(customerEnvironmentPath, "5_Umgebung", _model.VersionName, "MACH", "resource", "library", "machine", "installed_machines")) || Directory.Exists(
-            Path.Combine(customerEnvironmentPath, "5_Umgebung", _model.VersionName, "MACH", "resource", "library", "machine", $"installed_machines_{_model.Customer}"));
+            Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.VersionName, "MACH", "resource", "library", "machine", "installed_machines")) || Directory.Exists(
+            Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.VersionName, "MACH", "resource", "library", "machine", $"installed_machines_{_model.Customer}"));
 
         LoadPp = Directory.Exists(
-            Path.Combine(customerEnvironmentPath, "5_Umgebung", _model.VersionName, "MACH", "resource", "postprocessor"));
+            Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.VersionName, "MACH", "resource", "postprocessor"));
 
         LoadTool = Directory.Exists(
-            Path.Combine(customerEnvironmentPath, "5_Umgebung", _model.VersionName, "MACH", "resource", "library", "tool"));
+            Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.VersionName, "MACH", "resource", "library", "tool"));
 
         LoadDevice = Directory.Exists(
-            Path.Combine(customerEnvironmentPath, "5_Umgebung", _model.VersionName, "MACH", "resource", "library", "device"));
+            Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.VersionName, "MACH", "resource", "library", "device"));
 
         LoadFeed = Directory.Exists(
-            Path.Combine(customerEnvironmentPath, "5_Umgebung", _model.VersionName, "MACH", "resource", "library", "feeds_speeds"));
+            Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.VersionName, "MACH", "resource", "library", "feeds_speeds"));
+
+        LoadFullResourceDir = Directory.Exists(
+            Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.VersionName, "MACH", "resource")) && 
+            HasFullMachDirContent(customerEnvironmentPath);
+    }
+
+    public bool HasFullMachDirContent(string customerEnvironmentPath)
+    {
+
+        string currentPath = Path.Combine(
+            customerEnvironmentPath,
+            _model.EnvFolderName,
+            _model.VersionName,
+            "MACH",
+            "resource");
+
+        string?[] orgFolders = new string[]
+        {
+            "configuration", "debug",  "feature", "library",
+            "machining_knowledge", "owi",  "post_configurator", "postprocessor",
+            "probing_cycles", "robots",  "shop_doc", "spreadsheet",
+            "template_dir", "template_part",  "template_set", "tool_path",
+            "ug_library", "user_def_event",  "wizard"
+        };
+
+        string?[] currentFolders = Directory
+            .GetDirectories(currentPath)
+            .Select(Path.GetFileName)
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .ToArray();
+
+        foreach (string? folderName in orgFolders)
+        {
+            if (!currentFolders.Contains(folderName, StringComparer.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public string SelectedVersion
@@ -290,12 +330,11 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
     public bool LoadPp
     {
-        get => _model.Last.LastLoadPp != 0;
+        get => _model.Last.LastLoadPp;
         set
         {
-            var intValue = value ? 1 : 0;
-            if (_model.Last.LastLoadPp == intValue) return;
-            _model.Last.LastLoadPp = intValue;
+            if (_model.Last.LastLoadPp == value) return;
+            _model.Last.LastLoadPp = value;
             _model.Save();
             OnPropertyChanged();
         }
@@ -303,12 +342,11 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
     public bool LoadInstalledMachines
     {
-        get => _model.Last.LastLoadInstalledMachines != 0;
+        get => _model.Last.LastLoadInstalledMachines;
         set
         {
-            var intValue = value ? 1 : 0;
-            if (_model.Last.LastLoadInstalledMachines == intValue) return;
-            _model.Last.LastLoadInstalledMachines = intValue;
+            if (_model.Last.LastLoadInstalledMachines == value) return;
+            _model.Last.LastLoadInstalledMachines = value;
             _model.Save();
             OnPropertyChanged();
         }
@@ -316,12 +354,11 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
     public bool LoadTool
     {
-        get => _model.Last.LastLoadTool != 0;
+        get => _model.Last.LastLoadTool;
         set
         {
-            var intValue = value ? 1 : 0;
-            if (_model.Last.LastLoadTool == intValue) return;
-            _model.Last.LastLoadTool = intValue;
+            if (_model.Last.LastLoadTool == value) return;
+            _model.Last.LastLoadTool = value;
             _model.Save();
             OnPropertyChanged();
         }
@@ -329,12 +366,11 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
     public bool LoadDevice
     {
-        get => _model.Last.LastLoadDevice != 0;
+        get => _model.Last.LastLoadDevice;
         set
         {
-            var intValue = value ? 1 : 0;
-            if (_model.Last.LastLoadDevice == intValue) return;
-            _model.Last.LastLoadDevice = intValue;
+            if (_model.Last.LastLoadDevice == value) return;
+            _model.Last.LastLoadDevice = value;
             _model.Save();
             OnPropertyChanged();
         }
@@ -342,12 +378,23 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
     public bool LoadFeed
     {
-        get => _model.Last.LastLoadFeed != 0;
+        get => _model.Last.LastLoadFeed;
         set
         {
-            var intValue = value ? 1 : 0;
-            if (_model.Last.LastLoadFeed == intValue) return;
-            _model.Last.LastLoadFeed = intValue;
+            if (_model.Last.LastLoadFeed == value) return;
+            _model.Last.LastLoadFeed = value;
+            _model.Save();
+            OnPropertyChanged();
+        }
+    }
+
+    public bool LoadFullResourceDir
+    {
+        get => _model.Last.LastLoadFullResourceDir;
+        set
+        {
+            if (_model.Last.LastLoadFullResourceDir == value) return;
+            _model.Last.LastLoadFullResourceDir = value;
             _model.Save();
             OnPropertyChanged();
         }
@@ -419,7 +466,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
     {
         RunAction(() =>
         {
-            var message = _projectService.CreateCustomerProject(
+            var message = _projectService.CreateOrExtendCustomerEnvironment(
                 NewCustomer,
                 NewVersion,
                 NewMachine,
@@ -435,7 +482,9 @@ public sealed class MainViewModel : INotifyPropertyChanged
             _model.RefreshAll();
             RefreshCollectionsFromModel();
             return message;
-        });
+        },
+        "Erstelle neue Kundenumgebung..."
+        );
     }
 
     private void SaveLastSelection()
@@ -446,10 +495,16 @@ public sealed class MainViewModel : INotifyPropertyChanged
         _model.Save();
     }
 
-    private void RunAction(Func<string> action)
+    private void RunAction(Func<string> action, string startMessage = "")
     {
         try
         {
+            if (!String.IsNullOrEmpty(startMessage))
+            {                
+                StatusState = "";
+                StatusText = startMessage;
+            }
+
             var message = action();
 
             if (message.Contains("nicht", StringComparison.OrdinalIgnoreCase) ||

@@ -28,22 +28,28 @@ public sealed class NxService(AppModel model)
         {
             return "Kundenname und Version müssen angegeben werden!";
         }
+        bool loadFullResourceDir = model.Last.LastLoadFullResourceDir;
+        if (model.Settings.Team == "CAM")
+        {
+            loadFullResourceDir = true;
+        }
         var args =
             $"\"{model.Customer}\"" +
             $" \"{model.VersionName}\"" +
             $" \"{model.Last.LastLanguage}\"" +
             $" \"{model.Settings.CustomerEnvironmentPath}\"" +
             $" \"{model.Settings.NxInstallationPath}\"" +
-            $" \"{Convert.ToInt16(debug)}\"" +
-            $" \"{Bool(model.Last.LastLoadPp)}\" " +
-            $"\"{Bool(model.Last.LastLoadInstalledMachines)}\"" +
-            $" \"{Bool(model.Last.LastLoadTool)}\" " +
-            $" \"{Bool(model.Last.LastLoadDevice)}\" " +
-            $" \"{Bool(model.Last.LastLoadFeed)}\"" +
-            $" \"{Convert.ToInt16(model.StartNxWithCloudLicense)}\"" +
+            $" \"{debug}\"" +
+            $" \"{model.Last.LastLoadPp}\" " +
+            $"\"{model.Last.LastLoadInstalledMachines}\"" +
+            $" \"{model.Last.LastLoadTool}\" " +
+            $" \"{model.Last.LastLoadDevice}\" " +
+            $" \"{model.Last.LastLoadFeed}\"" +
+            $" \"{model.StartNxWithCloudLicense}\"" +
             $" \"{managed}\"" +
             $" \"{model.Settings.TemplateRoot}\"" +
-            $" \"{model.Settings.TcPath}\"";
+            $" \"{model.Settings.TcPath}\"" +
+            $" \"{loadFullResourceDir}\"";
         ProcessService.StartBatch(
     batch,
     args,
@@ -108,7 +114,7 @@ public sealed class NxService(AppModel model)
 
     public string OpenCustomerBatch()
     {
-        return OpenFile(Path.Combine(model.Settings.CustomerEnvironmentPath, model.Customer, "5_Umgebung", model.VersionName, "start_apps", $"custom_nx_{model.Customer}.bat"));
+        return OpenFile(Path.Combine(model.Settings.CustomerEnvironmentPath, model.Customer, model.EnvFolderName, model.VersionName, "start_apps", $"custom_nx_{model.Customer}.bat"));
     }
 
     public string OpenDeveloperBatch()

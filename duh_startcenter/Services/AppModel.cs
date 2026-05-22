@@ -32,6 +32,7 @@ public sealed class AppModel
     public IReadOnlyList<string> PostbuilderVersions { get; private set; } = [];
 
     public string[] MachineControllers { get; } = ["Sinumerik", "Fanuk", "Okuma", "HeidenhainTNC"];
+    public string EnvFolderName { get; } = "5_Umgebung";
 
     public Dictionary<string, string> MachineTypes { get; } = new()
     {
@@ -86,7 +87,7 @@ public sealed class AppModel
 
     public void RefreshVersions()
     {
-        Versions = DirectoryNames(Path.Combine(Settings.CustomerEnvironmentPath, Customer, "5_Umgebung"))
+        Versions = DirectoryNames(Path.Combine(Settings.CustomerEnvironmentPath, Customer, EnvFolderName))
             .Where(x => x.StartsWith("NX", StringComparison.OrdinalIgnoreCase)).Reverse().ToArray();
         VersionName = Pick(Last.LastVersion, Versions);
         RefreshMachines();
@@ -100,7 +101,7 @@ public sealed class AppModel
 
     public string GetInstalledMachinesPath()
     {
-        var basePath = Path.Combine(Settings.CustomerEnvironmentPath, Customer, "5_Umgebung", VersionName, "MACH", "resource", "library", "machine", "installed_machines");
+        var basePath = Path.Combine(Settings.CustomerEnvironmentPath, Customer, EnvFolderName, VersionName, "MACH", "resource", "library", "machine", "installed_machines");
         var camPath = basePath + "_" + Customer;
         return Directory.Exists(camPath) ? camPath : basePath;
     }
