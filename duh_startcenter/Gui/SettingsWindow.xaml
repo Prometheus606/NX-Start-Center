@@ -322,6 +322,7 @@ Height="Auto"
                 <CheckBox Style="{StaticResource ModernCheckBoxStyle}"
           Content="Repository im Fork Automatisch mit VS Code starten"
           IsChecked="{Binding Settings.OpenVsCodeWithFork}"
+                          Visibility="{Binding PpVisibility}"
           Grid.Row="12"
           Grid.Column="1"
           Margin="0,8"/>
@@ -329,9 +330,10 @@ Height="Auto"
                 <CheckBox Style="{StaticResource ModernCheckBoxStyle}"
           Content="Pullen erinnerung zeigen beim öffnen von Fork"
           IsChecked="{Binding Settings.ShowPullReminder}"
+          Visibility="{Binding PpVisibility}"
           Grid.Row="13"
           Grid.Column="1"
-          Margin="0,8"/>
+          Margin="0,8" Cursor="Hand"/>
 
             </Grid>
         </ScrollViewer>
