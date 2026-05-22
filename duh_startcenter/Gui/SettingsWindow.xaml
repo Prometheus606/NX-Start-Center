@@ -41,7 +41,7 @@
         </StackPanel>
 
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <Grid Margin="8">
+            <Grid Margin="8" Cursor="">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="220"/>
@@ -61,15 +61,28 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
+
+                <!-- Config -->
+                <TextBlock Text="Config Datei:"
+                           Grid.Row="0"
+                           Grid.Column="0"
+                           VerticalAlignment="Top"/>
+
+                <TextBlock Text="{Binding ConfigPath}"
+                           Grid.Row="0"
+                           Grid.Column="1"
+                           TextWrapping="Wrap"/>
 
                 <!-- NX Installationspfad -->
                 <TextBlock Text="NX Installationspfad:"
-                           Grid.Row="0"
+                           Grid.Row="1"
                            Grid.Column="0"
                            VerticalAlignment="Center"/>
 
-                <Grid Grid.Row="0" Grid.Column="1">
+                <Grid Grid.Row="1" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
@@ -94,11 +107,11 @@
 
                 <!-- Kundenumgebungen -->
                 <TextBlock Text="Kundenumgebungen:"
-                           Grid.Row="1"
+                           Grid.Row="2"
                            Grid.Column="0"
                            VerticalAlignment="Center"/>
 
-                <Grid Grid.Row="1" Grid.Column="1">
+                <Grid Grid.Row="2" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
@@ -120,11 +133,11 @@ Height="Auto"
 
                 <!-- Vorlage & Toolbars -->
                 <TextBlock Text="Vorlage &amp; Toolbars:"
-                           Grid.Row="2"
+                           Grid.Row="3"
                            Grid.Column="0"
                            VerticalAlignment="Center"/>
 
-                <Grid Grid.Row="2" Grid.Column="1">
+                <Grid Grid.Row="3" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
@@ -146,11 +159,11 @@ Height="Auto"
 
                 <!-- Portal.bat -->
                 <TextBlock Text="Portal.bat (Teamcenter):"
-                           Grid.Row="3"
+                           Grid.Row="4"
                            Grid.Column="0"
                            VerticalAlignment="Center"/>
 
-                <Grid Grid.Row="3" Grid.Column="1">
+                <Grid Grid.Row="4" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
@@ -172,11 +185,11 @@ Height="Auto"
 
                 <!-- Lizenzdatei -->
                 <TextBlock Text="Lizenzdatei:"
-                           Grid.Row="4"
+                           Grid.Row="5"
                            Grid.Column="0"
                            VerticalAlignment="Center"/>
 
-                <Grid Grid.Row="4" Grid.Column="1">
+                <Grid Grid.Row="5" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
@@ -198,11 +211,11 @@ Height="Auto"
 
                 <!-- LMTools -->
                 <TextBlock Text="LMTools:"
-                           Grid.Row="5"
+                           Grid.Row="6"
                            Grid.Column="0"
                            VerticalAlignment="Center"/>
 
-                <Grid Grid.Row="5" Grid.Column="1">
+                <Grid Grid.Row="6" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
@@ -224,11 +237,11 @@ Height="Auto"
 
                 <!-- Fork.exe -->
                 <TextBlock Text="Fork.exe:"
-                           Grid.Row="6"
+                           Grid.Row="7"
                            Grid.Column="0"
                            VerticalAlignment="Center"/>
 
-                <Grid Grid.Row="6" Grid.Column="1">
+                <Grid Grid.Row="7" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="AUto"/>
@@ -250,11 +263,11 @@ Height="Auto"
 
                 <!-- Rollenpfade -->
                 <TextBlock Text="Rollenpfade (; getrennt):"
-                           Grid.Row="7"
+                           Grid.Row="8"
                            Grid.Column="0"
                            VerticalAlignment="Center"/>
 
-                <Grid Grid.Row="7" Grid.Column="1">
+                <Grid Grid.Row="8" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="AUto"/>
@@ -276,46 +289,49 @@ Height="Auto"
 
                 <!-- Team -->
                 <TextBlock Text="Team:"
-                           Grid.Row="8"
+                           Grid.Row="9"
                            Grid.Column="0"
                            VerticalAlignment="Center"/>
 
                 <ComboBox ItemsSource="{Binding Teams}"
                           Width="250"
                           SelectedItem="{Binding Settings.Team}"
-                          Grid.Row="8"
+                          Grid.Row="9"
                           Grid.Column="1" HorizontalAlignment="Left"/>
 
                 <!-- Editor -->
                 <TextBlock Text="Editor:"
-                           Grid.Row="9"
+                           Grid.Row="10"
                            Grid.Column="0"
                            VerticalAlignment="Center"/>
 
                 <ComboBox ItemsSource="{Binding Editors}"
                           Width="250"
                           SelectedItem="{Binding Settings.Editor}"
-                          Grid.Row="9"
+                          Grid.Row="10"
                           Grid.Column="1" HorizontalAlignment="Left"/>
 
                 <!-- Debug -->
                 <CheckBox Style="{StaticResource ModernCheckBoxStyle}"
                           Content="Startdatei debuggen"
                           IsChecked="{Binding Settings.StartNxWithDebug}"
-                          Grid.Row="10"
+                          Grid.Row="11"
                           Grid.Column="1"
                           Margin="0,8"/>
-
-                <!-- Config -->
-                <TextBlock Text="Config:"
-                           Grid.Row="11"
-                           Grid.Column="0"
-                           VerticalAlignment="Top"/>
-
-                <TextBlock Text="{Binding ConfigPath}"
-                           Grid.Row="11"
-                           Grid.Column="1"
-                           TextWrapping="Wrap"/>
+                
+                <CheckBox Style="{StaticResource ModernCheckBoxStyle}"
+          Content="Repository im Fork Automatisch mit VS Code starten"
+          IsChecked="{Binding Settings.OpenVsCodeWithFork}"
+          Grid.Row="12"
+          Grid.Column="1"
+          Margin="0,8"/>
+                
+                <CheckBox Style="{StaticResource ModernCheckBoxStyle}"
+          Content="Pullen erinnerung zeigen beim öffnen von Fork"
+          IsChecked="{Binding Settings.ShowPullReminder}"
+          Grid.Row="13"
+          Grid.Column="1"
+          Margin="0,8"/>
 
             </Grid>
         </ScrollViewer>

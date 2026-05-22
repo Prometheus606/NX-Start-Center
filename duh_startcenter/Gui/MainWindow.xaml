@@ -262,7 +262,7 @@ IsChecked="{Binding TcCheck}" Margin="8,5,0,6"/>
                 Margin="6,14,6,6"/>
 
                             <Button Content="PP Öffnen"
-                Command="{Binding OpenVsCodeCommand}"
+                Command="{Binding OpenVsCodeAndForkCommand}"
                                     Visibility="{Binding PpVisibility}"
                 Margin="6,14,6,6" Cursor="Hand"/>
 

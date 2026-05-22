@@ -101,8 +101,24 @@ public sealed class NxService(AppModel model)
         var dir = Path.Combine(model.GetInstalledMachinesPath(), model.Machine);
         if (!File.Exists(model.Settings.ForkPath)) return "Fork ist nicht installiert oder der Pfad zur Fork.exe ist falsch.";
         if (!Directory.Exists(Path.Combine(dir, ".git"))) MessageBox.Show("Achtung: Kein Repository angelegt!", "Info");
+        if (model.Settings.ShowPullReminder)
+        {
+            ShowPullReminder();
+        }
+        
         ProcessService.StartFile(model.Settings.ForkPath, $"\"{dir}\"");
         return "Fork wurde geöffnet.";
+    }
+
+    public void ShowPullReminder()
+    {
+        MessageBox.Show(
+            Application.Current.MainWindow,
+            "Nicht vergessen das Projekt neu zu pullen!",
+            "Info",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information
+        );
     }
 
     public string OpenVsCode()
@@ -111,6 +127,20 @@ public sealed class NxService(AppModel model)
         if (!Directory.Exists(ppDir)) return "Der PP Ordner konnte nicht geöffnet werden da er nicht existiert.\n" + ppDir;
         ProcessService.StartFile("code", $"\"{ppDir}\"");
         return "VS Code wurde geöffnet.";
+    }
+
+    public string OpenVsCodeAndFork()
+    {
+        string message = OpenVsCode();
+        if (message != "VS Code wurde geöffnet.")
+        {
+            return message; 
+        }
+        if (model.Settings.OpenVsCodeWithFork)
+        {
+            message = OpenFork();          
+        }
+        return message;
     }
 
     public string OpenLicenseFile()

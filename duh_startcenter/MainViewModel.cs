@@ -68,6 +68,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
         StartPostbuilderCommand = new RelayCommand(() => RunAction(_nxService.StartPostbuilder));
         OpenExplorerCommand = new RelayCommand(() => RunAction(_nxService.OpenMachineFolder));
         OpenVsCodeCommand = new RelayCommand(() => RunAction(_nxService.OpenVsCode));
+        OpenVsCodeAndForkCommand = new RelayCommand(() => RunAction(_nxService.OpenVsCodeAndFork));
         OpenForkCommand = new RelayCommand(() => RunAction(_nxService.OpenFork));
         OpenMainBatch = new RelayCommand(() => RunAction(_nxService.OpenMainBatch));
         OpenCustomerBatch = new RelayCommand(() => RunAction(_nxService.OpenCustomerBatch));
@@ -118,6 +119,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public ICommand StartPostbuilderCommand { get; }
     public ICommand OpenExplorerCommand { get; }
     public ICommand OpenVsCodeCommand { get; }
+    public ICommand OpenVsCodeAndForkCommand { get; }
     public ICommand OpenForkCommand { get; }
     public ICommand OpenLicenseFileCommand { get; }
     public ICommand StartLmToolsCommand { get; }
@@ -570,7 +572,9 @@ public sealed class MainViewModel : INotifyPropertyChanged
             RolesPath = Settings.RolesPath,
             Team = Settings.Team,
             Editor = Settings.Editor,
-            StartNxWithDebug = Settings.StartNxWithDebug
+            StartNxWithDebug = Settings.StartNxWithDebug,
+            OpenVsCodeWithFork = Settings.OpenVsCodeWithFork,
+            ShowPullReminder = Settings.ShowPullReminder
         };
 
         var window = new SettingsWindow
@@ -598,6 +602,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
         Settings.Team = _settingsBackup.Team;
         Settings.Editor = _settingsBackup.Editor;
         Settings.StartNxWithDebug = _settingsBackup.StartNxWithDebug;
+        Settings.OpenVsCodeWithFork = _settingsBackup.OpenVsCodeWithFork;
+        Settings.ShowPullReminder = _settingsBackup.ShowPullReminder;
 
         OnPropertyChanged(nameof(Settings));
 

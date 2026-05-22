@@ -41,4 +41,12 @@ public sealed class AppSettings
 
     [JsonPropertyName("startNXWithDebug")]
     public bool StartNxWithDebug { get; set; }
+
+    [JsonPropertyName("showPullReminder")]
+    public bool ShowPullReminder { get; set; }
+
+
+[JsonPropertyName("openVsCodeWithFork")]
+    public bool OpenVsCodeWithFork { get; set; }
+
 }
