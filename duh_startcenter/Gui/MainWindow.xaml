@@ -188,18 +188,7 @@ Panel.ZIndex="5"/>
                       Grid.Row="2"
                       Grid.Column="1"/>
 
-                                        <StackPanel Grid.Row="3"
-Grid.ColumnSpan="3"
-VerticalAlignment="Top" Height="AUTO" Orientation="Horizontal">
-
-                                            <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Mit NX X Lizenz"
-                      IsChecked="{Binding NxXCheck}" Margin="0,5,0,0"/>
-
-
-
-                                        <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Teamcenter"
-                      IsChecked="{Binding TcCheck}" Margin="50,5,0,0"/>
-                                            </StackPanel>
+                                       
                                     </Grid>
                         </GroupBox>
 
@@ -208,7 +197,9 @@ VerticalAlignment="Top" Height="AUTO" Orientation="Horizontal">
 
                                     <GroupBox Header="Ladeoptionen" Grid.Row="1" Grid.Column="0" Margin="6,0,6,12" Visibility="{Binding PpVisibility}">
                             <StackPanel>
-                                        <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Installed Machines laden"
+                                            <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Gesamtes Resource Verzeichnis laden"
+IsChecked="{Binding LoadFullResourceDir}" Margin="0,2,0,2"/>
+                                            <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Installed Machines laden"
                       IsChecked="{Binding LoadInstalledMachines}" Margin="0,2,0,2"/>
                                         <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Postprozessor Ordner laden"
                       IsChecked="{Binding LoadPp}" Margin="0,2,0,2"/>
@@ -252,12 +243,21 @@ VerticalAlignment="Top" Height="AUTO" Orientation="Horizontal">
                 Grid.RowSpan="2"
                 Grid.Column="1"
                 Margin="14,28,0,0"
-                VerticalAlignment="Top" Height="240">
-
-                            <Button Content="NX Starten"
+                VerticalAlignment="Top" Height="Auto">
+                                    <StackPanel Margin="0,0,0,6">
+                                    <Button Content="NX Starten"
                 Command="{Binding StartCustomerNxCommand}"/>
+                                    <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Mit NX X Lizenz Starten"
+IsChecked="{Binding NxXCheck}" Margin="8,5,0,0"/>
 
-                            <Button Content="Ordner Öffnen"
+
+
+                                    <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Mit Teamcenter Starten"
+IsChecked="{Binding TcCheck}" Margin="8,5,0,6"/>
+                                    </StackPanel>
+
+
+                                    <Button Content="Ordner Öffnen"
                 Command="{Binding OpenExplorerCommand}"
                 Margin="6,14,6,6"/>
 
