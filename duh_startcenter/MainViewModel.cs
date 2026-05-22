@@ -1,4 +1,4 @@
-using Microsoft.Win32;
+Ôªøusing Microsoft.Win32;
 using NXStartCenter.Configuration;
 using NXStartCenter.Services;
 using Ookii.Dialogs.Wpf;
@@ -490,7 +490,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
     private void CreateProject()
     {
-        RunAction(() =>
+        RunActionAsync(() =>
         {
             var message = _projectService.CreateOrExtendCustomerEnvironment(
                 NewCustomer,
@@ -501,16 +501,19 @@ public sealed class MainViewModel : INotifyPropertyChanged
                 SelectedController,
                 ComplexEnvRequired);
 
-            _model.Customer = NewCustomer;
-            _model.VersionName = NewVersion;
-            _model.Machine = NewMachine;
-            SaveLastSelection();
-            _model.RefreshAll();
-            RefreshCollectionsFromModel();
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                _model.Customer = NewCustomer;
+                _model.VersionName = NewVersion;
+                _model.Machine = NewMachine;
+                SaveLastSelection();
+                _model.RefreshAll();
+                RefreshCollectionsFromModel();
+            });
+
             return message;
         },
-        "Erstelle neue Kundenumgebung..."
-        );
+        "Erstelle neue Kundenumgebung...");
     }
 
     private void SaveLastSelection()
@@ -526,7 +529,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
         try
         {
             if (!String.IsNullOrEmpty(startMessage))
-            {                
+            {
                 StatusState = "";
                 StatusText = startMessage;
             }
@@ -536,7 +539,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
             if (message.Contains("nicht", StringComparison.OrdinalIgnoreCase) ||
                 message.Contains("Fehler", StringComparison.OrdinalIgnoreCase) ||
                 message.Contains("muss", StringComparison.OrdinalIgnoreCase) ||
-                message.Contains("m¸ssen", StringComparison.OrdinalIgnoreCase) ||
+                message.Contains("mÔøΩssen", StringComparison.OrdinalIgnoreCase) ||
                 message.Contains("Achtung", StringComparison.OrdinalIgnoreCase))
             {
                 StatusState = "error";
@@ -548,6 +551,43 @@ public sealed class MainViewModel : INotifyPropertyChanged
             StatusState = "ok";
             StatusText = message;
 
+            OnPropertyChanged(nameof(CurrentProjectPath));
+        }
+        catch (Exception ex)
+        {
+            StatusState = "error";
+            StatusText = "Fehler: " + ex.Message;
+            MessageBox.Show(ex.Message, "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private async void RunActionAsync(Func<string> action, string startMessage = "")
+    {
+        try
+        {
+            if (!string.IsNullOrEmpty(startMessage))
+            {
+                StatusState = "";
+                StatusText = startMessage;
+                await Task.Yield();
+            }
+
+            var message = await Task.Run(action);
+
+            if (message.Contains("nicht", StringComparison.OrdinalIgnoreCase) ||
+                message.Contains("Fehler", StringComparison.OrdinalIgnoreCase) ||
+                message.Contains("muss", StringComparison.OrdinalIgnoreCase) ||
+                message.Contains("m√ºssen", StringComparison.OrdinalIgnoreCase) ||
+                message.Contains("Achtung", StringComparison.OrdinalIgnoreCase))
+            {
+                StatusState = "error";
+                StatusText = message;
+                MessageBox.Show(message, "NX Start Center", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            StatusState = "ok";
+            StatusText = message;
             OnPropertyChanged(nameof(CurrentProjectPath));
         }
         catch (Exception ex)
@@ -607,7 +647,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
         OnPropertyChanged(nameof(Settings));
 
-        StatusText = "ƒnderungen verworfen.";
+        StatusText = "√Ñnderungen verworfen.";
     }
 
     private void ShowInfo()
@@ -770,53 +810,53 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
     private void BrowseNxInstallationPath()
     {
-        _model.Settings.NxInstallationPath = BrowseForFoldersOrFiles(description: "NX Installationsordner ausw‰hlen") ?? _model.Settings.NxInstallationPath;
+        _model.Settings.NxInstallationPath = BrowseForFoldersOrFiles(description: "NX Installationsordner ausw√§hlen") ?? _model.Settings.NxInstallationPath;
         OnPropertyChanged(nameof(Settings));
     }
 
     private void BrowseCustomerEnvironment()
     {
-        _model.Settings.CustomerEnvironmentPath = BrowseForFoldersOrFiles(description: "Kundenumgebungsordner ausw‰hlen") ?? _model.Settings.CustomerEnvironmentPath;
+        _model.Settings.CustomerEnvironmentPath = BrowseForFoldersOrFiles(description: "Kundenumgebungsordner ausw√§hlen") ?? _model.Settings.CustomerEnvironmentPath;
         OnPropertyChanged(nameof(Settings));
     }
 
     private void BrowseTemplateRoot()
     {
-        _model.Settings.TemplateRoot = BrowseForFoldersOrFiles(description: "Templates Ordner ausw‰hlen (Vorlage und Toolbars)") ?? _model.Settings.TemplateRoot;
+        _model.Settings.TemplateRoot = BrowseForFoldersOrFiles(description: "Templates Ordner ausw√§hlen (Vorlage und Toolbars)") ?? _model.Settings.TemplateRoot;
         OnPropertyChanged(nameof(Settings));
     }
 
     private void BrowseTcPath()
     {
-        _model.Settings.TcPath = BrowseForFoldersOrFiles(type: "file", description: "Portal.bat ausw‰hlen", filers: "Batch Dateien (*.bat)|*.bat") ?? _model.Settings.TcPath;
+        _model.Settings.TcPath = BrowseForFoldersOrFiles(type: "file", description: "Portal.bat ausw√§hlen", filers: "Batch Dateien (*.bat)|*.bat") ?? _model.Settings.TcPath;
         OnPropertyChanged(nameof(Settings));
     }
 
     private void BrowseLicencePath()
     {
-        _model.Settings.LicencePath = BrowseForFoldersOrFiles(type: "file", description: "lizenz Datei ausw‰hlen", filers: "Batch Dateien (*.lic)|*.lic|Alle Dateien (*.*)|*.*") ?? _model.Settings.LicencePath;
+        _model.Settings.LicencePath = BrowseForFoldersOrFiles(type: "file", description: "lizenz Datei ausw√§hlen", filers: "Batch Dateien (*.lic)|*.lic|Alle Dateien (*.*)|*.*") ?? _model.Settings.LicencePath;
         OnPropertyChanged(nameof(Settings));
     }
 
     private void BrowseLicenceServerPath()
     {
-        _model.Settings.LicenceServerPath = BrowseForFoldersOrFiles(type: "file", description: "LMTools.exe ausw‰hlen", filers: "Ausf¸hrbare Dateien (*.exe)|*.exe") ?? _model.Settings.LicenceServerPath;
+        _model.Settings.LicenceServerPath = BrowseForFoldersOrFiles(type: "file", description: "LMTools.exe ausw√§hlen", filers: "Ausf√ºhrbare Dateien (*.exe)|*.exe") ?? _model.Settings.LicenceServerPath;
         OnPropertyChanged(nameof(Settings));
     }
 
     private void BrowseForkPath()
     {
-        _model.Settings.ForkPath = BrowseForFoldersOrFiles(type: "file", description: "Fork.exe ausw‰hlen", filers: "Ausf¸hrbare Dateien (*.exe)|*.exe") ?? _model.Settings.ForkPath;
+        _model.Settings.ForkPath = BrowseForFoldersOrFiles(type: "file", description: "Fork.exe ausw√§hlen", filers: "Ausf√ºhrbare Dateien (*.exe)|*.exe") ?? _model.Settings.ForkPath;
         OnPropertyChanged(nameof(Settings));
     }
 
     private void BrowseRolesPath()
     {
-        _model.Settings.RolesPath = BrowseForFoldersOrFiles(type: "file", description: "Rollen Dateien ausw‰hlen", filers: "NX Rollen Dateien (*.mtx)|*.mtx", multiSelect: true) ?? _model.Settings.RolesPath;
+        _model.Settings.RolesPath = BrowseForFoldersOrFiles(type: "file", description: "Rollen Dateien ausw√§hlen", filers: "NX Rollen Dateien (*.mtx)|*.mtx", multiSelect: true) ?? _model.Settings.RolesPath;
         OnPropertyChanged(nameof(Settings));
     }
 
-    private string BrowseForFoldersOrFiles(string type = "folder", string description = "Pfad Ausw‰hlen", string filers = "Alle Dateien (*.*)|*.*", bool multiSelect = false)
+    private string BrowseForFoldersOrFiles(string type = "folder", string description = "Pfad Ausw√§hlen", string filers = "Alle Dateien (*.*)|*.*", bool multiSelect = false)
     {
         if (type == "folder")
         {
