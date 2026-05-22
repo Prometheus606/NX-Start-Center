@@ -20,6 +20,8 @@ public sealed class NxService(AppModel model)
 
     public string StartCustomerNx()
     {
+        string oldRtbFilePath = Path.Combine(model.Settings.CustomerEnvironmentPath, model.Customer, model.EnvFolderName, model.VersionName, "UGII", "startup");
+        RemoveFile(oldRtbFilePath);
         bool debug = model.Settings.StartNxWithDebug;
         string managed = model.StartNxManaged == true ? "portal_client" : "nx";
         var batch = Path.Combine(AppContext.BaseDirectory, "app", "start_routine.bat");
@@ -27,6 +29,10 @@ public sealed class NxService(AppModel model)
         if (String.IsNullOrEmpty(model.Customer.Trim()) || String.IsNullOrEmpty(model.VersionName.Trim()))
         {
             return "Kundenname und Version müssen angegeben werden!";
+        }
+        if (!Directory.Exists(Path.Combine(model.Settings.NxInstallationPath, model.VersionName)))
+        {
+            return "NX Version nicht installiert!";
         }
         bool loadFullResourceDir = model.Last.LastLoadFullResourceDir;
         if (model.Settings.Team == "CAM")
@@ -61,6 +67,14 @@ public sealed class NxService(AppModel model)
         model.Last.LastMachine = model.Machine;
         model.Save();
         return "NX wurde für die Kundenumgebung gestartet.";
+    }
+
+    public void RemoveFile(string path)
+    {
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+        }
     }
 
     public string StartPostbuilder()
