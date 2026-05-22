@@ -12,11 +12,19 @@
         ResizeMode="NoResize"
         AllowsTransparency="True">
 
-    <Border BorderBrush="#33404D"
-            BorderThickness="1"
-            CornerRadius="14"
-            Background="{StaticResource BgMain}"
-            ClipToBounds="True">
+    <Border x:Name="RootBorder"
+        BorderBrush="#33404D"
+        BorderThickness="1"
+        CornerRadius="14"
+        Background="{StaticResource BgMain}"
+        ClipToBounds="True"
+        RenderTransformOrigin="0.5,0.5">
+        <Border.RenderTransform>
+            <TransformGroup>
+                <ScaleTransform x:Name="RootScale" ScaleX="1" ScaleY="1"/>
+                <TranslateTransform x:Name="RootTranslate" Y="0"/>
+            </TransformGroup>
+        </Border.RenderTransform>
 
         <Grid>
             <Grid.RowDefinitions>
@@ -25,8 +33,12 @@
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
 
-            <Border Grid.Row="0" Background="{StaticResource BgTop}" CornerRadius="14,14,0,0">
-                <Grid MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+            <Border Grid.Row="0"
+        Background="{StaticResource BgTop}"
+        CornerRadius="14,14,0,0"
+        MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="42"/>
