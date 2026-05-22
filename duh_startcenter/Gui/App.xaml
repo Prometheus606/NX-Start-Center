@@ -390,42 +390,56 @@
                     <ControlTemplate TargetType="Expander">
                         <StackPanel>
                             <ToggleButton x:Name="HeaderButton"
-                                  IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
-                                  Background="Transparent"
-                                  BorderThickness="0"
-                                  Height="46"
-                                  Padding="0"
-                                  Cursor="Hand"
-                                          HorizontalContentAlignment="Stretch">
-                                <Border x:Name="HeaderBorder"
-                                Background="Transparent"
-                                CornerRadius="8"
-                                Padding="10,0">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="34"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="22"/>
-                                        </Grid.ColumnDefinitions>
+              IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+              Height="46"
+              Padding="0"
+              Cursor="Hand"
+              Background="Transparent"
+              BorderThickness="0">
 
-                                        <TextBlock Grid.Column="0"
-                                           Text="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}"
-                                           Style="{StaticResource NavIconTextStyle}"/>
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border x:Name="HeaderBorder"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="8"
+                    Padding="10,0">
+                                            <ContentPresenter VerticalAlignment="Center"/>
+                                        </Border>
 
-                                        <ContentPresenter Grid.Column="1"
-                                                  ContentSource="Header"
-                                                  VerticalAlignment="Center"/>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="HeaderBorder"
+                            Property="Background"
+                            Value="#22303D"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
 
-                                        <TextBlock x:Name="Chevron"
-                                           Grid.Column="2"
-                                           Text="⌄"
-                                           Foreground="{StaticResource TextMuted}"
-                                           FontSize="15"
-                                           FontWeight="Bold"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"/>
-                                    </Grid>
-                                </Border>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="34"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="22"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0"
+                   Text="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}"
+                   Style="{StaticResource NavIconTextStyle}"/>
+
+                                    <ContentPresenter Grid.Column="1"
+                          ContentSource="Header"
+                          VerticalAlignment="Center"/>
+
+                                    <TextBlock x:Name="Chevron"
+                   Grid.Column="2"
+                   Text="⌄"
+                   Foreground="{StaticResource TextMuted}"
+                   FontSize="15"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+                                </Grid>
                             </ToggleButton>
 
                             <Border x:Name="ContentBorder"
@@ -437,13 +451,11 @@
 
                         <ControlTemplate.Triggers>
                             <Trigger SourceName="HeaderButton" Property="IsMouseOver" Value="True">
-                                <Setter TargetName="HeaderBorder" Property="Background" Value="#22303D"/>
+                                <Setter TargetName="HeaderButton" Property="Background" Value="#22303D"/>
                             </Trigger>
 
                             <Trigger Property="IsExpanded" Value="True">
-                                <Setter TargetName="HeaderBorder" Property="Background" Value="#AEE4FF"/>
                                 <Setter TargetName="Chevron" Property="Text" Value="⌃"/>
-                                <Setter TargetName="Chevron" Property="Foreground" Value="#18212A"/>
                                 <Setter TargetName="ContentBorder" Property="Visibility" Value="Visible"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
