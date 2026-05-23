@@ -39,9 +39,12 @@
 
         <Style x:Key="NavIconTextStyle" TargetType="TextBlock">
             <Setter Property="Foreground" Value="#45A9FF"/>
-            <Setter Property="FontSize" Value="18"/>
-            <Setter Property="Width" Value="34"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Width" Value="28"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,12,0"/>
         </Style>
 
         <Style x:Key="CardStyle" TargetType="Border">
@@ -164,23 +167,40 @@
             <Setter Property="Foreground" Value="{StaticResource TextMain}"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Height" Value="46"/>
-            <Setter Property="Padding" Value="10,0"/>
+
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Padding" Value="12,0"/>
             <Setter Property="Margin" Value="0,0,0,6"/>
+
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="Cursor" Value="Hand"/>
+
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center"/>
+                        <Border x:Name="Border"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="8"
+                        Padding="{TemplateBinding Padding}">
+
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalAlignment="Center"/>
                         </Border>
+
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#22303D"/>
+                                <Setter TargetName="Border"
+                                Property="Background"
+                                Value="#22303D"/>
                             </Trigger>
+
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Border" Property="Background" Value="{StaticResource AccentBlueDark}"/>
+                                <Setter TargetName="Border"
+                                Property="Background"
+                                Value="{StaticResource AccentBlueDark}"/>
                                 <Setter Property="Opacity" Value="1"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -418,9 +438,9 @@
 
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="34"/>
+                                        <ColumnDefinition Width="38"/>
                                         <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="22"/>
+                                        <ColumnDefinition Width="18"/>
                                     </Grid.ColumnDefinitions>
 
                                     <TextBlock Grid.Column="0"
@@ -435,8 +455,8 @@
                    Grid.Column="2"
                    Text="⌄"
                    Foreground="{StaticResource TextMuted}"
-                   FontSize="15"
-                   FontWeight="Bold"
+                   FontSize="14"
+                   FontWeight="Medium"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"/>
                                 </Grid>
@@ -444,7 +464,7 @@
 
                             <Border x:Name="ContentBorder"
                             Visibility="Collapsed"
-                            Margin="3,0,0,6">
+                            Margin="3,0,0,6" HorizontalAlignment="Left">
                                 <ContentPresenter/>
                             </Border>
                         </StackPanel>
@@ -468,12 +488,14 @@
        TargetType="Button"
        BasedOn="{StaticResource SideNavButtonStyle}">
 
-            <Setter Property="Height" Value="34"/>
-            <Setter Property="Margin" Value="0,3,0,0"/>
-            <Setter Property="Padding" Value="4,0"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Background" Value="#1D2934"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Margin" Value="12,4,4,0"/>
+            <Setter Property="Padding" Value="10,0,0,0"/>
 
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+
+            <Setter Property="Background" Value="#1D2934"/>
         </Style>
 
         <Style TargetType="ScrollBar">
