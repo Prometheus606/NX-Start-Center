@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>14.0</LangVersion>
-    <AssemblyName>NXStartCenter</AssemblyName>
+    <AssemblyName>DUH_Startcenter</AssemblyName>
     <RootNamespace>NXStartCenter</RootNamespace>
   </PropertyGroup>
   <ItemGroup>

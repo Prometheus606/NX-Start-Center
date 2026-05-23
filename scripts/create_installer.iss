@@ -12,7 +12,7 @@ AllowNoIcons=yes
 LicenseFile=..\LICENSE.txt
 OutputBaseFilename=DUH_Startcenter-installer
 OutputDir=..\output\installer
-SetupIconFile=..\resources\images\duhGroup_Logo.ico
+SetupIconFile=..\duh_startcenter\resources\images\duhGroup_Logo.ico
 Password=6acb22090d42b4c234d00fe3e0f4e5db
 Encryption=yes
 Compression=lzma
@@ -27,19 +27,146 @@ Name: "german"; MessagesFile: "compiler:Languages\German.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "..\output\exe\DUH_Startcenter.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\start_routine.bat"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\start_routine.py"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\duh_startcenter\bin\Release\net10.0-windows\win-x64\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\docs\USER_README.md"; DestDir: "{app}"; DestName: "README.md"; Flags: ignoreversion
-Source: "..\src\user_settings.py"; DestDir: "{app}"; Flags: ignoreversion onlyifdoesntexist
-Source: "..\src\user_settings.bat"; DestDir: "{app}"; Flags: ignoreversion onlyifdoesntexist
-Source: "..\resources\*"; DestDir: "{app}\resources"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\output\exe\certifi\*"; DestDir: "{app}\certifi"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{group}\DUH_Startcenter"; Filename: "{app}\DUH_Startcenter.exe"
 Name: "{group}\{cm:UninstallProgram,DUH_Startcenter}"; Filename: "{uninstallexe}"
-Name: "{autodesktop}\DUH_Startcenter"; Filename: "{app}\DUH_Startcenter"; Tasks: desktopicon
+Name: "{autodesktop}\DUH_Startcenter"; Filename: "{app}\DUH_Startcenter.exe"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\DUH_Startcenter.exe"; Description: "{cm:LaunchProgram,DUH_Startcenter}"; Flags: nowait postinstall skipifsilent
+
+[Code]
+var
+   SettingsPage1: TWizardPage;
+  SettingsPage2: TWizardPage;
+
+  NxPathEdit: TNewEdit;
+  CustomerEnvEdit: TNewEdit;
+  LicenceEdit: TNewEdit;
+  LicenceServerEdit: TNewEdit;
+  ForkEdit: TNewEdit;
+  TemplateEdit: TNewEdit;
+  TcEdit: TNewEdit;
+
+  TeamCombo: TNewComboBox;
+
+function JsonEscape(Value: string): string;
+begin
+  Result := Value;
+  StringChangeEx(Result, '\', '\\', True);
+  StringChangeEx(Result, '"', '\"', True);
+end;
+
+procedure AddLabel(Parent: TWizardPage; Text: string; TopPos: Integer);
+var
+  LabelCtrl: TNewStaticText;
+begin
+  LabelCtrl := TNewStaticText.Create(WizardForm);
+  LabelCtrl.Parent := Parent.Surface;
+  LabelCtrl.Caption := Text;
+  LabelCtrl.Top := TopPos;
+  LabelCtrl.Left := 0;
+end;
+
+function AddEdit(
+  Parent: TWizardPage;
+  DefaultValue: string;
+  TopPos: Integer
+): TNewEdit;
+begin
+  Result := TNewEdit.Create(WizardForm);
+  Result.Parent := Parent.Surface;
+  Result.Top := TopPos + 16;
+  Result.Left := 0;
+  Result.Width := Parent.SurfaceWidth;
+  Result.Text := DefaultValue;
+end;
+
+procedure InitializeWizard;
+begin
+  SettingsPage1 := CreateCustomPage(
+  wpSelectDir,
+  'DUH_Startcenter Einstellungen',
+  'Pfade 1 von 2'
+);
+
+AddLabel(SettingsPage1, 'NX Installationspfad:', 0);
+NxPathEdit := AddEdit(SettingsPage1, 'C:\Siemens\NX_Versionen', 0);
+
+AddLabel(SettingsPage1, 'Kundenumgebungen:', 50);
+CustomerEnvEdit := AddEdit(SettingsPage1, 'D:\Kundenumgebungen', 50);
+
+AddLabel(SettingsPage1, 'Lizenzdatei:', 100);
+LicenceEdit := AddEdit(SettingsPage1, 'C:\Siemens\License\License_ugslmd.lic', 100);
+
+AddLabel(SettingsPage1, 'Lizenzserver / lmtools.exe:', 150);
+LicenceServerEdit := AddEdit(SettingsPage1, 'C:\Siemens\License Server\lmtools.exe', 150);
+
+
+SettingsPage2 := CreateCustomPage(
+  SettingsPage1.ID,
+  'DUH_Startcenter Einstellungen',
+  'Pfade 2 von 2'
+);
+
+AddLabel(SettingsPage2, 'Fork.exe:', 0);
+ForkEdit := AddEdit(
+  SettingsPage2,
+  ExpandConstant('C:\Users\{username}\AppData\Local\Fork\current\Fork.exe'),
+  0
+);
+
+AddLabel(SettingsPage2, 'Template Root:', 50);
+TemplateEdit := AddEdit(SettingsPage2, 'D:\DUH Tools\Vorlage_Root', 50);
+
+AddLabel(SettingsPage2, 'Teamcenter portal.bat:', 100);
+TcEdit := AddEdit(SettingsPage2, 'D:\Siemens\TC2512\portal\portal.bat', 100);
+
+AddLabel(SettingsPage2, 'Team:', 150);
+
+TeamCombo := TNewComboBox.Create(WizardForm);
+TeamCombo.Parent := SettingsPage2.Surface;
+TeamCombo.Top := 166;
+TeamCombo.Left := 0;
+TeamCombo.Width := 200;
+TeamCombo.Style := csDropDownList;
+TeamCombo.Items.Add('PP');
+TeamCombo.Items.Add('CAM');
+TeamCombo.ItemIndex := 0;
+end;
+
+procedure CurStepChanged(CurStep: TSetupStep);
+var
+  Settings: string;
+begin
+  if CurStep = ssPostInstall then
+  begin
+    Settings :=
+      '{' + #13#10 +
+      '  "settings": {' + #13#10 +
+      '    "nx_installation_path": "' + JsonEscape(NxPathEdit.Text) + '",' + #13#10 +
+      '    "customer_environment_path": "' + JsonEscape(CustomerEnvEdit.Text) + '",' + #13#10 +
+      '    "licence_path": "' + JsonEscape(LicenceEdit.Text) + '",' + #13#10 +
+      '    "licence_server_path": "' + JsonEscape(LicenceServerEdit.Text) + '",' + #13#10 +
+      '    "fork_path": "' + JsonEscape(ForkEdit.Text) + '",' + #13#10 +
+      '    "template_root_path": "' + JsonEscape(TemplateEdit.Text) + '",' + #13#10 +
+      '    "tc_path": "' + JsonEscape(TcEdit.Text) + '",' + #13#10 +
+      '    "team": "' + JsonEscape(TeamCombo.Text) + '"' + #13#10 +
+      '  }' + #13#10 +
+      '}';
+
+    ForceDirectories(ExpandConstant('{app}\data'));
+
+if not SaveStringToFile(
+  ExpandConstant('{app}\data\config.json'),
+  Settings,
+  False
+) then
+begin
+  MsgBox('Die config.json konnte nicht geschrieben werden.', mbError, MB_OK);
+end;
+  end;
+end;
