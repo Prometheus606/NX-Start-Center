@@ -126,7 +126,7 @@ set "INSTALLER_DIR=%BASE%\output\installer"
 
 set "OLD_INSTALLER=%INSTALLER_DIR%\DUH_Startcenter-installer.exe"
 
-set "NEW_INSTALLER=%INSTALLER_DIR%\DUH_Startcenter-installer-!VERSION_NUMBER!.exe"
+set "NEW_INSTALLER=%INSTALLER_DIR%\DUH_Startcenter-installer-V!VERSION_NUMBER!.exe"
 
 if not exist "!OLD_INSTALLER!" (
     echo Installer wurde nicht gefunden:

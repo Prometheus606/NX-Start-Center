@@ -70,6 +70,7 @@ namespace NXStartCenter
                     MessageBoxImage.Information
                 );
             }
+            catch (HttpRequestException) {}
             catch (Exception ex)
             {
                 MessageBox.Show(
@@ -100,8 +101,8 @@ namespace NXStartCenter
             if (release == null)
                 return null;
 
-            string latest = release.tag_name.Replace("v", "");
-            string current = currentVersion.Replace("v", "");
+            string latest = release.tag_name.ToLower().Replace("v", "");
+            string current = currentVersion.ToLower().Replace("v", "");
 
             if (Version.TryParse(latest, out var latestVersion) &&
                 Version.TryParse(current, out var currentVer))
