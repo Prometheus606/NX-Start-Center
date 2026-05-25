@@ -88,7 +88,7 @@
                                     <TextBlock Text="Start Center"/>
                                 </StackPanel>
                             </Button>
-                            <Button Style="{StaticResource SideNavButtonStyle}" Command="{Binding RefreshCommand}">
+                                <Button Style="{StaticResource SideNavButtonStyle}" ToolTip="Läd die Kundenumgebungen neu" Command="{Binding RefreshCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="↻" Style="{StaticResource NavIconTextStyle}"/>
                                     <TextBlock Text="Aktualisieren"/>
@@ -117,15 +117,15 @@
           Tag="▶"
           Style="{StaticResource SideNavExpanderStyle}">
                                 <StackPanel>
-                                    <Button Content="Main Batch öffnen"
+                                        <Button Content="Main Batch öffnen" ToolTip="Die Haupt Startbatch. Sie ruft die anderen beiden Batch dateien auf."
                 Command="{Binding OpenMainBatch}"
                 Style="{StaticResource SideNavSubButtonStyle}"/>
-                                    <Button Content="Customer Batch öffnen"
+                                        <Button Content="Customer Batch öffnen" ToolTip="Kunden Startbatch"
                 Command="{Binding OpenCustomerBatch}"
                 Style="{StaticResource SideNavSubButtonStyle}" Cursor="Hand"/>
-                                    <Button Content="User Batch öffnen"
+                                        <Button Content="User Batch öffnen" ToolTip="Die letzte aufgerufene Batch datei vor NX Start. Hier können nach belieben Änderungen vorgenommen werden, die nie überschrieben werden."
                 Command="{Binding OpenDeveloperBatch}"
-                Style="{StaticResource SideNavSubButtonStyle}"/>
+                Style="{StaticResource SideNavSubButtonStyle}" Cursor="Hand"/>
                                 </StackPanel>
                             </Expander>
                             <Button Style="{StaticResource SideNavButtonStyle}" Command="{Binding ShowInfoCommand}">
@@ -151,7 +151,7 @@
 
                 <Grid Grid.Column="1" Margin="8,14,16,0">
                     <TabControl>
-                        <TabItem Header="Custom">
+                        <TabItem Header="Custom" ToolTip="Hauptseite - Starten von NX mit einer angepassten Umgebung">
                             <Grid Margin="0,12,0,0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="2*"/>
@@ -268,17 +268,20 @@
 
                                                 <Button Style="{StaticResource ActionButtonStyle}"
                         Content="Ordner öffnen"
+                        ToolTip="Öffnet den Ordner der aktuell ausgewählten Maschine"
                         Command="{Binding OpenExplorerCommand}"
                         Height="46"/>
 
                                                 <Button Style="{StaticResource ActionButtonStyle}"
                         Content="PP öffnen"
+                                                        ToolTip="Öffnet den PP Ordner des ausgewählten Ordners in VS Code"
                         Command="{Binding OpenVsCodeAndForkCommand}"
                         Visibility="{Binding PpVisibility}"
                         Height="46"/>
 
                                                 <Button Style="{StaticResource ActionButtonStyle}"
                         Content="Fork öffnen"
+                                                        ToolTip="Öffnet das Repository der ausgewählten Maschine in Fork"
                         Command="{Binding OpenForkCommand}"
                         Visibility="{Binding PpVisibility}"
                         Height="46"/>
@@ -301,11 +304,11 @@
                                                 <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
 
-                                            <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource ModernCheckBoxStyle}" Content="Gesamtes Resource Verzeichnis" IsChecked="{Binding LoadFullResourceDir}" Margin="0,0,8,9"/>
-                                            <CheckBox Grid.Row="1" Grid.Column="0" Style="{StaticResource ModernCheckBoxStyle}" Content="Installed Machines" IsChecked="{Binding LoadInstalledMachines}" Margin="0,0,8,9"/>
-                                            <CheckBox Grid.Row="2" Grid.Column="0" Style="{StaticResource ModernCheckBoxStyle}" Content="Postprozessor Ordner" IsChecked="{Binding LoadPp}" Margin="0,0,8,9"/>
-                                            <CheckBox Grid.Row="1" Grid.Column="1" Style="{StaticResource ModernCheckBoxStyle}" Content="Werkzeuge" IsChecked="{Binding LoadTool}" Margin="0,0,0,9"/>
-                                            <CheckBox Grid.Row="2" Grid.Column="1" Style="{StaticResource ModernCheckBoxStyle}" Content="Device" IsChecked="{Binding LoadDevice}" Margin="0,0,8,9"/>
+                                                <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource ModernCheckBoxStyle}" Content="Gesamtes Resource Verzeichnis" ToolTip="Macht nur Sinn wenn eine Vollständige CAM Umgebung installiert ist." IsChecked="{Binding LoadFullResourceDir}" Margin="0,0,8,9"/>
+                                                <CheckBox Grid.Row="1" Grid.Column="0" Style="{StaticResource ModernCheckBoxStyle}" Content="Installed Machines" ToolTip="Läd die Maschine aus dem installed_machines Verzeichne" IsChecked="{Binding LoadInstalledMachines}" Margin="0,0,8,9"/>
+                                                <CheckBox Grid.Row="2" Grid.Column="0" Style="{StaticResource ModernCheckBoxStyle}" Content="Postprozessor Ordner" ToolTip="Läd die Postprozessoren aus dem postprocessor verzeichnis (Für alte umgebungen und Postbuilder PP's)" IsChecked="{Binding LoadPp}" Margin="0,0,8,9"/>
+                                                <CheckBox Grid.Row="1" Grid.Column="1" Style="{StaticResource ModernCheckBoxStyle}" Content="Werkzeuge" IsChecked="{Binding LoadTool}" ToolTip="Läd die Werkzeuge aus der Umgebung" Margin="0,0,0,9"/>
+                                                <CheckBox Grid.Row="2" Grid.Column="1" Style="{StaticResource ModernCheckBoxStyle}" Content="Device" IsChecked="{Binding LoadDevice}" ToolTip="Läd die Devices aus der Umgebung" Margin="0,0,8,9"/>
                                         </Grid>
                                     </StackPanel>
                                 </Border>
@@ -323,11 +326,11 @@
                             </Grid>
                         </TabItem>
 
-                        <TabItem Header="OOTB">
+                        <TabItem Header="OOTB" ToolTip="NX ohne angepasster Umgebung starten">
                             <Grid Margin="0,14,0,0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="285"/>
+                                    <ColumnDefinition Width="240"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -337,7 +340,7 @@
                                 <Border Style="{StaticResource CardStyle}" Grid.Row="0" Grid.Column="0" Margin="0,0,12,12">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="110"/>
+                                            <ColumnDefinition Width="140"/>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="150"/>
                                         </Grid.ColumnDefinitions>
@@ -350,20 +353,20 @@
                                 <Border Style="{StaticResource CardStyle}" Grid.Row="1" Grid.Column="0" Margin="0,0,12,12" Visibility="{Binding PpVisibility}">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="110"/>
+                                            <ColumnDefinition Width="140"/>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="150"/>
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock Text="PB-Version:" Grid.Column="0"/>
+                                        <TextBlock Text="Postbuilder-Version:" Grid.Column="0"/>
                                         <ComboBox ItemsSource="{Binding PostbuilderVersions}" SelectedItem="{Binding SelectedPostbuilderVersion}" Grid.Column="1" ScrollViewer.CanContentScroll="True"/>
-                                        <Button Content="Postbuilder" Command="{Binding StartPostbuilderCommand}" Grid.Column="2" Margin="12,0,0,0"/>
+                                        <Button Content="PB Starten" Command="{Binding StartPostbuilderCommand}" Grid.Column="2" Margin="12,0,0,0"/>
                                     </Grid>
                                 </Border>
 
                             </Grid>
                         </TabItem>
 
-                        <TabItem Header="Neues Projekt">
+                        <TabItem Header="Neues Projekt" ToolTip="Anlegen einer neuen angepassten Umgebung oder einer neuen Maschine">
                             <Grid Margin="0,14,0,0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -389,26 +392,26 @@
 
                                         <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="✚  Neues Projekt" Style="{StaticResource SectionHeaderTextStyle}" Margin="0,0,0,10"/>
 
-                                        <TextBlock Text="Kunde:" Grid.Row="1" Grid.Column="0"/>
+                                        <TextBlock Text="Kunde:*" ToolTip="Auswahl oder eingabe des Kundennamens" Grid.Row="1" Grid.Column="0"/>
                                         <ComboBox ItemsSource="{Binding Customers}" Text="{Binding NewCustomer, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" ScrollViewer.CanContentScroll="True" Grid.Row="1" Grid.Column="1" SelectionChanged="ComboBox_SelectionChanged"/>
 
-                                        <TextBlock Text="NX-Version:" Grid.Row="2" Grid.Column="0"/>
+                                        <TextBlock Text="NX-Version:*" ToolTip="Auswahl oder eingabe der NX Version" Grid.Row="2" Grid.Column="0"/>
                                         <ComboBox ItemsSource="{Binding NativeVersions}" Text="{Binding NewVersion, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" ScrollViewer.CanContentScroll="True" Grid.Row="2" Grid.Column="1"/>
 
-                                        <TextBlock Text="Maschine:" Grid.Row="3" Grid.Column="0"/>
+                                        <TextBlock Text="Maschine:" ToolTip="Name der Maschine die angelegt werden soll" Grid.Row="3" Grid.Column="0"/>
                                         <TextBox Text="{Binding NewMachine, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1"/>
 
                                         <TextBlock Text="Auftragsnummer:" Grid.Row="4" Grid.Column="0"/>
                                         <TextBox Text="{Binding NewOrderNumber, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1"/>
 
-                                        <TextBlock Text="Maschinentyp:" Grid.Row="5" Grid.Column="0"/>
+                                        <TextBlock Text="Maschinentyp:" ToolTip="Wird für die Einträge in den .dat Dateien benötigt." Grid.Row="5" Grid.Column="0"/>
                                         <ComboBox ItemsSource="{Binding MachineTypes}" SelectedItem="{Binding SelectedMachineType}" Grid.Row="5" Grid.Column="1"/>
 
-                                        <TextBlock Text="Steuerung:" Grid.Row="6" Grid.Column="0"/>
+                                        <TextBlock Text="Steuerung:" ToolTip="Wird für die Einträge in den .dat Dateien benötigt." Grid.Row="6" Grid.Column="0"/>
                                         <ComboBox ItemsSource="{Binding MachineControllers}" SelectedItem="{Binding SelectedController}" Grid.Row="6" Grid.Column="1"/>
 
                                         <StackPanel Grid.Row="7" Grid.Column="1" Margin="0,12,0,0">
-                                            <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Vollständige CAM Umgebung erzeugen" IsChecked="{Binding ComplexEnvRequired}" Margin="0,0,0,12"/>
+                                            <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Vollständige CAM Umgebung erzeugen" ToolTip="Wenn diese option nicht gesetzt ist, wird nur eine simple Umgebung erzeugt. Ist eher für PP Entwickler interressant." IsChecked="{Binding ComplexEnvRequired}" Margin="0,0,0,12"/>
                                             <Button Content="Projekt erstellen" Command="{Binding CreateProjectCommand}" Width="190" HorizontalAlignment="Left"/>
                                         </StackPanel>
                                     </Grid>
