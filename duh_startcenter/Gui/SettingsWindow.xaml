@@ -235,32 +235,6 @@ Height="Auto"
                     </Button>
                 </Grid>
 
-                <!-- Fork.exe -->
-                <TextBlock Text="Fork.exe:"
-                           Grid.Row="7"
-                           Grid.Column="0"
-                           VerticalAlignment="Center"/>
-
-                <Grid Grid.Row="7" Grid.Column="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="AUto"/>
-                    </Grid.ColumnDefinitions>
-
-                    <TextBox Text="{Binding Settings.ForkPath, UpdateSourceTrigger=PropertyChanged}"
-                             Grid.Column="0"/>
-
-                    <Button Grid.Column="1"
-                                                        Background="Transparent"
-                            Width="Auto"
-Height="Auto"
-                            Margin="6,0,0,0"
-                            ToolTip="Datei auswählen"
-                            Command="{Binding BrowseForkPathCommand}">
-                        <TextBlock Text="📄" FontSize="14"/>
-                    </Button>
-                </Grid>
-
                 <!-- Rollenpfade -->
                 <TextBlock Text="Rollenpfade (; getrennt):"
                            Grid.Row="8"

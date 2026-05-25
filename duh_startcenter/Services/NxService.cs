@@ -1,3 +1,4 @@
+using Microsoft.Win32;
 using NXStartCenter;
 using System.Diagnostics;
 using System.IO;
@@ -99,14 +100,14 @@ public sealed class NxService(AppModel model)
     public string OpenFork()
     {
         var dir = Path.Combine(model.GetInstalledMachinesPath(), model.Machine);
-        if (!File.Exists(model.Settings.ForkPath)) return "Fork ist nicht installiert oder der Pfad zur Fork.exe ist falsch.";
+        if (!File.Exists(model.ForkPath)) return "Fork ist nicht installiert oder der Pfad zur Fork.exe ist falsch.";
         if (!Directory.Exists(Path.Combine(dir, ".git"))) MessageBox.Show("Achtung: Kein Repository angelegt!", "Info");
         if (model.Settings.ShowPullReminder)
         {
             ShowPullReminder();
         }
         
-        ProcessService.StartFile(model.Settings.ForkPath, $"\"{dir}\"");
+        ProcessService.StartFile(model.ForkPath, $"\"{dir}\"");
         return "Fork wurde geöffnet.";
     }
 
@@ -125,7 +126,7 @@ public sealed class NxService(AppModel model)
     {
         var ppDir = Path.Combine(model.GetInstalledMachinesPath(), model.Machine, "postprocessor");
         if (!Directory.Exists(ppDir)) return "Der PP Ordner konnte nicht geöffnet werden da er nicht existiert.\n" + ppDir;
-        ProcessService.StartFile("code", $"\"{ppDir}\"");
+        ProcessService.StartFile(ProcessService.FindEditor(model.Settings.Editor) ?? "code", $"\"{ppDir}\"");
         return "VS Code wurde geöffnet.";
     }
 

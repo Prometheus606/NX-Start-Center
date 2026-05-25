@@ -1,5 +1,8 @@
+using Microsoft.Win32;
+using System;
 using System.Diagnostics;
 using System.IO;
+using System.Windows;
 
 namespace NXStartCenter.Services;
 
@@ -52,31 +55,105 @@ public static class ProcessService
 
     public static string? FindEditor(string editor)
     {
-        var user = Environment.UserName;
+        string? path;
 
-        string[] paths = editor.ToLowerInvariant() switch
+        switch (editor.ToLowerInvariant())
         {
-            "notepad" => new[]
+            case "notepad++":
             {
-                @"C:\Windows\System32\notepad.exe"
-            },
-
-            "notepad++" => new[]
+                path = FindInstallLocation("Notepad++") ?? "";
+                    if (!path.EndsWith("notepad++.exe"))
+                    {
+                        Path.Combine(path ?? "", "notepad++.exe");
+                    }
+                    break;
+            }
+            case "vscode":
             {
-                @"C:\Program Files\Notepad++\notepad++.exe",
-                @"C:\Program Files (x86)\Notepad++\notepad++.exe"
-            },
+                path = FindInstallLocation("Visual Studio Code") ?? "";
+                    if (!path.EndsWith("Code.exe"))
+                    {
+                        Path.Combine(path ?? "", "Code.exe");
+                    }
+                    break;
+            }
+            case "notepad":
+            default:
+                path = FindInstallLocation("Windows Notepad");
+                if (string.IsNullOrEmpty(path)) { 
+                    path = Path.Combine(
+                        Environment.GetFolderPath(Environment.SpecialFolder.Windows),
+                        "notepad.exe");
+                }
+                if (!path.EndsWith("notepad.exe"))
+                {
+                    Path.Combine(path ?? "", "notepad.exe");
+                }
+                break;
+        }
 
-            "vscode" => new[]
+        if (string.IsNullOrEmpty(path) || !Path.Exists(path))
+        {
+            MessageBox.Show($"Der Installationsort des eingestellten Editors ({editor}) konnte nicht gefunden werden. Ist er nicht installiert? Der Standart Editor wird verwendet.", "NX Start Center", MessageBoxButton.OK, MessageBoxImage.Error);
+            path = FindEditor("notepad");
+        }
+
+        return path;
+    }
+
+    public static string? FindInstallLocation(string appName)
+    {
+        string[] registryPaths =
+        {
+        @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
+        @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
+    };
+
+        RegistryHive[] hives =
+        {
+        RegistryHive.LocalMachine,
+        RegistryHive.CurrentUser
+    };
+
+        foreach (var hive in hives)
+        {
+            using var baseKey = RegistryKey.OpenBaseKey(hive, RegistryView.Registry64);
+
+            foreach (var path in registryPaths)
             {
-                Path.Combine(@"C:\Users", user, @"AppData\Local\Programs\Microsoft VS Code\Code.exe"),
-                @"C:\Program Files\Microsoft VS Code\Code.exe",
-                @"C:\Program Files (x86)\Microsoft VS Code\Code.exe"
-            },
+                using var uninstallKey = baseKey.OpenSubKey(path);
+                if (uninstallKey == null)
+                    continue;
 
-            _ => Array.Empty<string>()
-        };
+                foreach (var subKeyName in uninstallKey.GetSubKeyNames())
+                {
+                    using var appKey = uninstallKey.OpenSubKey(subKeyName);
+                    var displayName = appKey?.GetValue("DisplayName") as string;
 
-        return paths.FirstOrDefault(File.Exists);
+                    if (displayName == null)
+                        continue;
+
+                    if (displayName.Contains(appName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        var result =
+                            appKey?.GetValue("DisplayIcon") as string
+                            ?? appKey?.GetValue("InstallLocation") as string;
+                        return result != null ? CleanPath(result) : null;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    static string CleanPath(string path)
+    {
+        path = path.Trim('"');
+
+        if (path.EndsWith(",0"))
+            path = path[..^2];
+
+        return path;
     }
 }

@@ -50,6 +50,8 @@ public sealed class MainViewModel : INotifyPropertyChanged
         NativeVersions = new ObservableCollection<string>();
         PostbuilderVersions = new ObservableCollection<string>();
 
+        _model.ForkPath = GetForkExePath();
+
         Teams = ["CAM", "PP"];
         Themes = ["cosmo", "flatly", "minty", "pulse", "lumen", "solar", "darkly", "cyborg"];
         Editors = ["Notepad", "Notepad++", "VSCode"];
@@ -86,7 +88,6 @@ public sealed class MainViewModel : INotifyPropertyChanged
         BrowseTemplateRootCommand = new RelayCommand(BrowseTemplateRoot);
         BrowseLicencePathCommand = new RelayCommand(BrowseLicencePath);
         BrowseLicenceServerPathCommand = new RelayCommand(BrowseLicenceServerPath);
-        BrowseForkPathCommand = new RelayCommand(BrowseForkPath);
         BrowseRolesPathCommand = new RelayCommand(BrowseRolesPath);
         BrowseTcPathCommand = new RelayCommand(BrowseTcPath);
 
@@ -137,7 +138,6 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public ICommand BrowseTemplateRootCommand { get; }
     public ICommand BrowseLicencePathCommand { get; }
     public ICommand BrowseLicenceServerPathCommand { get; }
-    public ICommand BrowseForkPathCommand { get; }
     public ICommand BrowseRolesPathCommand { get; }
     public ICommand BrowseTcPathCommand { get; }
 
@@ -608,7 +608,6 @@ public sealed class MainViewModel : INotifyPropertyChanged
             TcPath = Settings.TcPath,
             LicencePath = Settings.LicencePath,
             LicenceServerPath = Settings.LicenceServerPath,
-            ForkPath = Settings.ForkPath,
             RolesPath = Settings.RolesPath,
             Team = Settings.Team,
             Editor = Settings.Editor,
@@ -637,7 +636,6 @@ public sealed class MainViewModel : INotifyPropertyChanged
         Settings.TcPath = _settingsBackup.TcPath;
         Settings.LicencePath = _settingsBackup.LicencePath;
         Settings.LicenceServerPath = _settingsBackup.LicenceServerPath;
-        Settings.ForkPath = _settingsBackup.ForkPath;
         Settings.RolesPath = _settingsBackup.RolesPath;
         Settings.Team = _settingsBackup.Team;
         Settings.Editor = _settingsBackup.Editor;
@@ -844,12 +842,6 @@ public sealed class MainViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(Settings));
     }
 
-    private void BrowseForkPath()
-    {
-        _model.Settings.ForkPath = BrowseForFoldersOrFiles(type: "file", description: "Fork.exe auswählen", filers: "Ausführbare Dateien (*.exe)|*.exe") ?? _model.Settings.ForkPath;
-        OnPropertyChanged(nameof(Settings));
-    }
-
     private void BrowseRolesPath()
     {
         _model.Settings.RolesPath = BrowseForFoldersOrFiles(type: "file", description: "Rollen Dateien auswählen", filers: "NX Rollen Dateien (*.mtx)|*.mtx", multiSelect: true) ?? _model.Settings.RolesPath;
@@ -887,5 +879,15 @@ public sealed class MainViewModel : INotifyPropertyChanged
             }
         }
         return null;
+    }
+
+    private static string GetForkExePath()
+    {
+        string path = ProcessService.FindInstallLocation("Fork") ?? "";
+        if (!path.EndsWith(@"\current\Fork.exe"))
+        {
+            path = Path.Combine(path, "current", "Fork.exe");
+        }
+        return path;
     }
 }

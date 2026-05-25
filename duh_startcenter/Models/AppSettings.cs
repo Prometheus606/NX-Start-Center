@@ -18,9 +18,6 @@ public sealed class AppSettings
     [JsonPropertyName("licence_server_path")]
     public string LicenceServerPath { get; set; } = @"C:\Siemens\License Server\lmtools.exe";
 
-    [JsonPropertyName("fork_path")]
-    public string ForkPath { get; set; } = $@"C:\Users\{Environment.UserName}\AppData\Local\Fork\current\Fork.exe";
-
     [JsonPropertyName("template_root_path")]
     public string TemplateRoot { get; set; } = $@"{Directory.GetParent(AppContext.BaseDirectory)}\Startcenter_templates";
 
