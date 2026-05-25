@@ -6,7 +6,7 @@ AppId={{F5D57AD7-7B6A-4FBF-A776-F7548BAC26C6}
 AppName=DUH_Startcenter
 AppVersion=1.0.0
 AppPublisher=Niklas Beitler
-DefaultDirName={autopf}\DUH_Startcenter
+DefaultDirName=D:\DUH Tools\DUH_Startcenter
 DefaultGroupName=DUH_Startcenter
 AllowNoIcons=yes
 LicenseFile=..\LICENSE.txt
@@ -27,7 +27,7 @@ Name: "german"; MessagesFile: "compiler:Languages\German.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "..\duh_startcenter\bin\Release\net10.0-windows\win-x64\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\output\exe\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\docs\USER_README.md"; DestDir: "{app}"; DestName: "README.md"; Flags: ignoreversion
 
 [Icons]
@@ -39,6 +39,8 @@ Name: "{autodesktop}\DUH_Startcenter"; Filename: "{app}\DUH_Startcenter.exe"; Ta
 Filename: "{app}\DUH_Startcenter.exe"; Description: "{cm:LaunchProgram,DUH_Startcenter}"; Flags: nowait postinstall skipifsilent
 
 [Code]
+var
+  IsUpdateInstall: Boolean;
 var
    SettingsPage1: TWizardPage;
   SettingsPage2: TWizardPage;
@@ -85,13 +87,23 @@ begin
   Result.Text := DefaultValue;
 end;
 
+function ConfigFileExists: Boolean;
+begin
+  Result := FileExists(AddBackslash(WizardDirValue) + 'data\config.json');
+end;
+
 procedure InitializeWizard;
 begin
+IsUpdateInstall := ConfigFileExists;
+
+  if IsUpdateInstall then
+    Exit;
+
   SettingsPage1 := CreateCustomPage(
-  wpSelectDir,
-  'DUH_Startcenter Einstellungen',
-  'Pfade 1 von 2'
-);
+    wpSelectDir,
+    'DUH_Startcenter Einstellungen',
+    'Pfade 1 von 2'
+  );
 
 AddLabel(SettingsPage1, 'NX Installationspfad:', 0);
 NxPathEdit := AddEdit(SettingsPage1, 'C:\Siemens\NX_Versionen', 0);
@@ -110,13 +122,6 @@ SettingsPage2 := CreateCustomPage(
   SettingsPage1.ID,
   'DUH_Startcenter Einstellungen',
   'Pfade 2 von 2'
-);
-
-AddLabel(SettingsPage2, 'Fork.exe:', 0);
-ForkEdit := AddEdit(
-  SettingsPage2,
-  ExpandConstant('C:\Users\{username}\AppData\Local\Fork\current\Fork.exe'),
-  0
 );
 
 AddLabel(SettingsPage2, 'Template Root:', 50);
@@ -142,6 +147,11 @@ procedure CurStepChanged(CurStep: TSetupStep);
 var
   Settings: string;
 begin
+  if IsUpdateInstall then
+  begin
+    Exit;
+  end;
+
   if CurStep = ssPostInstall then
   begin
     Settings :=
@@ -151,7 +161,6 @@ begin
       '    "customer_environment_path": "' + JsonEscape(CustomerEnvEdit.Text) + '",' + #13#10 +
       '    "licence_path": "' + JsonEscape(LicenceEdit.Text) + '",' + #13#10 +
       '    "licence_server_path": "' + JsonEscape(LicenceServerEdit.Text) + '",' + #13#10 +
-      '    "fork_path": "' + JsonEscape(ForkEdit.Text) + '",' + #13#10 +
       '    "template_root_path": "' + JsonEscape(TemplateEdit.Text) + '",' + #13#10 +
       '    "tc_path": "' + JsonEscape(TcEdit.Text) + '",' + #13#10 +
       '    "team": "' + JsonEscape(TeamCombo.Text) + '"' + #13#10 +
@@ -160,13 +169,17 @@ begin
 
     ForceDirectories(ExpandConstant('{app}\data'));
 
-if not SaveStringToFile(
-  ExpandConstant('{app}\data\config.json'),
-  Settings,
-  False
-) then
-begin
-  MsgBox('Die config.json konnte nicht geschrieben werden.', mbError, MB_OK);
-end;
+    if not SaveStringToFile(
+      ExpandConstant('{app}\data\config.json'),
+      Settings,
+      False
+    ) then
+    begin
+      MsgBox(
+        'Die config.json konnte nicht geschrieben werden.',
+        mbError,
+        MB_OK
+      );
+    end;
   end;
 end;
