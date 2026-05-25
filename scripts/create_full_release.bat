@@ -139,7 +139,7 @@ if exist "!NEW_INSTALLER!" (
     del /f /q "!NEW_INSTALLER!"
 )
 
-ren "!OLD_INSTALLER!" "DUH_Startcenter-installer-!VERSION_NUMBER!.exe"
+ren "!OLD_INSTALLER!" "DUH_Startcenter-installer-V!VERSION_NUMBER!.exe"
 
 if errorlevel 1 (
     echo Fehler beim Umbenennen des Installers.
