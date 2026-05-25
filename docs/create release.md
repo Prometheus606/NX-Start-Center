@@ -14,8 +14,7 @@ git push -u origin main --tags
 ### 5. auf github ein neues release aus dem letzten tag erstellen und installer.exe dort reinziehen (aus output/installer/Output)
 ### 6. password beim installer:
 ~~~
-7. @tm5$a!Nt#7!HzAH
-ab 1.3.0: 6acb22090d42b4c234d00fe3e0f4e5db (CSE password)
+6acb22090d42b4c234d00fe3e0f4e5db (CSE password)
 ~~~
 
 
