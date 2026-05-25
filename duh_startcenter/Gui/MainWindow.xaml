@@ -10,7 +10,8 @@
         Background="Transparent"
         WindowStyle="None"
         ResizeMode="NoResize"
-        AllowsTransparency="True">
+        AllowsTransparency="True"
+        Loaded="Window_Loaded">
 
     <Border x:Name="RootBorder"
         BorderBrush="#33404D"

@@ -184,4 +184,9 @@ public partial class MainWindow : Window
 
         storyboard.Begin();
     }
+
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+        await UpdateService.CheckUpdateOnStartup(this);
+    }
 }
