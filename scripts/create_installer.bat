@@ -6,10 +6,6 @@ set "BASE=%~dp0..\"
 for %%i in ("%BASE%") do set "BASE=%%~fi"
 cd /d "%BASE%"
 
-
-rem dotnet publish -c Release -r win-x64 --self-contained true ` /p:PublishSingleFile=true ` /p:IncludeNativeLibrariesForSelfExtract=true
-rem "D:\Entwicklungsprojekte\duh_startcenter_rewrite\duh_startcenter\bin\Release\net10.0-windows\win-x64\publish\NXStartCenter.exe"
-
 rem === PyInstaller Build ===
 @echo off
 set "ISCC=C:\Users\niklas.beitler\AppData\Local\Programs\Inno Setup 6\ISCC.exe"
@@ -17,7 +13,7 @@ set "SCRIPT=%~dp0create_installer.iss"
 
 "%ISCC%" "%SCRIPT%"
 
-rem "C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\signtool.exe" sign /sha1 "25b8123c7ea491f66dc913e37d668a7297f35ab6" /t http://time.certum.pl /fd SHA256 /v %BASE%output\installer\DUH_Startcenter-installer.exe
+"C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\signtool.exe" sign /sha1 "25b8123c7ea491f66dc913e37d668a7297f35ab6" /t http://time.certum.pl /fd SHA256 /v %BASE%output\installer\DUH_Startcenter-installer.exe
 
 pause
 endlocal
