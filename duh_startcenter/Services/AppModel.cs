@@ -31,7 +31,7 @@ public sealed class AppModel
     public IReadOnlyList<string> NativeVersions { get; private set; } = [];
     public IReadOnlyList<string> PostbuilderVersions { get; private set; } = [];
 
-    public string ForkPath { get; set;  }
+    public string ForkPath { get; set; } = "";
 
     public string[] MachineControllers { get; } = ["Sinumerik", "Fanuk", "Okuma", "HeidenhainTNC"];
     public string EnvFolderName { get; } = "5_Umgebung";

@@ -97,7 +97,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public AppSettings Settings => _model.Settings;
     public AppInfo AppInfo => _model.AppInfo;
 
-    public string HeaderInfo => $"{AppMetadata.Version} | {AppMetadata.AppDate}";
+    public string HeaderInfo => $"{AppMetadata.Version} | {AppInfo.AppDate}";
     public string CurrentUser => Environment.UserDomainName + "\\" + Environment.UserName;
     public string CurrentProjectPath => string.IsNullOrWhiteSpace(SelectedMachine) ? string.Empty : Path.Combine(_model.GetInstalledMachinesPath(), SelectedMachine);
     public string ConfigPath => _model.ConfigPath;
@@ -878,7 +878,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
                     : dialog.FileName;
             }
         }
-        return null;
+        return "";
     }
 
     private static string GetForkExePath()
