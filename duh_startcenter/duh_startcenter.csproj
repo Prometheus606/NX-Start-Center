@@ -8,6 +8,7 @@
     <LangVersion>14.0</LangVersion>
     <AssemblyName>DUH_Startcenter</AssemblyName>
     <RootNamespace>NXStartCenter</RootNamespace>
+    <ApplicationIcon>resources\images\duhGroup_Logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="data\**" />
@@ -23,6 +24,9 @@
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="Gui\App.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="resources\images\duhGroup_Logo.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app\start_routine.bat" CopyToOutputDirectory="PreserveNewest" />
