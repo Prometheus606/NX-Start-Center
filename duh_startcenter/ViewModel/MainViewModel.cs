@@ -21,7 +21,7 @@ public sealed class MainViewModel : BaseViewModel
     private readonly AppModel _model;
     private readonly NxService _nxService;
     private readonly GeneralService _generalService;
-    private readonly ProjectService _projectService;
+    private readonly NewProjectService _projectService;
 
 
     public MainViewModel()
@@ -34,7 +34,7 @@ public sealed class MainViewModel : BaseViewModel
         _model = AppModel.Load(configPath);
         _nxService = new NxService(_model);
         _generalService = new GeneralService(_model);
-        _projectService = new ProjectService(_model);
+        _projectService = new NewProjectService(_model);
 
         Status = new StatusViewModel();
         SettingsVm = new SettingsViewModel(_model, _generalService, Status, AfterSettingsChanged);

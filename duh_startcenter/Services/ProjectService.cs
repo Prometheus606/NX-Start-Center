@@ -1,17 +1,17 @@
 using NXStartCenter;
+using NXStartCenter.Model;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection.PortableExecutable;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
-using NXStartCenter.Model;
 
 
 
 namespace NXStartCenter.Services;
 
-public sealed partial class ProjectService(AppModel model)
+public sealed partial class NewProjectService(AppModel model)
 {
     private string customer = "";
     private string version = "";
@@ -38,13 +38,8 @@ public sealed partial class ProjectService(AppModel model)
         var baseEnv = model.Settings.CustomerEnvironmentPath;
         var nxPath = model.Settings.NxInstallationPath;
         var customerPath = Path.Combine(baseEnv, customer);
-        var installedMachinesDir = Path.Combine(customerPath, model.EnvFolderName, version, "MACH", "resource", "library", "machine", "installed_machines");
-        var machineDir = Path.Combine(installedMachinesDir, machine);
         var isNewCustomer = !Directory.Exists(customerPath);
         var isNewNxVersion = !Directory.Exists(Path.Combine(customerPath, model.EnvFolderName, version));
-
-        if (!Directory.Exists(baseEnv)) return $"Kundenumgebung existiert nicht:\n{baseEnv}";
-        if (!string.IsNullOrWhiteSpace(machine) && Directory.Exists(machineDir)) return "Maschine bereits angelegt!";
 
         this.customer = customer;
         this.version = version;
@@ -55,8 +50,11 @@ public sealed partial class ProjectService(AppModel model)
         this.baseEnv = baseEnv;
         this.nxPath = nxPath;
         this.customerPath = customerPath;
-        this.installedMachinesDir = installedMachinesDir;
-        this.machineDir = machineDir;
+        this.installedMachinesDir = model.GetInstalledMachinesPath();
+        this.machineDir = Path.Combine(installedMachinesDir, machine);
+
+        if (!Directory.Exists(baseEnv)) return $"Kundenumgebung existiert nicht:\n{baseEnv}";
+        if (!string.IsNullOrWhiteSpace(machine) && Directory.Exists(machineDir)) return "Maschine bereits angelegt!";
         TemplateRootDir = model.Settings.TemplateRoot;
         envFolderName = model.EnvFolderName;
 
@@ -75,6 +73,16 @@ public sealed partial class ProjectService(AppModel model)
 
         model.RefreshAll();
         return "Neues Projekt wurde angelegt.";
+    }
+
+    private string GetMachineDatabaseFile()
+    {
+        string basePath = Path.Combine(customerPath, model.EnvFolderName, version, "MACH", "resource", "library", "machine");
+        if (Path.Exists(Path.Combine(basePath, $"ascii_{customer}")))
+        {
+            return Path.Combine(basePath, $"ascii_{customer}", "machine_database.dat");
+        }
+        return Path.Combine(basePath, "ascii", "machine_database.dat");
     }
 
     private static void CopyDirectoryIfExists(string source, string target)
@@ -97,27 +105,35 @@ public sealed partial class ProjectService(AppModel model)
     public void CreateNewMachine()
     {
 
-        if (!string.IsNullOrWhiteSpace(machine))
-        {
-            Directory.CreateDirectory(machineDir);
-            Directory.CreateDirectory(Path.Combine(machineDir, "postprocessor"));
-            Directory.CreateDirectory(Path.Combine(machineDir, "sample"));
-            Directory.CreateDirectory(Path.Combine(machineDir, "cse_driver"));
-            Directory.CreateDirectory(Path.Combine(machineDir, "documentation"));
-            Directory.CreateDirectory(Path.Combine(machineDir, "graphics"));
+        if (string.IsNullOrWhiteSpace(machine)) { return; }
 
-            var typeId = model.MachineTypes.GetValueOrDefault(machineType, "MDM0101");
-            File.WriteAllText(Path.Combine(machineDir, "README.md"), $"# {machine}  \n\nMaschine: {machine}  \nSteuerung: {controller}  \nFirma: {customer}  \nPost Configurator: -  \nNX-Version: {version}  \n");
-            File.WriteAllText(Path.Combine(machineDir, machine + ".dat"), machine + ",${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\postprocessor\\" + machine + ".tcl,${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\postprocessor\\" + machine + ".def\nCSE_FILES, ${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\cse_driver\\" + controller + "\\" + machine + ".MCF");
-            var line = "DATA|" + machine + "|" + typeId + "|" + machine + "|" + controller + "|Example|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\" + machine + ".dat|1.000000|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\graphics\\" + machine + "_SIM";
-            File.WriteAllText(Path.Combine(machineDir, "add_to_machine_database.dat"), line);
-            var asciiFile = Path.Combine(customerPath, model.EnvFolderName, version, "MACH", "resource", "library", "machine", "ascii", "machine_database.dat");
+        this.installedMachinesDir = model.GetInstalledMachinesPath();
+        this.machineDir = Path.Combine(installedMachinesDir, machine);
+
+        Directory.CreateDirectory(machineDir);
+        Directory.CreateDirectory(Path.Combine(machineDir, "postprocessor"));
+        Directory.CreateDirectory(Path.Combine(machineDir, "sample"));
+        Directory.CreateDirectory(Path.Combine(machineDir, "cse_driver"));
+        Directory.CreateDirectory(Path.Combine(machineDir, "documentation"));
+        Directory.CreateDirectory(Path.Combine(machineDir, "graphics"));
+
+        var typeId = model.MachineTypes.GetValueOrDefault(machineType, "MDM0101");
+        File.WriteAllText(Path.Combine(machineDir, "README.md"), $"# {machine}  \n\nMaschine: {machine}  \nSteuerung: {controller}  \nFirma: {customer}  \nPost Configurator: -  \nNX-Version: {version}  \n");
+        File.WriteAllText(Path.Combine(machineDir, machine + ".dat"), machine + ",${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\postprocessor\\" + machine + ".tcl,${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\postprocessor\\" + machine + ".def\nCSE_FILES, ${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\cse_driver\\" + controller + "\\" + machine + ".MCF");
+        var line = "DATA|" + machine + "|" + typeId + "|" + machine + "|" + controller + "|Example|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\" + machine + ".dat|1.000000|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\graphics\\" + machine + "_SIM";
+        File.WriteAllText(Path.Combine(machineDir, "add_to_machine_database.dat"), line);
+        var asciiFile = GetMachineDatabaseFile();
+        if (File.Exists(asciiFile))
+        {
+            File.SetAttributes(asciiFile, FileAttributes.Normal);
             File.AppendAllText(asciiFile, Environment.NewLine + line);
         }
+        
     }
 
     public void CreateSimpleNxEnvironment()
     {
+
         string[] dirs =
         [
             Path.Combine(customerPath, "1_Kundendaten", order),

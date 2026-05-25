@@ -17,7 +17,7 @@ namespace NXStartCenter.ViewModel
         private string _selectedMachineType = "Mill machine";
         private string _selectedController = "Sinumerik";
         private bool _complexEnvRequired = true;
-        private ProjectService _projectService;
+        private NewProjectService _projectService;
         private AppModel _model;
 
         public ICommand CreateProjectCommand { get; }
@@ -31,7 +31,7 @@ namespace NXStartCenter.ViewModel
 
         public ProjectCreationViewModel(
                 AppModel model,
-                ProjectService projectService,
+                NewProjectService projectService,
                 Func<Func<string>, string, Task> runActionAsync,
                 Action saveLastSelection,
                 Action refreshCollectionsFromModel)
@@ -41,7 +41,7 @@ namespace NXStartCenter.ViewModel
             _runActionAsync = runActionAsync;
             _saveLastSelection = saveLastSelection;
             _refreshCollectionsFromModel = refreshCollectionsFromModel;
-            _projectService = new ProjectService(model);
+            _projectService = new NewProjectService(model);
             CreateProjectCommand = new RelayCommand(CreateProject);
 
             MachineTypes = _model.MachineTypes.Keys.ToArray();

@@ -412,7 +412,7 @@
                                         <ComboBox ItemsSource="{Binding ProjectCreation.MachineControllers}" SelectedItem="{Binding ProjectCreation.SelectedController}" Grid.Row="6" Grid.Column="1"/>
 
                                         <StackPanel Grid.Row="7" Grid.Column="1" Margin="0,12,0,0">
-                                            <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Vollständige CAM Umgebung erzeugen" ToolTip="Wenn diese option nicht gesetzt ist, wird nur eine simple Umgebung erzeugt. Ist eher für PP Entwickler interressant." IsChecked="{Binding ComplexEnvRequired}" Margin="0,0,0,12"/>
+                                            <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Vollständige CAM Umgebung erzeugen" ToolTip="Wenn diese option nicht gesetzt ist, wird nur eine simple Umgebung erzeugt. Ist eher für PP Entwickler interressant." IsChecked="{Binding ProjectCreation.ComplexEnvRequired}" Margin="0,0,0,12" Cursor="Hand"/>
                                             <Button Content="Projekt erstellen" Command="{Binding ProjectCreation.CreateProjectCommand}" Width="190" HorizontalAlignment="Left" Cursor="Hand"/>
                                         </StackPanel>
                                     </Grid>
