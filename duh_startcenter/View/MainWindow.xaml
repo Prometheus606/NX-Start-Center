@@ -95,7 +95,7 @@
                                     <TextBlock Text="Aktualisieren"/>
                                 </StackPanel>
                             </Button>
-                            <Button Style="{StaticResource SideNavButtonStyle}" Command="{Binding OpenSettingsCommand}">
+                                <Button Style="{StaticResource SideNavButtonStyle}" Command="{Binding SettingsVm.OpenSettingsCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="⚙" Style="{StaticResource NavIconTextStyle}"/>
                                     <TextBlock Text="Einstellungen"/>
@@ -394,26 +394,26 @@
                                         <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="✚  Neues Projekt" Style="{StaticResource SectionHeaderTextStyle}" Margin="0,0,0,10"/>
 
                                         <TextBlock Text="Kunde:*" ToolTip="Auswahl oder eingabe des Kundennamens" Grid.Row="1" Grid.Column="0"/>
-                                        <ComboBox ItemsSource="{Binding Customers}" Text="{Binding NewCustomer, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" ScrollViewer.CanContentScroll="True" Grid.Row="1" Grid.Column="1" SelectionChanged="ComboBox_SelectionChanged"/>
+                                        <ComboBox ItemsSource="{Binding Customers}" Text="{Binding ProjectCreation.NewCustomer, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" ScrollViewer.CanContentScroll="True" Grid.Row="1" Grid.Column="1" SelectionChanged="ComboBox_SelectionChanged"/>
 
                                         <TextBlock Text="NX-Version:*" ToolTip="Auswahl oder eingabe der NX Version" Grid.Row="2" Grid.Column="0"/>
-                                        <ComboBox ItemsSource="{Binding NativeVersions}" Text="{Binding NewVersion, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" ScrollViewer.CanContentScroll="True" Grid.Row="2" Grid.Column="1"/>
+                                        <ComboBox ItemsSource="{Binding NativeVersions}" Text="{Binding ProjectCreation.NewVersion, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" ScrollViewer.CanContentScroll="True" Grid.Row="2" Grid.Column="1"/>
 
                                         <TextBlock Text="Maschine:" ToolTip="Name der Maschine die angelegt werden soll" Grid.Row="3" Grid.Column="0"/>
-                                        <TextBox Text="{Binding NewMachine, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1"/>
+                                        <TextBox Text="{Binding ProjectCreation.NewMachine, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1"/>
 
                                         <TextBlock Text="Auftragsnummer:" Grid.Row="4" Grid.Column="0"/>
-                                        <TextBox Text="{Binding NewOrderNumber, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1"/>
+                                        <TextBox Text="{Binding ProjectCreation.NewOrderNumber, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1"/>
 
                                         <TextBlock Text="Maschinentyp:" ToolTip="Wird für die Einträge in den .dat Dateien benötigt." Grid.Row="5" Grid.Column="0"/>
-                                        <ComboBox ItemsSource="{Binding MachineTypes}" SelectedItem="{Binding SelectedMachineType}" Grid.Row="5" Grid.Column="1"/>
+                                        <ComboBox ItemsSource="{Binding ProjectCreation.MachineTypes}" SelectedItem="{Binding ProjectCreation.SelectedMachineType}" Grid.Row="5" Grid.Column="1"/>
 
                                         <TextBlock Text="Steuerung:" ToolTip="Wird für die Einträge in den .dat Dateien benötigt." Grid.Row="6" Grid.Column="0"/>
-                                        <ComboBox ItemsSource="{Binding MachineControllers}" SelectedItem="{Binding SelectedController}" Grid.Row="6" Grid.Column="1"/>
+                                        <ComboBox ItemsSource="{Binding ProjectCreation.MachineControllers}" SelectedItem="{Binding ProjectCreation.SelectedController}" Grid.Row="6" Grid.Column="1"/>
 
                                         <StackPanel Grid.Row="7" Grid.Column="1" Margin="0,12,0,0">
                                             <CheckBox Style="{StaticResource ModernCheckBoxStyle}" Content="Vollständige CAM Umgebung erzeugen" ToolTip="Wenn diese option nicht gesetzt ist, wird nur eine simple Umgebung erzeugt. Ist eher für PP Entwickler interressant." IsChecked="{Binding ComplexEnvRequired}" Margin="0,0,0,12"/>
-                                            <Button Content="Projekt erstellen" Command="{Binding CreateProjectCommand}" Width="190" HorizontalAlignment="Left"/>
+                                            <Button Content="Projekt erstellen" Command="{Binding ProjectCreation.CreateProjectCommand}" Width="190" HorizontalAlignment="Left" Cursor="Hand"/>
                                         </StackPanel>
                                     </Grid>
                                 </Border>
@@ -431,8 +431,8 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <Ellipse Width="16" Height="16" Fill="{Binding StatusColor}" Margin="0,0,9,0"/>
-                        <TextBlock Text="{Binding StatusText}" Foreground="{Binding StatusColor}" TextTrimming="CharacterEllipsis" ToolTip="{Binding StatusText}"/>
+                        <Ellipse Width="16" Height="16" Fill="{Binding Status.StatusColor}" Margin="0,0,9,0"/>
+                        <TextBlock Text="{Binding Status.StatusText}" Foreground="{Binding Status.StatusColor}" TextTrimming="CharacterEllipsis" ToolTip="{Binding Status.StatusText}"/>
                     </StackPanel>
                     <TextBlock Grid.Column="1" Text="{Binding CurrentProjectPath}" Foreground="{StaticResource TextMuted}"
                                HorizontalAlignment="Right" TextTrimming="CharacterEllipsis" ToolTip="{Binding CurrentProjectPath}"/>

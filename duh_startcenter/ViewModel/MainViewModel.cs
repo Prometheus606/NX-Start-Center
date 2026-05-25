@@ -16,24 +16,12 @@ using NXStartCenter.View;
 
 namespace NXStartCenter.ViewModel;
 
-public sealed class MainViewModel : INotifyPropertyChanged
+public sealed class MainViewModel : BaseViewModel
 {
     private readonly AppModel _model;
     private readonly NxService _nxService;
     private readonly GeneralService _generalService;
     private readonly ProjectService _projectService;
-    private AppSettings? _settingsBackup;
-
-    private string _statusText = "Bereit";
-    private string _statusColor = "#C9C9C9";
-    private string _statusState = "ok";
-    private string _newCustomer = string.Empty;
-    private string _newVersion = string.Empty;
-    private string _newMachine = string.Empty;
-    private string _newOrderNumber = "0000";
-    private string _selectedMachineType = "Mill machine";
-    private string _selectedController = "Sinumerik";
-    private bool _complexEnvRequired = true;
 
 
     public MainViewModel()
@@ -48,6 +36,11 @@ public sealed class MainViewModel : INotifyPropertyChanged
         _generalService = new GeneralService(_model);
         _projectService = new ProjectService(_model);
 
+        Status = new StatusViewModel();
+        SettingsVm = new SettingsViewModel(_model, _generalService, Status, AfterSettingsChanged);
+        ProjectCreation = new ProjectCreationViewModel(_model, _projectService, RunActionAsync, SaveLastSelection, RefreshCollectionsFromModel);
+
+
         Customers = new ObservableCollection<string>();
         Versions = new ObservableCollection<string>();
         Machines = new ObservableCollection<string>();
@@ -56,12 +49,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
         _model.ForkPath = GeneralService.GetForkExePath();
 
-        Teams = ["CAM", "PP"];
-        Themes = ["cosmo", "flatly", "minty", "pulse", "lumen", "solar", "darkly", "cyborg"];
-        Editors = ["Notepad", "Notepad++", "VSCode"];
         Languages = ["german", "english"];
-        MachineTypes = _model.MachineTypes.Keys.ToArray();
-        MachineControllers = _model.MachineControllers;
 
         if (_model.Last.LastLanguage != "english" && _model.Last.LastLanguage != "german")
         {
@@ -81,22 +69,15 @@ public sealed class MainViewModel : INotifyPropertyChanged
         OpenDeveloperBatch = new RelayCommand(() => RunAction(_generalService.OpenDeveloperBatch));
         OpenLicenseFileCommand = new RelayCommand(() => RunAction(_generalService.OpenLicenseFile));
         StartLmToolsCommand = new RelayCommand(() => RunAction(_generalService.StartLmTools));
-        SaveSettingsCommand = new RelayCommand(SaveSettings);
         RefreshCommand = new RelayCommand(RefreshAll);
-        CreateProjectCommand = new RelayCommand(CreateProject);
-        OpenSettingsCommand = new RelayCommand(OpenSettings);
-        DiscardSettingsCommand = new RelayCommand(DiscardSettings);
         ShowInfoCommand = new RelayCommand(ShowInfo);
-        BrowseNxInstallationPathCommand = new RelayCommand(BrowseNxInstallationPath);
-        BrowseCustomerEnvironmentCommand = new RelayCommand(BrowseCustomerEnvironment);
-        BrowseTemplateRootCommand = new RelayCommand(BrowseTemplateRoot);
-        BrowseLicencePathCommand = new RelayCommand(BrowseLicencePath);
-        BrowseLicenceServerPathCommand = new RelayCommand(BrowseLicenceServerPath);
-        BrowseRolesPathCommand = new RelayCommand(BrowseRolesPath);
-        BrowseTcPathCommand = new RelayCommand(BrowseTcPath);
 
     RefreshCollectionsFromModel();
     }
+
+    public StatusViewModel Status { get; }
+    public SettingsViewModel SettingsVm { get; }
+    public ProjectCreationViewModel ProjectCreation { get; }
 
     public AppSettings Settings => _model.Settings;
     public AppInfo AppInfo => _model.AppInfo;
@@ -112,12 +93,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public ObservableCollection<string> NativeVersions { get; }
     public ObservableCollection<string> PostbuilderVersions { get; }
 
-    public IReadOnlyList<string> Teams { get; }
-    public IReadOnlyList<string> Themes { get; }
-    public IReadOnlyList<string> Editors { get; }
     public IReadOnlyList<string> Languages { get; }
-    public IReadOnlyList<string> MachineTypes { get; }
-    public IReadOnlyList<string> MachineControllers { get; }
 
     public ICommand StartNxNativeCommand { get; }
     public ICommand StartCustomerNxCommand { get; }
@@ -128,22 +104,11 @@ public sealed class MainViewModel : INotifyPropertyChanged
     public ICommand OpenForkCommand { get; }
     public ICommand OpenLicenseFileCommand { get; }
     public ICommand StartLmToolsCommand { get; }
-    public ICommand SaveSettingsCommand { get; }
     public ICommand RefreshCommand { get; }
-    public ICommand CreateProjectCommand { get; }
-    public ICommand OpenSettingsCommand { get; }
-    public ICommand DiscardSettingsCommand { get; }
     public ICommand OpenMainBatch { get; }
     public ICommand OpenCustomerBatch { get; }
     public ICommand OpenDeveloperBatch { get; }
     public ICommand ShowInfoCommand { get; }
-    public ICommand BrowseNxInstallationPathCommand { get; }
-    public ICommand BrowseCustomerEnvironmentCommand { get; }
-    public ICommand BrowseTemplateRootCommand { get; }
-    public ICommand BrowseLicencePathCommand { get; }
-    public ICommand BrowseLicenceServerPathCommand { get; }
-    public ICommand BrowseRolesPathCommand { get; }
-    public ICommand BrowseTcPathCommand { get; }
 
     private bool IsTeam(string team)
     => string.Equals(Settings.Team, team, StringComparison.OrdinalIgnoreCase);
@@ -159,39 +124,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
             ? Visibility.Visible
             : Visibility.Collapsed;
 
-    public string StatusText
-    {
-        get => _statusText;
-        private set => SetField(ref _statusText, value);
-    }
-
-    public string StatusColor
-    {
-        get => _statusColor;
-        private set => SetField(ref _statusColor, value);
-    }
-    public string StatusState
-    {
-        get => _statusState;
-        private set
-        {
-            SetField(ref _statusState, value);
-            switch (_statusState)
-            {
-                case "error":
-                {
-                        StatusColor= "#cc3527";
-                    break;
-                }
-                case "ok":
-                    StatusColor= "#4ead2b";
-                    break;
-                default:
-                    StatusColor= "#C9C9C9";
-                    break;
-            }
-        }
-    }
+    
 
     public string SelectedCustomer
     {
@@ -430,94 +363,13 @@ public sealed class MainViewModel : INotifyPropertyChanged
         }
     }
 
-    public string NewCustomer
-    {
-        get => _newCustomer;
-        set => SetField(ref _newCustomer, value ?? string.Empty);
-    }
-
-    public string NewVersion
-    {
-        get => _newVersion;
-        set => SetField(ref _newVersion, value ?? string.Empty);
-    }
-
-    public string NewMachine
-    {
-        get => _newMachine;
-        set => SetField(ref _newMachine, value ?? string.Empty);
-    }
-
-    public string NewOrderNumber
-    {
-        get => _newOrderNumber;
-        set => SetField(ref _newOrderNumber, value ?? string.Empty);
-    }
-
-    public bool ComplexEnvRequired
-    {
-        get => _complexEnvRequired;
-        set => SetField(ref _complexEnvRequired, value);
-    }
-
-    public string SelectedMachineType
-    {
-        get => _selectedMachineType;
-        set => SetField(ref _selectedMachineType, value ?? "Mill machine");
-    }
-
-    public string SelectedController
-    {
-        get => _selectedController;
-        set => SetField(ref _selectedController, value ?? "Sinumerik");
-    }
+    
 
     private void RefreshAll()
     {
         _model.RefreshAll();
         RefreshCollectionsFromModel();
-        StatusText = "Daten aktualisiert.";
-    }
-
-    private void SaveSettings()
-    {
-        _model.Save();
-        _model.RefreshAll();
-        RefreshCollectionsFromModel();
-
-        OnPropertyChanged(nameof(CamVisibility));
-        OnPropertyChanged(nameof(PpVisibility));
-        OnPropertyChanged(nameof(CamOrPpVisibility));
-
-        StatusText = "Einstellungen gespeichert.";
-    }
-
-    private void CreateProject()
-    {
-        RunActionAsync(() =>
-        {
-            var message = _projectService.CreateOrExtendCustomerEnvironment(
-                NewCustomer,
-                NewVersion,
-                NewMachine,
-                NewOrderNumber,
-                SelectedMachineType,
-                SelectedController,
-                ComplexEnvRequired);
-
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                _model.Customer = NewCustomer;
-                _model.VersionName = NewVersion;
-                _model.Machine = NewMachine;
-                SaveLastSelection();
-                _model.RefreshAll();
-                RefreshCollectionsFromModel();
-            });
-
-            return message;
-        },
-        "Erstelle neue Kundenumgebung...");
+        Status.SetSuccess("Daten aktualisiert.");
     }
 
     private void SaveLastSelection()
@@ -532,125 +384,70 @@ public sealed class MainViewModel : INotifyPropertyChanged
     {
         try
         {
-            if (!String.IsNullOrEmpty(startMessage))
+            if (!string.IsNullOrEmpty(startMessage))
             {
-                StatusState = "";
-                StatusText = startMessage;
+                Status.SetBusy(startMessage);
             }
 
             var message = action();
 
-            if (message.Contains("nicht", StringComparison.OrdinalIgnoreCase) ||
-                message.Contains("Fehler", StringComparison.OrdinalIgnoreCase) ||
-                message.Contains("muss", StringComparison.OrdinalIgnoreCase) ||
-                message.Contains("m�ssen", StringComparison.OrdinalIgnoreCase) ||
-                message.Contains("Achtung", StringComparison.OrdinalIgnoreCase))
+            if (IsErrorMessage(message))
             {
-                StatusState = "error";
-                StatusText = message;
+                Status.SetError(message);
                 MessageBox.Show(message, "NX Start Center", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
-            StatusState = "ok";
-            StatusText = message;
-
+            Status.SetSuccess(message);
             OnPropertyChanged(nameof(CurrentProjectPath));
         }
         catch (Exception ex)
         {
-            StatusState = "error";
-            StatusText = "Fehler: " + ex.Message;
+            Status.SetError("Fehler: " + ex.Message);
             MessageBox.Show(ex.Message, "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
-    private async void RunActionAsync(Func<string> action, string startMessage = "")
+    private async Task RunActionAsync(Func<string> action, string startMessage = "")
     {
         try
         {
             if (!string.IsNullOrEmpty(startMessage))
             {
-                StatusState = "";
-                StatusText = startMessage;
+                Status.SetBusy(startMessage);
                 await Task.Yield();
             }
 
             var message = await Task.Run(action);
 
-            if (message.Contains("nicht", StringComparison.OrdinalIgnoreCase) ||
-                message.Contains("Fehler", StringComparison.OrdinalIgnoreCase) ||
-                message.Contains("muss", StringComparison.OrdinalIgnoreCase) ||
-                message.Contains("müssen", StringComparison.OrdinalIgnoreCase) ||
-                message.Contains("Achtung", StringComparison.OrdinalIgnoreCase))
+            if (IsErrorMessage(message))
             {
-                StatusState = "error";
-                StatusText = message;
+                Status.SetError(message);
                 MessageBox.Show(message, "NX Start Center", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
-            StatusState = "ok";
-            StatusText = message;
+            Status.SetSuccess(message);
             OnPropertyChanged(nameof(CurrentProjectPath));
         }
         catch (Exception ex)
         {
-            StatusState = "error";
-            StatusText = "Fehler: " + ex.Message;
+            Status.SetError("Fehler: " + ex.Message);
             MessageBox.Show(ex.Message, "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
-    private void OpenSettings()
+    private static bool IsErrorMessage(string message)
     {
-        _settingsBackup = new AppSettings
-        {
-            NxInstallationPath = Settings.NxInstallationPath,
-            CustomerEnvironmentPath = Settings.CustomerEnvironmentPath,
-            TemplateRoot = Settings.TemplateRoot,
-            TcPath = Settings.TcPath,
-            LicencePath = Settings.LicencePath,
-            LicenceServerPath = Settings.LicenceServerPath,
-            RolesPath = Settings.RolesPath,
-            Team = Settings.Team,
-            Editor = Settings.Editor,
-            StartNxWithDebug = Settings.StartNxWithDebug,
-            OpenVsCodeWithFork = Settings.OpenVsCodeWithFork,
-            ShowPullReminder = Settings.ShowPullReminder
-        };
-
-        var window = new SettingsWindow
-        {
-            DataContext = this,
-            Owner = Application.Current.MainWindow
-        };
-
-        window.ShowDialog();
+        return message.Contains("nicht", StringComparison.OrdinalIgnoreCase) ||
+               message.Contains("Fehler", StringComparison.OrdinalIgnoreCase) ||
+               message.Contains("muss", StringComparison.OrdinalIgnoreCase) ||
+               message.Contains("müssen", StringComparison.OrdinalIgnoreCase) ||
+               message.Contains("m�ssen", StringComparison.OrdinalIgnoreCase) ||
+               message.Contains("Achtung", StringComparison.OrdinalIgnoreCase);
     }
 
-    private void DiscardSettings()
-    {
-        if (_settingsBackup == null)
-            return;
 
-        Settings.NxInstallationPath = _settingsBackup.NxInstallationPath;
-        Settings.CustomerEnvironmentPath = _settingsBackup.CustomerEnvironmentPath;
-        Settings.TemplateRoot = _settingsBackup.TemplateRoot;
-        Settings.TcPath = _settingsBackup.TcPath;
-        Settings.LicencePath = _settingsBackup.LicencePath;
-        Settings.LicenceServerPath = _settingsBackup.LicenceServerPath;
-        Settings.RolesPath = _settingsBackup.RolesPath;
-        Settings.Team = _settingsBackup.Team;
-        Settings.Editor = _settingsBackup.Editor;
-        Settings.StartNxWithDebug = _settingsBackup.StartNxWithDebug;
-        Settings.OpenVsCodeWithFork = _settingsBackup.OpenVsCodeWithFork;
-        Settings.ShowPullReminder = _settingsBackup.ShowPullReminder;
-
-        OnPropertyChanged(nameof(Settings));
-
-        StatusText = "Änderungen verworfen.";
-    }
 
     private void ShowInfo()
     {
@@ -752,21 +549,6 @@ public sealed class MainViewModel : INotifyPropertyChanged
         return values.FirstOrDefault() ?? string.Empty;
     }
 
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-    private bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value))
-            return false;
-
-        field = value;
-        OnPropertyChanged(propertyName);
-        return true;
-    }
-
     public string SelectedLanguage
     {
         get
@@ -810,45 +592,12 @@ public sealed class MainViewModel : INotifyPropertyChanged
         }
     }
 
-    private void BrowseNxInstallationPath()
+    private void AfterSettingsChanged()
     {
-        _model.Settings.NxInstallationPath = _generalService.BrowseForFoldersOrFiles(description: "NX Installationsordner auswählen") ?? _model.Settings.NxInstallationPath;
-        OnPropertyChanged(nameof(Settings));
-    }
-
-    private void BrowseCustomerEnvironment()
-    {
-        _model.Settings.CustomerEnvironmentPath = _generalService.BrowseForFoldersOrFiles(description: "Kundenumgebungsordner auswählen") ?? _model.Settings.CustomerEnvironmentPath;
-        OnPropertyChanged(nameof(Settings));
-    }
-
-    private void BrowseTemplateRoot()
-    {
-        _model.Settings.TemplateRoot = _generalService.BrowseForFoldersOrFiles(description: "Templates Ordner auswählen (Vorlage und Toolbars)") ?? _model.Settings.TemplateRoot;
-        OnPropertyChanged(nameof(Settings));
-    }
-
-    private void BrowseTcPath()
-    {
-        _model.Settings.TcPath = _generalService.BrowseForFoldersOrFiles(type: "file", description: "Portal.bat auswählen", filers: "Batch Dateien (*.bat)|*.bat") ?? _model.Settings.TcPath;
-        OnPropertyChanged(nameof(Settings));
-    }
-
-    private void BrowseLicencePath()
-    {
-        _model.Settings.LicencePath = _generalService.BrowseForFoldersOrFiles(type: "file", description: "lizenz Datei auswählen", filers: "Batch Dateien (*.lic)|*.lic|Alle Dateien (*.*)|*.*") ?? _model.Settings.LicencePath;
-        OnPropertyChanged(nameof(Settings));
-    }
-
-    private void BrowseLicenceServerPath()
-    {
-        _model.Settings.LicenceServerPath = _generalService.BrowseForFoldersOrFiles(type: "file", description: "LMTools.exe auswählen", filers: "Ausführbare Dateien (*.exe)|*.exe") ?? _model.Settings.LicenceServerPath;
-        OnPropertyChanged(nameof(Settings));
-    }
-
-    private void BrowseRolesPath()
-    {
-        _model.Settings.RolesPath = _generalService.BrowseForFoldersOrFiles(type: "file", description: "Rollen Dateien auswählen", filers: "NX Rollen Dateien (*.mtx)|*.mtx", multiSelect: true) ?? _model.Settings.RolesPath;
+        RefreshCollectionsFromModel();
+        OnPropertyChanged(nameof(CamVisibility));
+        OnPropertyChanged(nameof(PpVisibility));
+        OnPropertyChanged(nameof(CamOrPpVisibility));
         OnPropertyChanged(nameof(Settings));
     }
 }

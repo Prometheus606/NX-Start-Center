@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace NXStartCenter;
+namespace NXStartCenter.ViewModel;
 
 public sealed class RelayCommand : ICommand
 {
