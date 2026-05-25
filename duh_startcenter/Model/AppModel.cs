@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using System.IO;
 
 using NXStartCenter;
-namespace NXStartCenter.Services;
+namespace NXStartCenter.Model;
 
 public sealed class AppModel
 {

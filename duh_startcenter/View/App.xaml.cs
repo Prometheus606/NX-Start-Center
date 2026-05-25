@@ -1,7 +1,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace NXStartCenter;
+namespace NXStartCenter.View;
 
 public partial class App
 {

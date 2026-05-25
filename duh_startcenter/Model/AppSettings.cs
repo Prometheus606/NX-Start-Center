@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using System.IO;
 
-namespace NXStartCenter;
+namespace NXStartCenter.Model;
 
 
 public sealed class AppSettings

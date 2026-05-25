@@ -20,17 +20,13 @@
     <None Remove="resources\images\duhGroup_Logo.png" />
   </ItemGroup>
   <ItemGroup>
-    <Page Remove="Gui\App.xaml" />
+    <Page Remove="View\App.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="Gui\App.xaml" />
+    <ApplicationDefinition Include="View\App.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="resources\images\duhGroup_Logo.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app\start_routine.bat" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="app\user_settings.bat" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
@@ -44,6 +40,12 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <None Update="batch_files\start_routine.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="batch_files\user_settings.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="resources\.gitignore">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

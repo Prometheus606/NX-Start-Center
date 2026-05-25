@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace NXStartCenter
+namespace NXStartCenter.Model
 {
     public class GitHubRelease
     {

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace NXStartCenter;
+namespace NXStartCenter.View;
 
 public partial class SettingsWindow : Window
 {

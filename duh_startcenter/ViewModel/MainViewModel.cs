@@ -11,13 +11,16 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using static System.Net.WebRequestMethods;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using NXStartCenter.Model;
+using NXStartCenter.View;
 
-namespace NXStartCenter;
+namespace NXStartCenter.ViewModel;
 
 public sealed class MainViewModel : INotifyPropertyChanged
 {
     private readonly AppModel _model;
     private readonly NxService _nxService;
+    private readonly GeneralService _generalService;
     private readonly ProjectService _projectService;
     private AppSettings? _settingsBackup;
 
@@ -42,6 +45,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
         _model = AppModel.Load(configPath);
         _nxService = new NxService(_model);
+        _generalService = new GeneralService(_model);
         _projectService = new ProjectService(_model);
 
         Customers = new ObservableCollection<string>();
@@ -50,7 +54,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
         NativeVersions = new ObservableCollection<string>();
         PostbuilderVersions = new ObservableCollection<string>();
 
-        _model.ForkPath = GetForkExePath();
+        _model.ForkPath = GeneralService.GetForkExePath();
 
         Teams = ["CAM", "PP"];
         Themes = ["cosmo", "flatly", "minty", "pulse", "lumen", "solar", "darkly", "cyborg"];
@@ -67,16 +71,16 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
         StartNxNativeCommand = new RelayCommand(() => RunAction(_nxService.StartNativeNx));
         StartCustomerNxCommand = new RelayCommand(() => RunAction(_nxService.StartCustomerNx));
-        StartPostbuilderCommand = new RelayCommand(() => RunAction(_nxService.StartPostbuilder));
-        OpenExplorerCommand = new RelayCommand(() => RunAction(_nxService.OpenMachineFolder));
-        OpenVsCodeCommand = new RelayCommand(() => RunAction(_nxService.OpenVsCode));
-        OpenVsCodeAndForkCommand = new RelayCommand(() => RunAction(_nxService.OpenVsCodeAndFork));
-        OpenForkCommand = new RelayCommand(() => RunAction(_nxService.OpenFork));
-        OpenMainBatch = new RelayCommand(() => RunAction(_nxService.OpenMainBatch));
-        OpenCustomerBatch = new RelayCommand(() => RunAction(_nxService.OpenCustomerBatch));
-        OpenDeveloperBatch = new RelayCommand(() => RunAction(_nxService.OpenDeveloperBatch));
-        OpenLicenseFileCommand = new RelayCommand(() => RunAction(_nxService.OpenLicenseFile));
-        StartLmToolsCommand = new RelayCommand(() => RunAction(_nxService.StartLmTools));
+        StartPostbuilderCommand = new RelayCommand(() => RunAction(_generalService.StartPostbuilder));
+        OpenExplorerCommand = new RelayCommand(() => RunAction(_generalService.OpenMachineFolder));
+        OpenVsCodeCommand = new RelayCommand(() => RunAction(_generalService.OpenVsCode));
+        OpenVsCodeAndForkCommand = new RelayCommand(() => RunAction(_generalService.OpenVsCodeAndFork));
+        OpenForkCommand = new RelayCommand(() => RunAction(_generalService.OpenFork));
+        OpenMainBatch = new RelayCommand(() => RunAction(_generalService.OpenMainBatch));
+        OpenCustomerBatch = new RelayCommand(() => RunAction(_generalService.OpenCustomerBatch));
+        OpenDeveloperBatch = new RelayCommand(() => RunAction(_generalService.OpenDeveloperBatch));
+        OpenLicenseFileCommand = new RelayCommand(() => RunAction(_generalService.OpenLicenseFile));
+        StartLmToolsCommand = new RelayCommand(() => RunAction(_generalService.StartLmTools));
         SaveSettingsCommand = new RelayCommand(SaveSettings);
         RefreshCommand = new RelayCommand(RefreshAll);
         CreateProjectCommand = new RelayCommand(CreateProject);
@@ -808,86 +812,43 @@ public sealed class MainViewModel : INotifyPropertyChanged
 
     private void BrowseNxInstallationPath()
     {
-        _model.Settings.NxInstallationPath = BrowseForFoldersOrFiles(description: "NX Installationsordner auswählen") ?? _model.Settings.NxInstallationPath;
+        _model.Settings.NxInstallationPath = _generalService.BrowseForFoldersOrFiles(description: "NX Installationsordner auswählen") ?? _model.Settings.NxInstallationPath;
         OnPropertyChanged(nameof(Settings));
     }
 
     private void BrowseCustomerEnvironment()
     {
-        _model.Settings.CustomerEnvironmentPath = BrowseForFoldersOrFiles(description: "Kundenumgebungsordner auswählen") ?? _model.Settings.CustomerEnvironmentPath;
+        _model.Settings.CustomerEnvironmentPath = _generalService.BrowseForFoldersOrFiles(description: "Kundenumgebungsordner auswählen") ?? _model.Settings.CustomerEnvironmentPath;
         OnPropertyChanged(nameof(Settings));
     }
 
     private void BrowseTemplateRoot()
     {
-        _model.Settings.TemplateRoot = BrowseForFoldersOrFiles(description: "Templates Ordner auswählen (Vorlage und Toolbars)") ?? _model.Settings.TemplateRoot;
+        _model.Settings.TemplateRoot = _generalService.BrowseForFoldersOrFiles(description: "Templates Ordner auswählen (Vorlage und Toolbars)") ?? _model.Settings.TemplateRoot;
         OnPropertyChanged(nameof(Settings));
     }
 
     private void BrowseTcPath()
     {
-        _model.Settings.TcPath = BrowseForFoldersOrFiles(type: "file", description: "Portal.bat auswählen", filers: "Batch Dateien (*.bat)|*.bat") ?? _model.Settings.TcPath;
+        _model.Settings.TcPath = _generalService.BrowseForFoldersOrFiles(type: "file", description: "Portal.bat auswählen", filers: "Batch Dateien (*.bat)|*.bat") ?? _model.Settings.TcPath;
         OnPropertyChanged(nameof(Settings));
     }
 
     private void BrowseLicencePath()
     {
-        _model.Settings.LicencePath = BrowseForFoldersOrFiles(type: "file", description: "lizenz Datei auswählen", filers: "Batch Dateien (*.lic)|*.lic|Alle Dateien (*.*)|*.*") ?? _model.Settings.LicencePath;
+        _model.Settings.LicencePath = _generalService.BrowseForFoldersOrFiles(type: "file", description: "lizenz Datei auswählen", filers: "Batch Dateien (*.lic)|*.lic|Alle Dateien (*.*)|*.*") ?? _model.Settings.LicencePath;
         OnPropertyChanged(nameof(Settings));
     }
 
     private void BrowseLicenceServerPath()
     {
-        _model.Settings.LicenceServerPath = BrowseForFoldersOrFiles(type: "file", description: "LMTools.exe auswählen", filers: "Ausführbare Dateien (*.exe)|*.exe") ?? _model.Settings.LicenceServerPath;
+        _model.Settings.LicenceServerPath = _generalService.BrowseForFoldersOrFiles(type: "file", description: "LMTools.exe auswählen", filers: "Ausführbare Dateien (*.exe)|*.exe") ?? _model.Settings.LicenceServerPath;
         OnPropertyChanged(nameof(Settings));
     }
 
     private void BrowseRolesPath()
     {
-        _model.Settings.RolesPath = BrowseForFoldersOrFiles(type: "file", description: "Rollen Dateien auswählen", filers: "NX Rollen Dateien (*.mtx)|*.mtx", multiSelect: true) ?? _model.Settings.RolesPath;
+        _model.Settings.RolesPath = _generalService.BrowseForFoldersOrFiles(type: "file", description: "Rollen Dateien auswählen", filers: "NX Rollen Dateien (*.mtx)|*.mtx", multiSelect: true) ?? _model.Settings.RolesPath;
         OnPropertyChanged(nameof(Settings));
-    }
-
-    private string BrowseForFoldersOrFiles(string type = "folder", string description = "Pfad Auswählen", string filers = "Alle Dateien (*.*)|*.*", bool multiSelect = false)
-    {
-        if (type == "folder")
-        {
-            var dialog = new VistaFolderBrowserDialog
-            {
-                Description = description,
-                UseDescriptionForTitle = true
-            };
-            if (dialog.ShowDialog(Application.Current.MainWindow) == true)
-            {
-                return dialog.SelectedPath;
-            }
-        }
-        else
-        {
-            var dialog = new OpenFileDialog
-            {
-                Title = description,
-                Filter = filers,
-                Multiselect = multiSelect,
-                CheckFileExists = true
-            };
-            if (dialog.ShowDialog(Application.Current.MainWindow) == true)
-            {
-                return multiSelect
-                    ? string.Join(";", dialog.FileNames)
-                    : dialog.FileName;
-            }
-        }
-        return "";
-    }
-
-    private static string GetForkExePath()
-    {
-        string path = ProcessService.FindInstallLocation("Fork") ?? "";
-        if (!path.EndsWith(@"\current\Fork.exe"))
-        {
-            path = Path.Combine(path, "current", "Fork.exe");
-        }
-        return path;
     }
 }

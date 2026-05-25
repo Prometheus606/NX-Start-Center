@@ -211,8 +211,8 @@ rem ----------------------------------------------------------------------------
 REM ------------------------------------------------------------------------------
 REM Custom Batch lesen
 REM ------------------------------------------------------------------------------
-if exist "%SCRIPT_DIR%\app\user_settings.bat" (
-    call "%SCRIPT_DIR%app\user_settings.bat"
+if exist "%SCRIPT_DIR%\Batch_files\user_settings.bat" (
+    call "%SCRIPT_DIR%Batch_files\user_settings.bat"
 ) else (
 		echo user settings nicht gefunden
 	)

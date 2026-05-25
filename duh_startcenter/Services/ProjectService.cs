@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection.PortableExecutable;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
+using NXStartCenter.Model;
 
 
 

@@ -5,6 +5,8 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using NXStartCenter.Model;
+using NXStartCenter.View;
 
 namespace NXStartCenter
 {
