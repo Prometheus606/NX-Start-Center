@@ -41,15 +41,14 @@ Filename: "{app}\DUH_Startcenter.exe"; Description: "{cm:LaunchProgram,DUH_Start
 [Code]
 var
   IsUpdateInstall: Boolean;
-var
-   SettingsPage1: TWizardPage;
+
+  SettingsPage1: TWizardPage;
   SettingsPage2: TWizardPage;
 
   NxPathEdit: TNewEdit;
   CustomerEnvEdit: TNewEdit;
   LicenceEdit: TNewEdit;
   LicenceServerEdit: TNewEdit;
-  ForkEdit: TNewEdit;
   TemplateEdit: TNewEdit;
   TcEdit: TNewEdit;
 
@@ -73,18 +72,93 @@ begin
   LabelCtrl.Left := 0;
 end;
 
-function AddEdit(
+function AddEditWithBrowse(
   Parent: TWizardPage;
   DefaultValue: string;
-  TopPos: Integer
+  TopPos: Integer;
+  ButtonClick: TNotifyEvent
 ): TNewEdit;
+var
+  BrowseButton: TNewButton;
 begin
   Result := TNewEdit.Create(WizardForm);
   Result.Parent := Parent.Surface;
   Result.Top := TopPos + 16;
   Result.Left := 0;
-  Result.Width := Parent.SurfaceWidth;
+  Result.Width := Parent.SurfaceWidth - 110;
   Result.Text := DefaultValue;
+
+  BrowseButton := TNewButton.Create(WizardForm);
+  BrowseButton.Parent := Parent.Surface;
+  BrowseButton.Caption := 'Durchsuchen...';
+  BrowseButton.Top := Result.Top - 1;
+  BrowseButton.Left := Result.Left + Result.Width + 8;
+  BrowseButton.Width := 100;
+  BrowseButton.OnClick := ButtonClick;
+end;
+
+function SelectFolderModern(Title: string; var Path: string): Boolean;
+begin
+  Result := BrowseForFolder(Title, Path, False);
+end;
+
+function SelectFileModern(Title: string; Filter: string; var Path: string): Boolean;
+begin
+  Result := GetOpenFileName(Title, Path, '', Filter, '');
+end;
+
+procedure BrowseNxPath(Sender: TObject);
+var
+  Path: string;
+begin
+  Path := NxPathEdit.Text;
+  if SelectFolderModern('NX Installationspfad auswählen', Path) then
+    NxPathEdit.Text := Path;
+end;
+
+procedure BrowseCustomerEnvPath(Sender: TObject);
+var
+  Path: string;
+begin
+  Path := CustomerEnvEdit.Text;
+  if SelectFolderModern('Kundenumgebungen auswählen', Path) then
+    CustomerEnvEdit.Text := Path;
+end;
+
+procedure BrowseLicenceFile(Sender: TObject);
+var
+  Path: string;
+begin
+  Path := LicenceEdit.Text;
+  if SelectFileModern('Lizenzdatei auswählen', 'Lizenzdateien (*.lic)|*.lic|Alle Dateien (*.*)|*.*', Path) then
+    LicenceEdit.Text := Path;
+end;
+
+procedure BrowseLicenceServerFile(Sender: TObject);
+var
+  Path: string;
+begin
+  Path := LicenceServerEdit.Text;
+  if SelectFileModern('lmtools.exe auswählen', 'Programme (*.exe)|*.exe', Path) then
+    LicenceServerEdit.Text := Path;
+end;
+
+procedure BrowseTemplateRoot(Sender: TObject);
+var
+  Path: string;
+begin
+  Path := TemplateEdit.Text;
+  if SelectFolderModern('Template Root auswählen', Path) then
+    TemplateEdit.Text := Path;
+end;
+
+procedure BrowseTcFile(Sender: TObject);
+var
+  Path: string;
+begin
+  Path := TcEdit.Text;
+  if SelectFileModern('Teamcenter portal.bat auswählen', 'Batch-Dateien (*.bat)|*.bat', Path) then
+    TcEdit.Text := Path;
 end;
 
 function ConfigFileExists: Boolean;
@@ -94,7 +168,7 @@ end;
 
 procedure InitializeWizard;
 begin
-IsUpdateInstall := ConfigFileExists;
+  IsUpdateInstall := ConfigFileExists;
 
   if IsUpdateInstall then
     Exit;
@@ -102,45 +176,44 @@ IsUpdateInstall := ConfigFileExists;
   SettingsPage1 := CreateCustomPage(
     wpSelectDir,
     'DUH_Startcenter Einstellungen',
-    'Pfade 1 von 2'
+    'Pfade'
   );
 
-AddLabel(SettingsPage1, 'NX Installationspfad:', 0);
-NxPathEdit := AddEdit(SettingsPage1, 'C:\Siemens\NX_Versionen', 0);
+  AddLabel(SettingsPage1, 'NX Installationspfad:', 0);
+  NxPathEdit := AddEditWithBrowse(SettingsPage1, 'C:\Siemens\NX_Versionen', 0, @BrowseNxPath);
 
-AddLabel(SettingsPage1, 'Kundenumgebungen:', 50);
-CustomerEnvEdit := AddEdit(SettingsPage1, 'D:\Kundenumgebungen', 50);
+  AddLabel(SettingsPage1, 'Kundenumgebungen:', 50);
+  CustomerEnvEdit := AddEditWithBrowse(SettingsPage1, 'D:\Kundenumgebungen', 50, @BrowseCustomerEnvPath);
 
-AddLabel(SettingsPage1, 'Lizenzdatei:', 100);
-LicenceEdit := AddEdit(SettingsPage1, 'C:\Siemens\License\License_ugslmd.lic', 100);
+  AddLabel(SettingsPage1, 'Lizenzdatei:', 100);
+  LicenceEdit := AddEditWithBrowse(SettingsPage1, 'C:\Siemens\License\License_ugslmd.lic', 100, @BrowseLicenceFile);
 
-AddLabel(SettingsPage1, 'Lizenzserver / lmtools.exe:', 150);
-LicenceServerEdit := AddEdit(SettingsPage1, 'C:\Siemens\License Server\lmtools.exe', 150);
+  AddLabel(SettingsPage1, 'Lizenzserver / lmtools.exe:', 150);
+  LicenceServerEdit := AddEditWithBrowse(SettingsPage1, 'C:\Siemens\License Server\lmtools.exe', 150, @BrowseLicenceServerFile);
+  
+    AddLabel(SettingsPage1, 'Template Root (toolbars):', 200);
+  TemplateEdit := AddEditWithBrowse(SettingsPage1, 'D:\DUH Tools\Vorlage_Root', 200, @BrowseTemplateRoot);
 
+  AddLabel(SettingsPage1, 'Teamcenter portal.bat (Für Teamcenter, optional):', 250);
+  TcEdit := AddEditWithBrowse(SettingsPage1, 'D:\Siemens\TC2512\portal\portal.bat', 250, @BrowseTcFile);
 
-SettingsPage2 := CreateCustomPage(
-  SettingsPage1.ID,
-  'DUH_Startcenter Einstellungen',
-  'Pfade 2 von 2'
-);
+  SettingsPage2 := CreateCustomPage(
+    SettingsPage1.ID,
+    'DUH_Startcenter Einstellungen',
+    'Team Auswahl'
+  );
 
-AddLabel(SettingsPage2, 'Template Root:', 50);
-TemplateEdit := AddEdit(SettingsPage2, 'D:\DUH Tools\Vorlage_Root', 50);
+  AddLabel(SettingsPage2, 'Icg´h bin in Team:', 0);
 
-AddLabel(SettingsPage2, 'Teamcenter portal.bat:', 100);
-TcEdit := AddEdit(SettingsPage2, 'D:\Siemens\TC2512\portal\portal.bat', 100);
-
-AddLabel(SettingsPage2, 'Team:', 150);
-
-TeamCombo := TNewComboBox.Create(WizardForm);
-TeamCombo.Parent := SettingsPage2.Surface;
-TeamCombo.Top := 166;
-TeamCombo.Left := 0;
-TeamCombo.Width := 200;
-TeamCombo.Style := csDropDownList;
-TeamCombo.Items.Add('PP');
-TeamCombo.Items.Add('CAM');
-TeamCombo.ItemIndex := 0;
+  TeamCombo := TNewComboBox.Create(WizardForm);
+  TeamCombo.Parent := SettingsPage2.Surface;
+  TeamCombo.Top := 16;
+  TeamCombo.Left := 0;
+  TeamCombo.Width := 200;
+  TeamCombo.Style := csDropDownList;
+  TeamCombo.Items.Add('PP');
+  TeamCombo.Items.Add('CAM');
+  TeamCombo.ItemIndex := 0;
 end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
@@ -148,9 +221,7 @@ var
   Settings: string;
 begin
   if IsUpdateInstall then
-  begin
     Exit;
-  end;
 
   if CurStep = ssPostInstall then
   begin
@@ -169,17 +240,7 @@ begin
 
     ForceDirectories(ExpandConstant('{app}\data'));
 
-    if not SaveStringToFile(
-      ExpandConstant('{app}\data\config.json'),
-      Settings,
-      False
-    ) then
-    begin
-      MsgBox(
-        'Die config.json konnte nicht geschrieben werden.',
-        mbError,
-        MB_OK
-      );
-    end;
+    if not SaveStringToFile(ExpandConstant('{app}\data\config.json'), Settings, False) then
+      MsgBox('Die config.json konnte nicht geschrieben werden.', mbError, MB_OK);
   end;
 end;
