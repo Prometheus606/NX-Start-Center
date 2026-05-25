@@ -10,6 +10,28 @@ for %%i in ("%BASE%") do set "BASE=%%~fi"
 
 cd /d "%BASE%" || exit /b 1
 
+rem ============================================
+rem Prüfen auf uncommitted Changes
+rem ============================================
+
+git diff --quiet
+if errorlevel 1 (
+    echo.
+    echo Es existieren uncommittete Änderungen im Repository.
+    echo Bitte zuerst committen oder stashen.
+    pause
+    exit /b 1
+)
+
+git diff --cached --quiet
+if errorlevel 1 (
+    echo.
+    echo Es existieren staged aber nicht committete Änderungen.
+    echo Bitte zuerst committen oder stashen.
+    pause
+    exit /b 1
+)
+
 echo ============================================
 echo DUH_Startcenter Build
 echo ============================================
