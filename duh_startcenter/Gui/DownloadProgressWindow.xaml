@@ -5,18 +5,27 @@
         Width="400"
         Height="160"
         WindowStartupLocation="CenterOwner"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        Background="{StaticResource BgMain}"
+        FontFamily="Segoe UI"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True">
 
-    <Grid Margin="20">
+    <Grid Margin="20"
+      Background="{StaticResource BgMain}">
         <StackPanel>
             <TextBlock Text="Update wird heruntergeladen..."
                        FontSize="16"
                        Margin="0,0,0,15"/>
 
             <ProgressBar x:Name="DownloadProgressBar"
-                         Height="22"
-                         Minimum="0"
-                         Maximum="100"/>
+             Height="22"
+             Minimum="0"
+             Maximum="100"
+             Background="#2D2D30"
+             Foreground="#3B82F6"
+             BorderBrush="#444"
+             BorderThickness="1"/>
 
             <TextBlock x:Name="ProgressText"
                        Margin="0,10,0,0"
