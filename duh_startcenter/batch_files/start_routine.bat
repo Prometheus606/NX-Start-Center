@@ -1,7 +1,7 @@
-@echo off
+ï»¿@echo off
 rem *****************************************************************************
 rem 					     WICHTIGER HINWEIS!!
-rem     Anpassungen an dieser Datei werden bei einem Update überschrieben!
+rem     Anpassungen an dieser Datei werden bei einem Update ï¿½berschrieben!
 rem *****************************************************************************
 
 
@@ -48,6 +48,7 @@ rem ----------------------------------------------------------------------------
 	call :SetIfExist UGII_LOAD_OPTIONS "%PLM_SHARE_DUH%\Vorlage\load_options\load_options.def"
 	call :SetIfExist DUH_ToolBars_DIR "%VORLAGE_ROOT%\ToolBars\DUH_Group"	
 	call :SetIfExist Siemens_ToolBars_DIR "%VORLAGE_ROOT%\ToolBars\Siemens"
+	call :SetIfExist DUH_PP_TOOLS "%VORLAGE_ROOT%\ToolBars\DUH_Group\PP_Tools"
 	call :SetIfExist NX_SHR_VERSION_DIR "%NX_Version_DUH%"
 	call :SetIfExist SPLM_SHR_DIR "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%"
 
@@ -113,12 +114,11 @@ rem duh_tools_DIR
  
 
 rem ------------------------------------------------------------------------------
-
+	if EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\custom_dirs.dat" del "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\custom_dirs.dat"
 	if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\menus\custom_dirs.dat" (
 		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\menus" mkdir "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\menus"
-		copy "%VORLAGE_ROOT%\Vorlage\custom_dirs.dat" "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\menus\"
-
 	)
+	copy "%VORLAGE_ROOT%\Vorlage\custom_dirs.dat" "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\menus\"
 
 	call :SetIfExist UGII_CUSTOM_DIRECTORY_FILE "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\menus\custom_dirs.dat"
 	
@@ -130,8 +130,8 @@ rem ugii_env.dat
 rem ------------------------------------------------------------------------------
 	if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\UGII\ugii_env.dat" (
 		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\UGII" mkdir "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\UGII"
-		copy "%VORLAGE_ROOT%\Vorlage\ugii_env.dat" "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\UGII"
 	)
+	copy "%VORLAGE_ROOT%\Vorlage\ugii_env.dat" "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\UGII"
 
 	call :SetIfExist UGII_ENV_FILE "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\ugii_env.dat"
 rem ------------------------------------------------------------------------------
@@ -162,7 +162,7 @@ rem Provide .men file for NX app title
 
 
 
-rem Frühzugriffsfunktion
+rem Frï¿½hzugriffsfunktion
 rem ------------------------------------------------------------------------------
 	call :SetIfExist UGII_LOCAL_USER_TOGGLE_DEFAULTS "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\EarlyAccessFeature\feature_toggle_user.fcg"
 "
@@ -190,7 +190,7 @@ if "%DEBUG%" == "True" (
 rem ------------------------------------------------------------------------------
 
 rem custom_nx.bat
-rem zum Variablen setzen für jeden Kunden 
+rem zum Variablen setzen fï¿½r jeden Kunden 
 rem costom_nx.bat unter %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps  
 rem ------------------------------------------------------------------------------
 	if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps\custom_nx_%CUSTOMERNAME%.bat" (
