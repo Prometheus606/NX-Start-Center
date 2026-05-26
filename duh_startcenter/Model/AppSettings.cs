@@ -19,7 +19,7 @@ public sealed class AppSettings
     public string LicenceServerPath { get; set; } = @"C:\Siemens\License Server\lmtools.exe";
 
     [JsonPropertyName("template_root_path")]
-    public string TemplateRoot { get; set; } = $@"{Directory.GetParent(AppContext.BaseDirectory)}\Startcenter_templates";
+    public string TemplateRoot { get; set; } = $@"D:\DUH Tools\DUH_Startcenter_templates";
 
     [JsonPropertyName("tc_path")]
     public string TcPath { get; set; } = $@"D:\Siemens\TC2512\portal\portal.bat";
@@ -28,22 +28,19 @@ public sealed class AppSettings
     public string RolesPath { get; set; } = string.Empty;
 
     [JsonPropertyName("team")]
-    public string Team { get; set; } = "PP";
-
-    [JsonPropertyName("preferred_theme")]
-    public string PreferredTheme { get; set; } = "darkly";
+    public string Team { get; set; } = "CAM";
 
     [JsonPropertyName("editor")]
     public string Editor { get; set; } = "VSCode";
 
     [JsonPropertyName("startNXWithDebug")]
-    public bool StartNxWithDebug { get; set; }
+    public bool StartNxWithDebug { get; set; } = false;
 
     [JsonPropertyName("showPullReminder")]
-    public bool ShowPullReminder { get; set; }
+    public bool ShowPullReminder { get; set; } = true;
 
 
-[JsonPropertyName("openVsCodeWithFork")]
-    public bool OpenVsCodeWithFork { get; set; }
+    [JsonPropertyName("openVsCodeWithFork")]
+    public bool OpenVsCodeWithFork { get; set; } = true;
 
 }
