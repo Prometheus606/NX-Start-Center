@@ -225,7 +225,6 @@ rem 								Start NX
 rem *****************************************************************************
 
 rem start with Teamcenter!
-pause
 if /i "%MANAGED%" == "portal_client" (
     call %TC_PFAD%
     goto DUH_ENDE
