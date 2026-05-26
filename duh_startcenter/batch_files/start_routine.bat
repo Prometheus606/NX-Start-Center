@@ -1,7 +1,12 @@
 ﻿@echo off
 rem *****************************************************************************
+rem 					     IMPORTANT!!
+rem     Changes made to this file will be overwritten during an update!
+rem     Please make permanent changes in user_settings.bat!
+rem *****************************************************************************
 rem 					     WICHTIGER HINWEIS!!
-rem     Anpassungen an dieser Datei werden bei einem Update �berschrieben!
+rem     Anpassungen an dieser Datei werden bei einem Update überschrieben!
+rem		Dauerhafte anpassungen bitte in user_settings.bat vornehmen!
 rem *****************************************************************************
 
 
@@ -33,13 +38,14 @@ set "CLOUD_LICENSE=%~3"
 set "MANAGED=%~4"
 set "VORLAGE_ROOT=%~5"
 set "TC_PFAD=%~6"
-set "LOAD_FULL_RESOURCE_DIR=%~7"
+set "IS_PP_DEVELOPER=%~7"
+set "LOAD_FULL_RESOURCE_DIR=%~8"
 
 set "SCRIPT_DIR=%~dp0"
 set "UMGEBUNG=5_Umgebung"
 
 rem ------------------------------------------------------------------------------
-rem Umgebungsvariablen setzen
+rem Set Main Env Variables
 rem ------------------------------------------------------------------------------
 	call :SetIfExist UGII_BASE_DIR "%NX_INSTALL_PATH%\%NX_Version_DUH%"
 	call :SetIfExist PLM_SHARE_DUH "%CUSTOMER_PATH%"
@@ -48,10 +54,15 @@ rem ----------------------------------------------------------------------------
 	call :SetIfExist UGII_LOAD_OPTIONS "%PLM_SHARE_DUH%\Vorlage\load_options\load_options.def"
 	call :SetIfExist DUH_ToolBars_DIR "%VORLAGE_ROOT%\ToolBars\DUH_Group"	
 	call :SetIfExist Siemens_ToolBars_DIR "%VORLAGE_ROOT%\ToolBars\Siemens"
-	call :SetIfExist DUH_PP_TOOLS "%VORLAGE_ROOT%\ToolBars\DUH_Group\PP_Tools"
 	call :SetIfExist NX_SHR_VERSION_DIR "%NX_Version_DUH%"
 	call :SetIfExist SPLM_SHR_DIR "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%"
 
+rem ------------------------------------------------------------------------------
+rem set Toolbar for PP developers
+rem ------------------------------------------------------------------------------
+	if "%IS_PP_DEVELOPER%" == "True" (
+		call :SetIfExist DUH_PP_TOOLS "%VORLAGE_ROOT%\ToolBars\DUH_Group\PP_Tools"
+	)
 
 rem ------------------------------------------------------------------------------
 rem set CAM Setup Variables
@@ -87,12 +98,17 @@ set "LIBRARY_DIR=%RESOURCE_DIR%library\
 		)
 	)
 
+rem ------------------------------------------------------------------------------
+rem set License Server if NX X is Used
+rem ------------------------------------------------------------------------------
+if "%DEBUG%" == "True" Pause
 if "CLOUD_LICENSE" == "True" (
+
 	set SPLM_LICENSE_SERVER=CLOUD
 ) 
-	
-REM DUH Pause %NX_Version_DUH%.bat 2
-if "%DEBUG%" == "True" Pause
+
+rem ------------------------------------------------------------------------------
+rem set temp dir
 rem ------------------------------------------------------------------------------
 	call :SetIfExist UGII_TMP_DIR "%PLM_SHARE_DUH%\%CUSTOMERNAME%\2_Testdaten\temp\NX
 
@@ -105,14 +121,15 @@ rem ----------------------------------------------------------------------------
 	call :SetIfExist UGII_CAM_LIBRARY_FEEDS_SPEEDS_DATA_DIR "%UGII_CAM_RESOURCE_DIR%library\feeds_speeds\%CUSTOMERNAME%\"
 	call :SetIfExist UGII_CAM_LIBRARY_MACHINE_DATA_DIR "%UGII_CAM_RESOURCE_DIR%library\machine\%CUSTOMERNAME%\"
 	call :SetIfExist UGII_CAM_LIBRARY_TOOL_METRIC_DIR "%UGII_CAM_RESOURCE_DIR%library\tool\%CUSTOMERNAME%\"
+
 rem ------------------------------------------------------------------------------
-
-
-rem duh_tools_DIR
+rem remove duh_tools_DIR
+rem ------------------------------------------------------------------------------
 
 	if EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\cx_tools" rd /s /q  "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\cx_tools"
  
-
+rem ------------------------------------------------------------------------------
+rem copy custom_dirs.dat and removes old version if exists
 rem ------------------------------------------------------------------------------
 	if EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\custom_dirs.dat" del "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\custom_dirs.dat"
 	if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\menus\custom_dirs.dat" (
@@ -120,12 +137,10 @@ rem ----------------------------------------------------------------------------
 	)
 	copy "%VORLAGE_ROOT%\Vorlage\custom_dirs.dat" "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\menus\"
 
-	call :SetIfExist UGII_CUSTOM_DIRECTORY_FILE "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\menus\custom_dirs.dat"
-	
+	call :SetIfExist UGII_CUSTOM_DIRECTORY_FILE "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\menus\custom_dirs.dat"	
 	call :SetIfExist UGII_UG_CUSTOM_DIRECTORY_FILE "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\menus\ug_custom_dirs.dat"
-	call :SetIfExist UGII_ENV_FILE "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\ugii_env_switch.dat"
-rem ------------------------------------------------------------------------------
 
+rem ------------------------------------------------------------------------------
 rem ugii_env.dat
 rem ------------------------------------------------------------------------------
 	if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\UGII\ugii_env.dat" (
@@ -133,10 +148,10 @@ rem ----------------------------------------------------------------------------
 	)
 	copy "%VORLAGE_ROOT%\Vorlage\ugii_env.dat" "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\UGII"
 
+	call :SetIfExist UGII_ENV_FILE "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\ugii_env_switch.dat"
 	call :SetIfExist UGII_ENV_FILE "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\ugii_env.dat"
+
 rem ------------------------------------------------------------------------------
-
-
 rem customer_defaults_Site
 rem ------------------------------------------------------------------------------
 	if EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\customer_defaults" rd /s /q "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\customer_defaults"
@@ -149,10 +164,10 @@ rem ----------------------------------------------------------------------------
 	call :SetIfExist UGII_GROUP_DIR "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\Group"
 	call :SetIfExist UGII_USER_DIR "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User"
 	call :SetIfExist UGII_LOCAL_USER_DEFAULTS "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup\nx_user.dpv"
+
 rem ------------------------------------------------------------------------------
-
-
 rem Provide .men file for NX app title
+rem ------------------------------------------------------------------------------
 
 	if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup\nxtitel_configgroup.men" (
 		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup" mkdir "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup"
@@ -161,14 +176,12 @@ rem Provide .men file for NX app title
 	)
 
 
-
-rem Fr�hzugriffsfunktion
+rem ------------------------------------------------------------------------------
+rem Early Access function
 rem ------------------------------------------------------------------------------
 	call :SetIfExist UGII_LOCAL_USER_TOGGLE_DEFAULTS "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\EarlyAccessFeature\feature_toggle_user.fcg"
-"
+
 rem ------------------------------------------------------------------------------
-
-
 rem set nxtools environment
 rem ------------------------------------------------------------------------------
 	call :SetIfExist NXTOOLS_SYSDIR "%VORLAGE_ROOT%\ToolBars\NX_tools\%NX_Version_DUH%\NXTools"
@@ -176,40 +189,27 @@ rem ----------------------------------------------------------------------------
 	call :SetIfExist UGII_USER_TOOLS_FILE "%NXTOOLS_SYSDIR%\usertools\usertools.utd"
 	call :SetIfExist UGII_USER_TOOLS_MENU "%NXTOOLS_SYSDIR%\usertools\usertools.utm"
 	call :SetIfExist UGII_USER_TOOLS_BITMAP_PATH "%NXTOOLS_SYSDIR%\usertools\bitmaps"
+
 rem ------------------------------------------------------------------------------
-
-
-
-REM DUH Pause %NX_Version_DUH%.bat 1
-if "%DEBUG%" == "True" (	
-	echo %PLM_SHARE_DUH%
-	echo %CUSTOMERNAME%
-	echo %UMGEBUNG%
-	Pause
-)
+rem Call custom_nx.bat
+rem set variables for customers
+rem custom_nx.bat at %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps  
 rem ------------------------------------------------------------------------------
-
-rem custom_nx.bat
-rem zum Variablen setzen f�r jeden Kunden 
-rem costom_nx.bat unter %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps  
-rem ------------------------------------------------------------------------------
+	if "%DEBUG%" == "True" Pause
 	if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps\custom_nx_%CUSTOMERNAME%.bat" (
 
 echo	D| xcopy "%VORLAGE_ROOT%\Vorlage\start_apps\custom_nx.bat %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps\custom_nx_%CUSTOMERNAME%.bat"  /d /Y
 	)
 
-REM DUH Pause %NX_Version_DUH%.bat 2
 	if exist "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps\custom_nx_%CUSTOMERNAME%.bat" (
 		call "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps\custom_nx_%CUSTOMERNAME%.bat"
 	) else (
 		echo custom_nx_%CUSTOMERNAME% nicht gefunden
 	)
-rem ------------------------------------------------------------------------------
-
 
 
 REM ------------------------------------------------------------------------------
-REM Custom Batch lesen
+REM Call User Batch
 REM ------------------------------------------------------------------------------
 if exist "%SCRIPT_DIR%\Batch_files\user_settings.bat" (
     call "%SCRIPT_DIR%Batch_files\user_settings.bat"
@@ -217,9 +217,8 @@ if exist "%SCRIPT_DIR%\Batch_files\user_settings.bat" (
 		echo user settings nicht gefunden
 	)
 
-REM DUH Pause %NX_Version_DUH%.bat 3
-if "%DEBUG%" == "True" Pause
 
+if "%DEBUG%" == "True" Pause
 rem *****************************************************************************
 rem 								Start NX
 rem *****************************************************************************

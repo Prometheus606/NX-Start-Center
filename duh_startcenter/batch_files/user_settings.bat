@@ -2,11 +2,16 @@
 if "%DEBUG%" == "True" echo on
 if "%DEBUG%" == "True" Pause
 REM # *****************************************************************************
+REM # 					        IMPORTANT!!
+REM #
+REM #     Please make any changes that should not be overwritten in this file
+REM #
+REM # *****************************************************************************
 REM # 					        WICHTIGER HINWEIS!!
 REM #
 REM #     Änderungen die nicht überschrieben werden sollen, bitte in dieser Datei vornehmen
 REM #
-REM  # *****************************************************************************
+REM # *****************************************************************************
 
 
 REM ------------------------------------------------------------------------------

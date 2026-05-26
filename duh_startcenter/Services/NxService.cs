@@ -37,6 +37,7 @@ public sealed class NxService(AppModel model)
         {
             return "NX Version nicht installiert!";
         }
+        bool isPPUser = model.Settings.Team == "PP";
         bool loadFullResourceDir = model.Last.LastLoadFullResourceDir;
         if (model.Settings.Team == "CAM")
         {
@@ -58,6 +59,7 @@ public sealed class NxService(AppModel model)
             $" \"{managed}\"" +
             $" \"{model.Settings.TemplateRoot}\"" +
             $" \"{model.Settings.TcPath}\"" +
+            $" \"{isPPUser}\"" +
             $" \"{loadFullResourceDir}\"";
         ProcessService.StartBatch(
     batch,
