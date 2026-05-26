@@ -21,7 +21,11 @@ public static class ProcessService
         Process.Start(psi);
     }
 
-    public static void StartBatch(string batchFile, string? arguments = null, string? workingDirectory = null, bool debug = false)
+    public static void StartBatch(
+    string batchFile,
+    string? arguments = null,
+    string? workingDirectory = null,
+    bool debug = false)
     {
         ProcessStartInfo psi;
 
@@ -32,19 +36,19 @@ public static class ProcessService
                 FileName = "cmd.exe",
                 Arguments = $"/k \"\"{batchFile}\" {arguments ?? string.Empty}\"",
                 WorkingDirectory = workingDirectory ?? string.Empty,
-                UseShellExecute = true,
-                CreateNoWindow = false
+                UseShellExecute = true
             };
         }
         else
         {
             psi = new ProcessStartInfo
             {
-                FileName = batchFile,
-                Arguments = arguments ?? string.Empty,
+                FileName = "cmd.exe",
+                Arguments = $"/c \"\"{batchFile}\" {arguments ?? string.Empty}\"",
                 WorkingDirectory = workingDirectory ?? string.Empty,
                 UseShellExecute = false,
-                CreateNoWindow = true
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden
             };
         }
 
