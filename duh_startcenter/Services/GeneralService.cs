@@ -124,7 +124,7 @@ public sealed class GeneralService(AppModel model)
         return "LMTools wurde gestartet.";
     }
 
-    public string BrowseForFoldersOrFiles(string type = "folder", string description = "Pfad Auswählen", string filers = "Alle Dateien (*.*)|*.*", bool multiSelect = false)
+    public string? BrowseForFoldersOrFiles(string type = "folder", string description = "Pfad Auswählen", string filers = "Alle Dateien (*.*)|*.*", bool multiSelect = false)
     {
         if (type == "folder")
         {
@@ -154,7 +154,7 @@ public sealed class GeneralService(AppModel model)
                     : dialog.FileName;
             }
         }
-        return "";
+        return null;
     }
 
     public static string GetForkExePath()
