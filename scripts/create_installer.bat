@@ -9,7 +9,7 @@ cd /d "%BASE%"
 rem === PyInstaller Build ===
 @echo off
 set "ISCC=C:\Users\niklas.beitler\AppData\Local\Programs\Inno Setup 6\ISCC.exe"
-set "SCRIPT=%~dp0create_installer.iss"
+set "SCRIPT=%~dp0DUH_Startcenter.iss"
 
 "%ISCC%" "%SCRIPT%"
 

@@ -69,7 +69,29 @@ set "VERSION_NUMBER=!VERSION_NUMBER:v=!"
 echo Versionsnummer: !VERSION_NUMBER!
 
 rem ============================================
-rem Version in test.cs schreiben
+rem Version in ISS Script schreiben
+rem ============================================
+
+set "ISS_FILE=%BASE%\scripts\DUH_Startcenter.iss"
+
+if not exist "!ISS_FILE!" (
+    echo ISS Datei nicht gefunden:
+    echo !ISS_FILE!
+    pause
+    exit /b 1
+)
+
+echo Schreibe Version in ISS Script ...
+
+powershell -NoProfile -ExecutionPolicy Bypass ^
+"$file = '!ISS_FILE!'; ^
+$version = '!VERSION_NUMBER!'; ^
+$content = Get-Content $file; ^
+$content = $content -replace '^AppVersion=.*$', ('AppVersion=' + $version); ^
+Set-Content $file $content"
+
+rem ============================================
+rem Version in AppInfo.cs schreiben
 rem ============================================
 
 set "VERSION_FILE=%BASE%\duh_startcenter\AppInfo.cs"
@@ -176,6 +198,11 @@ echo ============================================
 
 echo Installer:
 echo !NEW_INSTALLER!
+
+rem ============================================
+rem Remove changes from .iss file
+rem ============================================
+git checkout -- "!ISS_FILE!"
 
 pause
 endlocal
