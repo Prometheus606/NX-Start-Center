@@ -27,7 +27,10 @@ Name: "german"; MessagesFile: "compiler:Languages\German.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "..\output\exe\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\output\exe\DUH_Startcenter.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\output\exe\resources\*"; DestDir: "{app}\resources"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\output\exe\batch_files\start_routine.bat"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\output\exe\batch_files\user_settings.bat"; DestDir: "{app}"; Flags: ignoreversion onlyifdoesntexist
 Source: "..\docs\USER_README.md"; DestDir: "{app}"; DestName: "README.md"; Flags: ignoreversion
 
 [Icons]
