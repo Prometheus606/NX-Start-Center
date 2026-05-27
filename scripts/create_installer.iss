@@ -29,8 +29,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "..\output\exe\DUH_Startcenter.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\output\exe\resources\*"; DestDir: "{app}\resources"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\output\exe\batch_files\start_routine.bat"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\output\exe\batch_files\user_settings.bat"; DestDir: "{app}"; Flags: ignoreversion onlyifdoesntexist
+Source: "..\output\exe\batch_files\start_routine.bat"; DestDir: "{app}\batch_files"; Flags: ignoreversion
+Source: "..\output\exe\batch_files\user_settings.bat"; DestDir: "{app}\batch_files"; Flags: ignoreversion onlyifdoesntexist
 Source: "..\docs\USER_README.md"; DestDir: "{app}"; DestName: "README.md"; Flags: ignoreversion
 
 [Icons]
@@ -206,7 +206,7 @@ begin
     'Team Auswahl'
   );
 
-  AddLabel(SettingsPage2, 'Icg´h bin in Team:', 0);
+  AddLabel(SettingsPage2, 'Ich bin in Team:', 0);
 
   TeamCombo := TNewComboBox.Create(WizardForm);
   TeamCombo.Parent := SettingsPage2.Surface;
