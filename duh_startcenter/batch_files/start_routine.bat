@@ -1,11 +1,11 @@
-﻿@echo off
+@echo off
 rem *****************************************************************************
 rem 					     IMPORTANT!!
 rem     Changes made to this file will be overwritten during an update!
 rem     Please make permanent changes in user_settings.bat!
 rem *****************************************************************************
 rem 					     WICHTIGER HINWEIS!!
-rem     Anpassungen an dieser Datei werden bei einem Update überschrieben!
+rem     Anpassungen an dieser Datei werden bei einem Update ueberschrieben!
 rem		Dauerhafte anpassungen bitte in user_settings.bat vornehmen!
 rem *****************************************************************************
 
@@ -138,10 +138,10 @@ rem Provide .men file for NX app title
 rem ------------------------------------------------------------------------------
 
 	if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup\nxtitel_configgroup.men" (
-		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup" mkdir "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup"
-		copy "%VORLAGE_ROOT%\Vorlage\usertools\startup\nxtitel_configgroup.men" "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup"
-		echo TITLE CAM - %CUSTOMERNAME% %NX_Version_DUH% >> "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup\nxtitel_configgroup.men"
+		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup" mkdir "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup"	
 	)
+	copy "%VORLAGE_ROOT%\Vorlage\usertools\startup\nxtitel_configgroup.men" "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup"
+	echo TITLE CAM - %CUSTOMERNAME% %NX_Version_DUH% >> "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup\nxtitel_configgroup.men"
  
 rem ------------------------------------------------------------------------------
 rem copy custom_dirs.dat
