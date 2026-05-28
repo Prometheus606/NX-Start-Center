@@ -123,15 +123,29 @@ rem ----------------------------------------------------------------------------
 	call :SetIfExist UGII_CAM_LIBRARY_TOOL_METRIC_DIR "%UGII_CAM_RESOURCE_DIR%library\tool\%CUSTOMERNAME%\"
 
 rem ------------------------------------------------------------------------------
-rem remove duh_tools_DIR
+rem remove not needet files and folders (from old environments)
 rem ------------------------------------------------------------------------------
 
 	if EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\cx_tools" rd /s /q  "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\cx_tools"
+	if EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\customer_defaults" rd /s /q "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\customer_defaults"
+	if EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\custom_dirs.dat" del "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\custom_dirs.dat"
+	if EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\startup\nxtitel_configgroup.men" del "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\startup\nxtitel_configgroup.men"
+	if EXIST "%LOCALAPPDATA%\Siemens\%NX_Version_DUH%\NX_user.dpv" del "%LOCALAPPDATA%\Siemens\%NX_Version_DUH%\NX_user.dpv"
+	if EXIST "%LOCALAPPDATA%\Siemens\%NX_Version_DUH%\NX_user.xsl" del "%LOCALAPPDATA%\Siemens\%NX_Version_DUH%\NX_user.xsl"
+
+rem ------------------------------------------------------------------------------
+rem Provide .men file for NX app title
+rem ------------------------------------------------------------------------------
+
+	if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup\nxtitel_configgroup.men" (
+		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup" mkdir "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup"
+		copy "%VORLAGE_ROOT%\Vorlage\usertools\startup\nxtitel_configgroup.men" "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup"
+		echo TITLE CAM - %CUSTOMERNAME% %NX_Version_DUH% >> "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup\nxtitel_configgroup.men"
+	)
  
 rem ------------------------------------------------------------------------------
-rem copy custom_dirs.dat and removes old version if exists
+rem copy custom_dirs.dat
 rem ------------------------------------------------------------------------------
-	if EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\custom_dirs.dat" del "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\custom_dirs.dat"
 	if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\menus\custom_dirs.dat" (
 		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\menus" mkdir "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\menus"
 	)
@@ -154,26 +168,12 @@ rem ----------------------------------------------------------------------------
 rem ------------------------------------------------------------------------------
 rem customer_defaults_Site
 rem ------------------------------------------------------------------------------
-	if EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\customer_defaults" rd /s /q "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\customer_defaults"
-
-	if EXIST "%LOCALAPPDATA%\Siemens\%NX_Version_DUH%\NX_user.dpv" del "%LOCALAPPDATA%\Siemens\%NX_Version_DUH%\NX_user.dpv"
-	if EXIST "%LOCALAPPDATA%\Siemens\%NX_Version_DUH%\NX_user.xsl" del "%LOCALAPPDATA%\Siemens\%NX_Version_DUH%\NX_user.xsl"
 	
 
 	call :SetIfExist UGII_SITE_DIR "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\Site"
 	call :SetIfExist UGII_GROUP_DIR "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\Group"
 	call :SetIfExist UGII_USER_DIR "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User"
 	call :SetIfExist UGII_LOCAL_USER_DEFAULTS "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup\nx_user.dpv"
-
-rem ------------------------------------------------------------------------------
-rem Provide .men file for NX app title
-rem ------------------------------------------------------------------------------
-
-	if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup\nxtitel_configgroup.men" (
-		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup" mkdir "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup"
-	copy "%VORLAGE_ROOT%\Vorlage\usertools\startup\nxtitel_configgroup.men" "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup"
-	echo TITLE CAM - %CUSTOMERNAME% %NX_Version_DUH% >> "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\CustomerDefaults\User\startup\nxtitel_configgroup.men"
-	)
 
 
 rem ------------------------------------------------------------------------------
