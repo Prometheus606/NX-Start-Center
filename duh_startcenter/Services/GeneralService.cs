@@ -74,14 +74,15 @@ public sealed class GeneralService(AppModel model)
 
     public string OpenVsCodeAndFork()
     {
-        string message = OpenVsCode();
+        string message = "";
+        if (model.Settings.OpenVsCodeWithFork)
+        {
+            message = OpenFork();
+        }
+        message = OpenVsCode();
         if (message != "VS Code wurde geöffnet.")
         {
             return message; 
-        }
-        if (model.Settings.OpenVsCodeWithFork)
-        {
-            message = OpenFork();          
         }
         return message;
     }
