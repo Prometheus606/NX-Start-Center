@@ -196,12 +196,24 @@ rem set variables for customers
 rem custom_nx.bat at %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps  
 rem ------------------------------------------------------------------------------
 	if "%DEBUG%" == "True" Pause
-	if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps\custom_nx_%CUSTOMERNAME%.bat" (
-
-echo	D| xcopy "%VORLAGE_ROOT%\Vorlage\start_apps\custom_nx.bat %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps\custom_nx_%CUSTOMERNAME%.bat"  /d /Y
+	if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps\custom_nx_%CUSTOMERNAME%.bat" IF /I "%LOAD_FULL_RESOURCE_DIR%"=="True" (
+		echo	D| xcopy "%VORLAGE_ROOT%\Vorlage\start_apps\custom_nx.bat %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps\custom_nx_%CUSTOMERNAME%.bat"  /d /Y
 	)
 
-	if exist "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps\custom_nx_%CUSTOMERNAME%.bat" (
+	if exist "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps\custom_nx_%CUSTOMERNAME%.bat" IF /I "%LOAD_FULL_RESOURCE_DIR%"=="True" (
+		set "KUNDE_DUH=%CUSTOMERNAME%"
+		if "%DEBUG%" == "True" (
+			set "SIDT_DEBUG=1"
+		) else (
+			set "SIDT_DEBUG=0"
+		)
+		if "%UGII_LANG%" == "german" (
+			set "SIDT_PAR1=de"
+		) else (
+			set "SIDT_PAR1=en"
+		)
+		set "NX_SHR_VERSION_DIR=%NX_Version_DUH%"
+		set "SIDT_PAR2=%MANAGED%"
 		call "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps\custom_nx_%CUSTOMERNAME%.bat"
 	) else (
 		echo custom_nx_%CUSTOMERNAME% nicht gefunden
