@@ -105,9 +105,9 @@ namespace NXStartCenter.ViewModel
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    _model.Customer = NewCustomer;
-                    _model.VersionName = NewVersion;
-                    _model.Machine = NewMachine;
+                    _model.SelectedCustomer = NewCustomer;
+                    _model.SelectedVersion = NewVersion;
+                    _model.SelectedMachine = NewMachine;
                     _saveLastSelection();
                     _model.RefreshAll();
                     _refreshCollectionsFromModel();

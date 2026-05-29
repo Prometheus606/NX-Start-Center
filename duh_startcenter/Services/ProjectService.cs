@@ -13,12 +13,12 @@ namespace NXStartCenter.Services;
 
 public sealed partial class NewProjectService(AppModel model)
 {
-    private string customer = "";
-    private string version = "";
-    private string machine = "";
-    private string order = "";
-    private string machineType = "";
-    private string controller = "";
+    private string newCustomerName = "";
+    private string newVersion = "";
+    private string newMachineName = "";
+    private string newOrderNumber = "";
+    private string newMachineType = "";
+    private string newController = "";
     private string baseEnv = "";
     private string nxPath = "";
     private string customerPath = "";
@@ -28,59 +28,67 @@ public sealed partial class NewProjectService(AppModel model)
     private bool isNewCustomer = true;
     private string envFolderName = "";
 
-    public string CreateOrExtendCustomerEnvironment(string customer, string version, string machine, string order, string machineType, string controller, bool complexEnvRequired)
+    public string CreateOrExtendCustomerEnvironment(string newCustomerName, string newVersion, string newMachineName, string newOrderNumber, string newMachineType, string newController, bool complexEnvRequired)
     {
-        if (string.IsNullOrWhiteSpace(customer) || string.IsNullOrWhiteSpace(version)) return "Kundenname und Version muss angegeben sein!";
-        if (new[] { customer, version, machine, order }.Any(x => x.Contains(' '))) return "Leerzeichen sind nicht zulässig!";
-        if (!NxVersionRegex().IsMatch(version)) return "Die Version muss das Format NXxxxx haben.";
-        order = string.IsNullOrWhiteSpace(order) ? "0000" : order;
+        if (string.IsNullOrWhiteSpace(newCustomerName) || string.IsNullOrWhiteSpace(newVersion)) return "Kundenname und Version muss angegeben sein!";
+        if (new[] { newCustomerName, newVersion, newMachineName, newOrderNumber }.Any(x => x.Contains(' '))) return "Leerzeichen sind nicht zulässig!";
+        if (!NxVersionRegex().IsMatch(newVersion)) return "Die Version muss das Format NXxxxx haben.";
+        newOrderNumber = string.IsNullOrWhiteSpace(newOrderNumber) ? "0000" : newOrderNumber;
 
         var baseEnv = model.Settings.CustomerEnvironmentPath;
         var nxPath = model.Settings.NxInstallationPath;
-        var customerPath = Path.Combine(baseEnv, customer);
+        var customerPath = Path.Combine(baseEnv, newCustomerName);
         var isNewCustomer = !Directory.Exists(customerPath);
-        var isNewNxVersion = !Directory.Exists(Path.Combine(customerPath, model.EnvFolderName, version));
+        var isNewNxVersion = !Directory.Exists(Path.Combine(customerPath, model.EnvFolderName, newVersion));
 
-        this.customer = customer;
-        this.version = version;
-        this.machine = machine;
-        this.machineType = machineType;
-        this.controller = controller;
-        this.order = order;
+        this.newCustomerName = newCustomerName;
+        this.newVersion = newVersion;
+        this.newMachineName = newMachineName;
+        this.newMachineType = newMachineType;
+        this.newController = newController;
+        this.newOrderNumber = newOrderNumber;
         this.baseEnv = baseEnv;
         this.nxPath = nxPath;
         this.customerPath = customerPath;
-        this.installedMachinesDir = model.GetInstalledMachinesPath();
-        this.machineDir = Path.Combine(installedMachinesDir, machine);
+        this.installedMachinesDir = model.GetInstalledMachinesPath(newCustomerName, newVersion);
+        this.machineDir = Path.Combine(installedMachinesDir, newMachineName);
 
         if (!Directory.Exists(baseEnv)) return $"Kundenumgebung existiert nicht:\n{baseEnv}";
-        if (!string.IsNullOrWhiteSpace(machine) && Directory.Exists(machineDir)) return "Maschine bereits angelegt!";
+        if (!string.IsNullOrWhiteSpace(newMachineName) && Directory.Exists(machineDir)) return "Maschine bereits angelegt!";
         TemplateRootDir = model.Settings.TemplateRoot;
         envFolderName = model.EnvFolderName;
 
-        if (isNewCustomer || (!isNewCustomer && isNewNxVersion))
+        try
         {
-            if (complexEnvRequired)
-                CreateComplexNxEnvironment();
-            else
-                CreateSimpleNxEnvironment();
-        }       
 
-        if (!string.IsNullOrWhiteSpace(machine))
-        {
-            CreateNewMachine();
+            if (isNewCustomer || (!isNewCustomer && isNewNxVersion))
+            {
+                if (complexEnvRequired)
+                    CreateComplexNxEnvironment();
+                else
+                    CreateSimpleNxEnvironment();
+            }       
+
+            if (!string.IsNullOrWhiteSpace(newMachineName))
+            {
+                CreateNewMachine();
+            }
         }
+        catch (Exception ex)
+        {
 
+            return $"Fehler beim erzeugen: {ex.Message}";
+        }
         model.RefreshAll();
         return "Neues Projekt wurde angelegt.";
     }
 
     private string GetMachineDatabaseFile()
     {
-        string basePath = Path.Combine(customerPath, model.EnvFolderName, version, "MACH", "resource", "library", "machine");
-        if (Path.Exists(Path.Combine(basePath, $"ascii_{customer}")))
+        string basePath = Path.Combine(customerPath, model.EnvFolderName, newVersion, "MACH", "resource", "library", "machine");
+        if (Path.Exists(Path.Combine(basePath, $"ascii_{newCustomerName}")))
         {
-            return Path.Combine(basePath, $"ascii_{customer}", "machine_database.dat");
+            return Path.Combine(basePath, $"ascii_{newCustomerName}", "machine_database.dat");
         }
         return Path.Combine(basePath, "ascii", "machine_database.dat");
     }
@@ -105,10 +113,10 @@ public sealed partial class NewProjectService(AppModel model)
     public void CreateNewMachine()
     {
 
-        if (string.IsNullOrWhiteSpace(machine)) { return; }
+        if (string.IsNullOrWhiteSpace(newMachineName)) { return; }
 
-        this.installedMachinesDir = model.GetInstalledMachinesPath();
-        this.machineDir = Path.Combine(installedMachinesDir, machine);
+        this.installedMachinesDir = model.GetInstalledMachinesPath(newCustomerName, newVersion);
+        this.machineDir = Path.Combine(installedMachinesDir, newMachineName);
 
         Directory.CreateDirectory(machineDir);
         Directory.CreateDirectory(Path.Combine(machineDir, "postprocessor"));
@@ -117,10 +125,10 @@ public sealed partial class NewProjectService(AppModel model)
         Directory.CreateDirectory(Path.Combine(machineDir, "documentation"));
         Directory.CreateDirectory(Path.Combine(machineDir, "graphics"));
 
-        var typeId = model.MachineTypes.GetValueOrDefault(machineType, "MDM0101");
-        File.WriteAllText(Path.Combine(machineDir, "README.md"), $"# {machine}  \n\nMaschine: {machine}  \nSteuerung: {controller}  \nFirma: {customer}  \nPost Configurator: -  \nNX-Version: {version}  \n");
-        File.WriteAllText(Path.Combine(machineDir, machine + ".dat"), machine + ",${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\postprocessor\\" + machine + ".tcl,${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\postprocessor\\" + machine + ".def\nCSE_FILES, ${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\cse_driver\\" + controller + "\\" + machine + ".MCF");
-        var line = "DATA|" + machine + "|" + typeId + "|" + machine + "|" + controller + "|Example|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\" + machine + ".dat|1.000000|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\graphics\\" + machine + "_SIM";
+        var typeId = model.MachineTypes.GetValueOrDefault(newMachineType, "MDM0101");
+        File.WriteAllText(Path.Combine(machineDir, "README.md"), $"# {newMachineName}  \n\nMaschine: {newMachineName}  \nSteuerung: {newController}  \nFirma: {newCustomerName}  \nPost Configurator: -  \nNX-Version: {newVersion}  \n");
+        File.WriteAllText(Path.Combine(machineDir, newMachineName + ".dat"), newMachineName + ",${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + newMachineName + "\\postprocessor\\" + newMachineName + ".tcl,${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + newMachineName + "\\postprocessor\\" + newMachineName + ".def\nCSE_FILES, ${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + newMachineName + "\\cse_driver\\" + newController + "\\" + newMachineName + ".MCF");
+        var line = "DATA|" + newMachineName + "|" + typeId + "|" + newMachineName + "|" + newController + "|Example|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + newMachineName + "\\" + newMachineName + ".dat|1.000000|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + newMachineName + "\\graphics\\" + newMachineName + "_SIM";
         File.WriteAllText(Path.Combine(machineDir, "add_to_machine_database.dat"), line);
         var asciiFile = GetMachineDatabaseFile();
         if (File.Exists(asciiFile))
@@ -136,27 +144,27 @@ public sealed partial class NewProjectService(AppModel model)
 
         string[] dirs =
         [
-            Path.Combine(customerPath, "1_Kundendaten", order),
-            Path.Combine(customerPath, "2_Testdaten", order),
-            Path.Combine(customerPath, "3_Auslieferung", order),
-            Path.Combine(customerPath, "4_Calls", order),
-            Path.Combine(customerPath, model.EnvFolderName, version, "MACH", "resource", "usertools"),
-            Path.Combine(customerPath, model.EnvFolderName, version, "MACH", "resource", "library", "machine", "ascii"),
-            Path.Combine(customerPath, model.EnvFolderName, version, "MACH", "resource", "library", "machine", "inclass"),
-            Path.Combine(customerPath, "6_Custom", order, version, "roles"),
-            Path.Combine(customerPath, "6_Custom", order, version, "startup"),
-            Path.Combine(customerPath, "7_Dokumentation", order),
+            Path.Combine(customerPath, "1_Kundendaten", newOrderNumber),
+            Path.Combine(customerPath, "2_Testdaten", newOrderNumber),
+            Path.Combine(customerPath, "3_Auslieferung", newOrderNumber),
+            Path.Combine(customerPath, "4_Calls", newOrderNumber),
+            Path.Combine(customerPath, model.EnvFolderName, newVersion, "MACH", "resource", "usertools"),
+            Path.Combine(customerPath, model.EnvFolderName, newVersion, "MACH", "resource", "library", "machine", "ascii"),
+            Path.Combine(customerPath, model.EnvFolderName, newVersion, "MACH", "resource", "library", "machine", "inclass"),
+            Path.Combine(customerPath, "6_Custom", newOrderNumber, newVersion, "roles"),
+            Path.Combine(customerPath, "6_Custom", newOrderNumber, newVersion, "startup"),
+            Path.Combine(customerPath, "7_Dokumentation", newOrderNumber),
             installedMachinesDir
         ];
         foreach (var dir in dirs) Directory.CreateDirectory(dir);
 
         if (isNewCustomer)
         {
-            CopyDirectoryIfExists(Path.Combine(nxPath, version, "MACH", "resource", "library", "machine", "ascii"), Path.Combine(customerPath, model.EnvFolderName, version, "MACH", "resource", "library", "machine", "ascii"));
-            CopyDirectoryIfExists(Path.Combine(nxPath, version, "MACH", "resource", "library", "machine", "inclass"), Path.Combine(customerPath, model.EnvFolderName, version, "MACH", "resource", "library", "machine", "inclass"));
+            CopyDirectoryIfExists(Path.Combine(nxPath, newVersion, "MACH", "resource", "library", "machine", "ascii"), Path.Combine(customerPath, model.EnvFolderName, newVersion, "MACH", "resource", "library", "machine", "ascii"));
+            CopyDirectoryIfExists(Path.Combine(nxPath, newVersion, "MACH", "resource", "library", "machine", "inclass"), Path.Combine(customerPath, model.EnvFolderName, newVersion, "MACH", "resource", "library", "machine", "inclass"));
         }
 
-        if (!string.IsNullOrWhiteSpace(machine))
+        if (!string.IsNullOrWhiteSpace(newMachineName))
         {
             Directory.CreateDirectory(machineDir);
             Directory.CreateDirectory(Path.Combine(machineDir, "postprocessor"));
@@ -165,12 +173,12 @@ public sealed partial class NewProjectService(AppModel model)
             Directory.CreateDirectory(Path.Combine(machineDir, "documentation"));
             Directory.CreateDirectory(Path.Combine(machineDir, "graphics"));
 
-            var typeId = model.MachineTypes.GetValueOrDefault(machineType, "MDM0101");
-            File.WriteAllText(Path.Combine(machineDir, "README.md"), $"# {machine}  \n\nMaschine: {machine}  \nSteuerung: {controller}  \nFirma: {customer}  \nPost Configurator: -  \nNX-Version: {version}  \n");
-            File.WriteAllText(Path.Combine(machineDir, machine + ".dat"), machine + ",${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\postprocessor\\" + machine + ".tcl,${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\postprocessor\\" + machine + ".def\nCSE_FILES, ${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\cse_driver\\" + controller + "\\" + machine + ".MCF");
-            var line = "DATA|" + machine + "|" + typeId + "|" + machine + "|" + controller + "|Example|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\" + machine + ".dat|1.000000|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + machine + "\\graphics\\" + machine + "_SIM";
+            var typeId = model.MachineTypes.GetValueOrDefault(newMachineType, "MDM0101");
+            File.WriteAllText(Path.Combine(machineDir, "README.md"), $"# {newMachineName}  \n\nMaschine: {newMachineName}  \nSteuerung: {newController}  \nFirma: {newCustomerName}  \nPost Configurator: -  \nNX-Version: {newVersion}  \n");
+            File.WriteAllText(Path.Combine(machineDir, newMachineName + ".dat"), newMachineName + ",${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + newMachineName + "\\postprocessor\\" + newMachineName + ".tcl,${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + newMachineName + "\\postprocessor\\" + newMachineName + ".def\nCSE_FILES, ${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + newMachineName + "\\cse_driver\\" + newController + "\\" + newMachineName + ".MCF");
+            var line = "DATA|" + newMachineName + "|" + typeId + "|" + newMachineName + "|" + newController + "|Example|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + newMachineName + "\\" + newMachineName + ".dat|1.000000|${UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR}\\" + newMachineName + "\\graphics\\" + newMachineName + "_SIM";
             File.WriteAllText(Path.Combine(machineDir, "add_to_machine_database.dat"), line);
-            var asciiFile = Path.Combine(customerPath, model.EnvFolderName, version, "MACH", "resource", "library", "machine", "ascii", "machine_database.dat");
+            var asciiFile = Path.Combine(customerPath, model.EnvFolderName, newVersion, "MACH", "resource", "library", "machine", "ascii", "machine_database.dat");
             File.AppendAllText(asciiFile, Environment.NewLine + line);
         }
     }
@@ -178,214 +186,216 @@ public sealed partial class NewProjectService(AppModel model)
 
     public void CreateComplexNxEnvironment()
     {
-        string ugiiBaseDir = Path.Combine(nxPath, version);
-        string envRoot = Path.Combine(customerPath, envFolderName, version);
+        string ugiiBaseDir = Path.Combine(nxPath, newVersion);
+        if (!Path.Exists(ugiiBaseDir)) throw new Exception("NX Version nicht installiert!");
+        string envRoot = Path.Combine(customerPath, envFolderName, newVersion);
         string machRoot = Path.Combine(envRoot, "MACH");
         string resourceRoot = Path.Combine(machRoot, "resource");
 
-        // Basisordner
-        CreateDirs(
-            customerPath,
-            Path.Combine(customerPath, "1_Kundendaten"),
-            Path.Combine(customerPath, "2_Testdaten"),
-            Path.Combine(customerPath, "2_Testdaten", "Temp"),
-            Path.Combine(customerPath, "2_Testdaten", "Temp", "NX"),
-            Path.Combine(customerPath, "2_Testdaten", "Shop_Doc"),
-            Path.Combine(customerPath, "4_Calls"),
-            Path.Combine(customerPath, "6_Custom"),
-            Path.Combine(customerPath, "7_Dokumentation"),
-            envRoot,
-            machRoot,
-            Path.Combine(envRoot, "Reuse_Library"),
-            Path.Combine(envRoot, "UGII"),
-            Path.Combine(envRoot, "UGII", "menus"),
-            Path.Combine(envRoot, "start_apps"),
-            resourceRoot,
-            Path.Combine(machRoot, "CAM_POST_OUTPUT_DIR"),
-            Path.Combine(machRoot, "CAM_SETUP_ROOT_DIR")
-        );
+            // Basisordner
+            CreateDirs(
+                customerPath,
+                Path.Combine(customerPath, "1_Kundendaten"),
+                Path.Combine(customerPath, "2_Testdaten"),
+                Path.Combine(customerPath, "2_Testdaten", "Temp"),
+                Path.Combine(customerPath, "2_Testdaten", "Temp", "NX"),
+                Path.Combine(customerPath, "2_Testdaten", "Shop_Doc"),
+                Path.Combine(customerPath, "4_Calls"),
+                Path.Combine(customerPath, "6_Custom"),
+                Path.Combine(customerPath, "7_Dokumentation"),
+                envRoot,
+                machRoot,
+                Path.Combine(envRoot, "Reuse_Library"),
+                Path.Combine(envRoot, "UGII"),
+                Path.Combine(envRoot, "UGII", "menus"),
+                Path.Combine(envRoot, "start_apps"),
+                resourceRoot,
+                Path.Combine(machRoot, "CAM_POST_OUTPUT_DIR"),
+                Path.Combine(machRoot, "CAM_SETUP_ROOT_DIR")
+            );
 
-        // Große Ordnerkopien
-        CopyDirectoryIfMissingOrEmpty(
-            Path.Combine(ugiiBaseDir, "MACH", "resource"),
-            resourceRoot,
-            Path.Combine(resourceRoot, "library"));
+            // Große Ordnerkopien
+            CopyDirectoryIfMissingOrEmpty(
+                Path.Combine(ugiiBaseDir, "MACH", "resource"),
+                resourceRoot,
+                Path.Combine(resourceRoot, "library"));
 
-        CopyDirectoryIfMissingOrEmpty(
-            Path.Combine(ugiiBaseDir, "MACH", "templates"),
-            Path.Combine(machRoot, "templates"));
+            CopyDirectoryIfMissingOrEmpty(
+                Path.Combine(ugiiBaseDir, "MACH", "templates"),
+                Path.Combine(machRoot, "templates"));
 
-        CopyFileIfMissing(
-            Path.Combine(ugiiBaseDir, "UGII", "templates", "ugs_model_templates.pax"),
-            Path.Combine(machRoot, "templates", "ugs_model_templates.pax"));
-
-        CopyDirectoryIfMissingOrEmpty(
-            Path.Combine(ugiiBaseDir, "MACH", "resource", "ug_library"),
-            Path.Combine(resourceRoot, $"ug_library_{customer}"));
-
-        CopyDirectoryIfMissingOrEmpty(
-            Path.Combine(ugiiBaseDir, "MACH", "resource", "user_def_event"),
-            Path.Combine(resourceRoot, $"user_def_event_{customer}"));
-
-        // Library: device
-        CreateDirs(
-            Path.Combine(resourceRoot, "library", "machine", "installed_machines"),
-            Path.Combine(resourceRoot, "library", "device", $"ascii_{customer}"),
-            Path.Combine(resourceRoot, "library", "device", $"graphics_{customer}")
-        );
-
-        CopyFileIfMissing(
-            Path.Combine(ugiiBaseDir, "MACH", "resource", "library", "device", "ascii", "device_database.dat"),
-            Path.Combine(resourceRoot, "library", "device", $"ascii_{customer}", "device_database.dat"));
-
-        // Library: feeds_speeds
-        string feedsTarget = Path.Combine(resourceRoot, "library", "feeds_speeds", $"ascii_{customer}");
-        CreateDirs(feedsTarget);
-
-        foreach (string file in new[]
-        {
-            "cut_methods.dat",
-            "feeds_speeds.dat",
-            "machining_data.dat",
-            "part_materials.dat",
-            "process_force_parameters.dat",
-            "tool_machining_data.dat",
-            "tool_materials.dat"
-        })
-        {
             CopyFileIfMissing(
-                Path.Combine(ugiiBaseDir, "MACH", "resource", "library", "feeds_speeds", "ascii", file),
-                Path.Combine(feedsTarget, file));
-        }
-
-        // Library: machine
-        CreateDirs(
-            Path.Combine(resourceRoot, "library", "machine", $"ascii_{customer}"),
-            Path.Combine(resourceRoot, "library", "machine", $"installed_machines_{customer}")
-        );
-
-        CopyFileIfMissing(
-            Path.Combine(ugiiBaseDir, "MACH", "resource", "library", "machine", "ascii", "machine_database.dat"),
-            Path.Combine(resourceRoot, "library", "machine", $"ascii_{customer}", "machine_database.dat"));
-
-        // Library: tool
-        CopyDirectoryIfMissingOrEmpty(
-            Path.Combine(ugiiBaseDir, "MACH", "resource", "library", "tool", "ascii"),
-            Path.Combine(resourceRoot, "library", "tool", $"ascii_{customer}"));
-
-        CreateDirs(Path.Combine(resourceRoot, "library", "tool", $"graphics_{customer}"));
-
-        CopyDirectoryIfMissingOrEmpty(
-            Path.Combine(ugiiBaseDir, "MACH", "resource", "library", "tool", "metric"),
-            Path.Combine(resourceRoot, "library", "tool", $"metric_{customer}"));
-
-        // Fixture Automation nur NX2512
-        if (version.Equals("NX2512", StringComparison.OrdinalIgnoreCase))
-        {
-            CopyDirectoryIfMissingOrEmpty(
-                Path.Combine(ugiiBaseDir, "MACH", "resource", "library", "fixture_automation", "ascii"),
-                Path.Combine(resourceRoot, "library", "fixture_automation", $"ascii_{customer}"));
-
-            CreateDirs(Path.Combine(resourceRoot, "library", "fixture_automation", $"graphics_{customer}"));
+                Path.Combine(ugiiBaseDir, "UGII", "templates", "ugs_model_templates.pax"),
+                Path.Combine(machRoot, "templates", "ugs_model_templates.pax"));
 
             CopyDirectoryIfMissingOrEmpty(
-                Path.Combine(ugiiBaseDir, "MACH", "resource", "library", "fixture_automation", "metric"),
-                Path.Combine(resourceRoot, "library", "fixture_automation", $"metric_{customer}"));
-        }
+                Path.Combine(ugiiBaseDir, "MACH", "resource", "ug_library"),
+                Path.Combine(resourceRoot, $"ug_library_{newCustomerName}"));
 
-        // Einzeldateien mit kundenspezifischem Namen
-        CopyFileIfMissing(
-            Path.Combine(ugiiBaseDir, "MACH", "resource", "machining_knowledge", "machining_knowledge.dat"),
-            Path.Combine(resourceRoot, "machining_knowledge", $"machining_knowledge_{customer}.dat"));
+            CopyDirectoryIfMissingOrEmpty(
+                Path.Combine(ugiiBaseDir, "MACH", "resource", "user_def_event"),
+                Path.Combine(resourceRoot, $"user_def_event_{newCustomerName}"));
 
-        CopyFileIfMissing(
-            Path.Combine(ugiiBaseDir, "MACH", "resource", "machining_knowledge", "machining_knowledge.xml"),
-            Path.Combine(resourceRoot, "machining_knowledge", $"machining_knowledge_{customer}.xml"));
+            // Library: device
+            CreateDirs(
+                Path.Combine(resourceRoot, "library", "machine", "installed_machines"),
+                Path.Combine(resourceRoot, "library", "device", $"ascii_{newCustomerName}"),
+                Path.Combine(resourceRoot, "library", "device", $"graphics_{newCustomerName}")
+            );
 
-        CopyFileIfMissing(
-            Path.Combine(ugiiBaseDir, "MACH", "resource", "machining_knowledge", "machining_knowledge_tc.xml"),
-            Path.Combine(resourceRoot, "machining_knowledge", $"machining_knowledge_{customer}_tc.xml"));
+            CopyFileIfMissing(
+                Path.Combine(ugiiBaseDir, "MACH", "resource", "library", "device", "ascii", "device_database.dat"),
+                Path.Combine(resourceRoot, "library", "device", $"ascii_{newCustomerName}", "device_database.dat"));
 
-        CopyFileIfMissing(
-            Path.Combine(ugiiBaseDir, "MACH", "resource", "machining_knowledge", "machining_knowledge_part_planner.dat"),
-            Path.Combine(resourceRoot, "machining_knowledge", $"machining_knowledge_{customer}_tc.dat"));
+            // Library: feeds_speeds
+            string feedsTarget = Path.Combine(resourceRoot, "library", "feeds_speeds", $"ascii_{newCustomerName}");
+            CreateDirs(feedsTarget);
 
-        CopyFileIfMissing(
-            Path.Combine(ugiiBaseDir, "MACH", "resource", "postprocessor", "template_post.dat"),
-            Path.Combine(resourceRoot, "postprocessor", $"template_post_{customer}.dat"));
+            foreach (string file in new[]
+            {
+                "cut_methods.dat",
+                "feeds_speeds.dat",
+                "machining_data.dat",
+                "part_materials.dat",
+                "process_force_parameters.dat",
+                "tool_machining_data.dat",
+                "tool_materials.dat"
+            })
+            {
+                CopyFileIfMissing(
+                    Path.Combine(ugiiBaseDir, "MACH", "resource", "library", "feeds_speeds", "ascii", file),
+                    Path.Combine(feedsTarget, file));
+            }
 
-        CopyFileIfMissing(
-            Path.Combine(ugiiBaseDir, "MACH", "resource", "shop_doc", "shop_doc.dat"),
-            Path.Combine(resourceRoot, "shop_doc", $"shop_doc_{customer}.dat"));
+            // Library: newMachineName
+            CreateDirs(
+                Path.Combine(resourceRoot, "library", "machine", $"ascii_{newCustomerName}"),
+                Path.Combine(resourceRoot, "library", "machine", $"installed_machines_{newCustomerName}")
+            );
 
-        CopyFileIfMissing(
-            Path.Combine(ugiiBaseDir, "MACH", "resource", "template_set", "cam_general.opt"),
-            Path.Combine(resourceRoot, "template_set", $"cam_{customer}_native.opt"));
+            CopyFileIfMissing(
+                Path.Combine(ugiiBaseDir, "MACH", "resource", "library", "machine", "ascii", "machine_database.dat"),
+                Path.Combine(resourceRoot, "library", "machine", $"ascii_{newCustomerName}", "machine_database.dat"));
 
-        CopyFileIfMissing(
-            Path.Combine(ugiiBaseDir, "MACH", "resource", "template_set", "cam_teamcenter_general.opt"),
-            Path.Combine(resourceRoot, "template_set", $"cam_{customer}_tc.opt"));
+            // Library: tool
+            CopyDirectoryIfMissingOrEmpty(
+                Path.Combine(ugiiBaseDir, "MACH", "resource", "library", "tool", "ascii"),
+                Path.Combine(resourceRoot, "library", "tool", $"ascii_{newCustomerName}"));
 
-        // configuration
-        CopyDirectoryIfMissingOrEmpty(
-            Path.Combine(ugiiBaseDir, "MACH", "resource", "configuration"),
-            Path.Combine(resourceRoot, "configuration"));
+            CreateDirs(Path.Combine(resourceRoot, "library", "tool", $"graphics_{newCustomerName}"));
 
-        CreateCamConfigFiles(resourceRoot, customer);
+            CopyDirectoryIfMissingOrEmpty(
+                Path.Combine(ugiiBaseDir, "MACH", "resource", "library", "tool", "metric"),
+                Path.Combine(resourceRoot, "library", "tool", $"metric_{newCustomerName}"));
 
-        // auxiliary
-        string auxiliaryMetric = Path.Combine(machRoot, "auxiliary", "tagging", "metric");
-        CreateDirs(auxiliaryMetric);
+            // Fixture Automation nur NX2512
+            if (newVersion.Equals("NX2512", StringComparison.OrdinalIgnoreCase))
+            {
+                CopyDirectoryIfMissingOrEmpty(
+                    Path.Combine(ugiiBaseDir, "MACH", "resource", "library", "fixture_automation", "ascii"),
+                    Path.Combine(resourceRoot, "library", "fixture_automation", $"ascii_{newCustomerName}"));
 
-        CopyFileIfMissing(
-            Path.Combine(ugiiBaseDir, "MACH", "auxiliary", "tagging", "metric", "tagging.dat"),
-            Path.Combine(auxiliaryMetric, "tagging.dat"));
+                CreateDirs(Path.Combine(resourceRoot, "library", "fixture_automation", $"graphics_{newCustomerName}"));
 
-        CopyFileIfMissing(
-            Path.Combine(ugiiBaseDir, "MACH", "auxiliary", "tagging", "metric", "tagging_fea.dat"),
-            Path.Combine(auxiliaryMetric, "tagging_fea.dat"));
+                CopyDirectoryIfMissingOrEmpty(
+                    Path.Combine(ugiiBaseDir, "MACH", "resource", "library", "fixture_automation", "metric"),
+                    Path.Combine(resourceRoot, "library", "fixture_automation", $"metric_{newCustomerName}"));
+            }
 
-        // template_dir
-        CopyDirectoryIfMissingOrEmpty(
-            Path.Combine(ugiiBaseDir, "MACH", "resource", "template_dir"),
-            Path.Combine(resourceRoot, $"template_dir_{customer}"));
+            // Einzeldateien mit kundenspezifischem Namen
+            CopyFileIfMissing(
+                Path.Combine(ugiiBaseDir, "MACH", "resource", "machining_knowledge", "machining_knowledge.dat"),
+                Path.Combine(resourceRoot, "machining_knowledge", $"machining_knowledge_{newCustomerName}.dat"));
 
-        // duh_tools
-        CopyDirectoryIfMissingOrEmpty(
-            Path.Combine(TemplateRootDir, "Vorlage", "duh_tools"),
-            Path.Combine(envRoot, "duh_tools"));
+            CopyFileIfMissing(
+                Path.Combine(ugiiBaseDir, "MACH", "resource", "machining_knowledge", "machining_knowledge.xml"),
+                Path.Combine(resourceRoot, "machining_knowledge", $"machining_knowledge_{newCustomerName}.xml"));
 
-        // custom_dirs.dat
-        CopyFileIfMissing(
-            Path.Combine(TemplateRootDir, "Vorlage", "custom_dirs.dat"),
-            Path.Combine(envRoot, "UGII", "menus", "custom_dirs.dat"));
+            CopyFileIfMissing(
+                Path.Combine(ugiiBaseDir, "MACH", "resource", "machining_knowledge", "machining_knowledge_tc.xml"),
+                Path.Combine(resourceRoot, "machining_knowledge", $"machining_knowledge_{newCustomerName}_tc.xml"));
 
-        // ugii_env.dat
-        CopyFileIfMissing(
-            Path.Combine(TemplateRootDir, "Vorlage", "ugii_env.dat"),
-            Path.Combine(envRoot, "UGII", "ugii_env.dat"));
+            CopyFileIfMissing(
+                Path.Combine(ugiiBaseDir, "MACH", "resource", "machining_knowledge", "machining_knowledge_part_planner.dat"),
+                Path.Combine(resourceRoot, "machining_knowledge", $"machining_knowledge_{newCustomerName}_tc.dat"));
 
-        // CustomerDefaults
-        CopyDirectoryIfMissingOrEmpty(
-            Path.Combine(TemplateRootDir, "Vorlage", version, "CustomerDefaults", "Site"),
-            Path.Combine(envRoot, "CustomerDefaults", "Site"));
+            CopyFileIfMissing(
+                Path.Combine(ugiiBaseDir, "MACH", "resource", "postprocessor", "template_post.dat"),
+                Path.Combine(resourceRoot, "postprocessor", $"template_post_{newCustomerName}.dat"));
 
-        CopyDirectoryIfMissingOrEmpty(
-            Path.Combine(TemplateRootDir, "Vorlage", version, "CustomerDefaults", "Group"),
-            Path.Combine(envRoot, "CustomerDefaults", "Group"));
+            CopyFileIfMissing(
+                Path.Combine(ugiiBaseDir, "MACH", "resource", "shop_doc", "shop_doc.dat"),
+                Path.Combine(resourceRoot, "shop_doc", $"shop_doc_{newCustomerName}.dat"));
 
-        CopyDirectoryIfMissingOrEmpty(
-            Path.Combine(TemplateRootDir, "Vorlage", version, "CustomerDefaults", "User"),
-            Path.Combine(envRoot, "CustomerDefaults", "User"));
+            CopyFileIfMissing(
+                Path.Combine(ugiiBaseDir, "MACH", "resource", "template_set", "cam_general.opt"),
+                Path.Combine(resourceRoot, "template_set", $"cam_{newCustomerName}_native.opt"));
 
-        CopyDirectoryIfMissingOrEmpty(
-            Path.Combine(TemplateRootDir, "Vorlage", version, "CustomerDefaults", "EarlyAccessFeature"),
-            Path.Combine(envRoot, "CustomerDefaults", "EarlyAccessFeature"));
+            CopyFileIfMissing(
+                Path.Combine(ugiiBaseDir, "MACH", "resource", "template_set", "cam_teamcenter_general.opt"),
+                Path.Combine(resourceRoot, "template_set", $"cam_{newCustomerName}_tc.opt"));
 
-        // custom_nx_CUSTOMER.bat
-        CopyFileIfMissing(
-            Path.Combine(TemplateRootDir, "Vorlage", "start_apps", "custom_nx.bat"),
-            Path.Combine(envRoot, "start_apps", $"custom_nx_{customer}.bat"));
+            // configuration
+            CopyDirectoryIfMissingOrEmpty(
+                Path.Combine(ugiiBaseDir, "MACH", "resource", "configuration"),
+                Path.Combine(resourceRoot, "configuration"));
+
+            CreateCamConfigFiles(resourceRoot, newCustomerName);
+
+            // auxiliary
+            string auxiliaryMetric = Path.Combine(machRoot, "auxiliary", "tagging", "metric");
+            CreateDirs(auxiliaryMetric);
+
+            CopyFileIfMissing(
+                Path.Combine(ugiiBaseDir, "MACH", "auxiliary", "tagging", "metric", "tagging.dat"),
+                Path.Combine(auxiliaryMetric, "tagging.dat"));
+
+            CopyFileIfMissing(
+                Path.Combine(ugiiBaseDir, "MACH", "auxiliary", "tagging", "metric", "tagging_fea.dat"),
+                Path.Combine(auxiliaryMetric, "tagging_fea.dat"));
+
+            // template_dir
+            CopyDirectoryIfMissingOrEmpty(
+                Path.Combine(ugiiBaseDir, "MACH", "resource", "template_dir"),
+                Path.Combine(resourceRoot, $"template_dir_{newCustomerName}"));
+
+            // duh_tools
+            CopyDirectoryIfMissingOrEmpty(
+                Path.Combine(TemplateRootDir, "Vorlage", "duh_tools"),
+                Path.Combine(envRoot, "duh_tools"));
+
+            // custom_dirs.dat
+            CopyFileIfMissing(
+                Path.Combine(TemplateRootDir, "Vorlage", "custom_dirs.dat"),
+                Path.Combine(envRoot, "UGII", "menus", "custom_dirs.dat"));
+
+            // ugii_env.dat
+            CopyFileIfMissing(
+                Path.Combine(TemplateRootDir, "Vorlage", "ugii_env.dat"),
+                Path.Combine(envRoot, "UGII", "ugii_env.dat"));
+
+            // CustomerDefaults
+            CopyDirectoryIfMissingOrEmpty(
+                Path.Combine(TemplateRootDir, "Vorlage", newVersion, "CustomerDefaults", "Site"),
+                Path.Combine(envRoot, "CustomerDefaults", "Site"));
+
+            CopyDirectoryIfMissingOrEmpty(
+                Path.Combine(TemplateRootDir, "Vorlage", newVersion, "CustomerDefaults", "Group"),
+                Path.Combine(envRoot, "CustomerDefaults", "Group"));
+
+            CopyDirectoryIfMissingOrEmpty(
+                Path.Combine(TemplateRootDir, "Vorlage", newVersion, "CustomerDefaults", "User"),
+                Path.Combine(envRoot, "CustomerDefaults", "User"));
+
+            CopyDirectoryIfMissingOrEmpty(
+                Path.Combine(TemplateRootDir, "Vorlage", newVersion, "CustomerDefaults", "EarlyAccessFeature"),
+                Path.Combine(envRoot, "CustomerDefaults", "EarlyAccessFeature"));
+
+            // custom_nx_CUSTOMER.bat
+            CopyFileIfMissing(
+                Path.Combine(TemplateRootDir, "Vorlage", "start_apps", "custom_nx.bat"),
+                Path.Combine(envRoot, "start_apps", $"custom_nx_{newCustomerName}.bat"));
+
     }
 
     private static void CreateCamConfigFiles(string resourceRoot, string customer)

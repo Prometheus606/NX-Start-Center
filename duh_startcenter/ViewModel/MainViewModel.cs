@@ -84,7 +84,7 @@ public sealed class MainViewModel : BaseViewModel
 
     public string HeaderInfo => $"{AppMetadata.Version} | {AppInfo.AppDate}";
     public string CurrentUser => Environment.UserDomainName + "\\" + Environment.UserName;
-    public string CurrentProjectPath => string.IsNullOrWhiteSpace(SelectedMachine) ? string.Empty : Path.Combine(_model.GetInstalledMachinesPath(), SelectedMachine);
+    public string CurrentProjectPath => string.IsNullOrWhiteSpace(SelectedMachine) ? string.Empty : Path.Combine(_model.GetInstalledMachinesPath(_model.SelectedCustomer, _model.SelectedVersion), SelectedMachine);
     public string ConfigPath => _model.ConfigPath;
 
     public ObservableCollection<string> Customers { get; }
@@ -128,11 +128,11 @@ public sealed class MainViewModel : BaseViewModel
 
     public string SelectedCustomer
     {
-        get => _model.Customer;
+        get => _model.SelectedCustomer;
         set
         {
-            if (_model.Customer == value) return;
-            _model.Customer = value ?? string.Empty;
+            if (_model.SelectedCustomer == value) return;
+            _model.SelectedCustomer = value ?? string.Empty;
             _model.RefreshVersions();
             RefreshVersionsAndMachinesFromModel();
             AutoSetLoadOptionsForCustomer();
@@ -172,32 +172,32 @@ public sealed class MainViewModel : BaseViewModel
 
     private void AutoSetLoadOptionsForCustomer()
     {
-        if (string.IsNullOrWhiteSpace(_model.Customer))
+        if (string.IsNullOrWhiteSpace(_model.SelectedCustomer))
             return;
 
         // Vorerst Beispielpfad
         var customerEnvironmentPath = Path.Combine(
             _model.Settings.CustomerEnvironmentPath,
-            _model.Customer);
+            _model.SelectedCustomer);
 
         LoadInstalledMachines = Directory.Exists(
-            Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.VersionName, "MACH", "resource", "library", "machine", "installed_machines")) || Directory.Exists(
-            Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.VersionName, "MACH", "resource", "library", "machine", $"installed_machines_{_model.Customer}"));
+            Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.SelectedVersion, "MACH", "resource", "library", "machine", "installed_machines")) || Directory.Exists(
+            Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.SelectedVersion, "MACH", "resource", "library", "machine", $"installed_machines_{_model.SelectedCustomer}"));
 
         LoadPp = Directory.Exists(
-            Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.VersionName, "MACH", "resource", "postprocessor"));
+            Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.SelectedVersion, "MACH", "resource", "postprocessor"));
 
         LoadTool = Directory.Exists(
-            Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.VersionName, "MACH", "resource", "library", "tool"));
+            Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.SelectedVersion, "MACH", "resource", "library", "tool"));
 
         LoadDevice = Directory.Exists(
-            Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.VersionName, "MACH", "resource", "library", "device"));
+            Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.SelectedVersion, "MACH", "resource", "library", "device"));
 
         LoadFeed = Directory.Exists(
-            Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.VersionName, "MACH", "resource", "library", "feeds_speeds"));
+            Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.SelectedVersion, "MACH", "resource", "library", "feeds_speeds"));
 
         LoadFullResourceDir = Directory.Exists(
-            Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.VersionName, "MACH", "resource")) && 
+            Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.SelectedVersion, "MACH", "resource")) && 
             HasFullMachDirContent(customerEnvironmentPath);
     }
 
@@ -207,7 +207,7 @@ public sealed class MainViewModel : BaseViewModel
         string currentPath = Path.Combine(
             customerEnvironmentPath,
             _model.EnvFolderName,
-            _model.VersionName,
+            _model.SelectedVersion,
             "MACH",
             "resource");
 
@@ -239,11 +239,11 @@ public sealed class MainViewModel : BaseViewModel
 
     public string SelectedVersion
     {
-        get => _model.VersionName;
+        get => _model.SelectedVersion;
         set
         {
-            if (_model.VersionName == value) return;
-            _model.VersionName = value ?? string.Empty;
+            if (_model.SelectedVersion == value) return;
+            _model.SelectedVersion = value ?? string.Empty;
             _model.RefreshMachines();
             RefreshMachinesFromModel();
             SaveLastSelection();
@@ -254,11 +254,11 @@ public sealed class MainViewModel : BaseViewModel
 
     public string SelectedMachine
     {
-        get => _model.Machine;
+        get => _model.SelectedMachine;
         set
         {
-            if (_model.Machine == value) return;
-            _model.Machine = value ?? string.Empty;
+            if (_model.SelectedMachine == value) return;
+            _model.SelectedMachine = value ?? string.Empty;
             SaveLastSelection();
             OnPropertyChanged();
             OnPropertyChanged(nameof(CurrentProjectPath));
@@ -267,12 +267,12 @@ public sealed class MainViewModel : BaseViewModel
 
     public string SelectedNativeVersion
     {
-        get => _model.NativeVersion;
+        get => _model.SelectedNativeVersion;
         set
         {
-            if (_model.NativeVersion == value) return;
-            _model.NativeVersion = value ?? string.Empty;
-            _model.Last.LastNativeVersion = _model.NativeVersion;
+            if (_model.SelectedNativeVersion == value) return;
+            _model.SelectedNativeVersion = value ?? string.Empty;
+            _model.Last.LastNativeVersion = _model.SelectedNativeVersion;
             _model.Save();
             OnPropertyChanged();
         }
@@ -280,12 +280,12 @@ public sealed class MainViewModel : BaseViewModel
 
     public string SelectedPostbuilderVersion
     {
-        get => _model.PostbuilderVersion;
+        get => _model.SelectedPostbuilderVersion;
         set
         {
-            if (_model.PostbuilderVersion == value) return;
-            _model.PostbuilderVersion = value ?? string.Empty;
-            _model.Last.LastPostbuilderVersion = _model.PostbuilderVersion;
+            if (_model.SelectedPostbuilderVersion == value) return;
+            _model.SelectedPostbuilderVersion = value ?? string.Empty;
+            _model.Last.LastPostbuilderVersion = _model.SelectedPostbuilderVersion;
             _model.Save();
             OnPropertyChanged();
         }
@@ -374,9 +374,9 @@ public sealed class MainViewModel : BaseViewModel
 
     private void SaveLastSelection()
     {
-        _model.Last.LastCustomer = _model.Customer;
-        _model.Last.LastVersion = _model.VersionName;
-        _model.Last.LastMachine = _model.Machine;
+        _model.Last.LastCustomer = _model.SelectedCustomer;
+        _model.Last.LastVersion = _model.SelectedVersion;
+        _model.Last.LastMachine = _model.SelectedMachine;
         _model.Save();
     }
 

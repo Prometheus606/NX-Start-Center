@@ -17,11 +17,11 @@ public sealed class AppModel
     public AppInfo AppInfo { get; private set; } = new();
     public LastConfiguration Last => Config.LastConfiguration;
 
-    public string Customer { get; set; } = string.Empty;
-    public string VersionName { get; set; } = string.Empty;
-    public string Machine { get; set; } = string.Empty;
-    public string NativeVersion { get; set; } = string.Empty;
-    public string PostbuilderVersion { get; set; } = string.Empty;
+    public string SelectedCustomer { get; set; } = string.Empty;
+    public string SelectedVersion { get; set; } = string.Empty;
+    public string SelectedMachine { get; set; } = string.Empty;
+    public string SelectedNativeVersion { get; set; } = string.Empty;
+    public string SelectedPostbuilderVersion { get; set; } = string.Empty;
     public bool StartNxWithCloudLicense { get; set; }
     public bool StartNxManaged { get; set; } 
 
@@ -76,11 +76,11 @@ public sealed class AppModel
     public void RefreshAll()
     {
         NativeVersions = FindNxVersions(Settings.NxInstallationPath);
-        NativeVersion = Pick(Last.LastNativeVersion, NativeVersions);
+        SelectedNativeVersion = Pick(Last.LastNativeVersion, NativeVersions);
         PostbuilderVersions = NativeVersions;
-        PostbuilderVersion = Pick(Last.LastPostbuilderVersion, PostbuilderVersions);
+        SelectedPostbuilderVersion = Pick(Last.LastPostbuilderVersion, PostbuilderVersions);
         Customers = DirectoryNames(Settings.CustomerEnvironmentPath);
-        Customer = Pick(Last.LastCustomer, Customers);
+        SelectedCustomer = Pick(Last.LastCustomer, Customers);
         StartNxManaged = Last.LastTcCheck;
         StartNxWithCloudLicense = Last.LastCloudLicenseCheck;
 
@@ -89,22 +89,22 @@ public sealed class AppModel
 
     public void RefreshVersions()
     {
-        Versions = DirectoryNames(Path.Combine(Settings.CustomerEnvironmentPath, Customer, EnvFolderName))
+        Versions = DirectoryNames(Path.Combine(Settings.CustomerEnvironmentPath, SelectedCustomer, EnvFolderName))
             .Where(x => x.StartsWith("NX", StringComparison.OrdinalIgnoreCase)).Reverse().ToArray();
-        VersionName = Pick(Last.LastVersion, Versions);
+        SelectedVersion = Pick(Last.LastVersion, Versions);
         RefreshMachines();
     }
 
     public void RefreshMachines()
     {
-        Machines = DirectoryNames(GetInstalledMachinesPath());
-        Machine = Pick(Last.LastMachine, Machines);
+        Machines = DirectoryNames(GetInstalledMachinesPath(SelectedCustomer, SelectedVersion));
+        SelectedMachine = Pick(Last.LastMachine, Machines);
     }
 
-    public string GetInstalledMachinesPath()
+    public string GetInstalledMachinesPath(string customername, string nxVersion)
     {
-        var basePath = Path.Combine(Settings.CustomerEnvironmentPath, Customer, EnvFolderName, VersionName, "MACH", "resource", "library", "machine", "installed_machines");
-        var camPath = basePath + "_" + Customer;
+        var basePath = Path.Combine(Settings.CustomerEnvironmentPath, customername, EnvFolderName, nxVersion, "MACH", "resource", "library", "machine", "installed_machines");
+        var camPath = basePath + "_" + customername;
         return Directory.Exists(camPath) ? camPath : basePath;
     }
 

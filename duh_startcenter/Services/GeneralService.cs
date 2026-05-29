@@ -22,18 +22,18 @@ public sealed class GeneralService(AppModel model)
 
     public string StartPostbuilder()
     {
-        if (string.IsNullOrWhiteSpace(model.PostbuilderVersion)) return "Keine Postbuilder-Version gewählt.";
-        var batch = Path.Combine(model.Settings.NxInstallationPath, model.PostbuilderVersion, "POSTBUILD", "post_builder.bat");
+        if (string.IsNullOrWhiteSpace(model.SelectedPostbuilderVersion)) return "Keine Postbuilder-Version gewählt.";
+        var batch = Path.Combine(model.Settings.NxInstallationPath, model.SelectedPostbuilderVersion, "POSTBUILD", "post_builder.bat");
         if (!File.Exists(batch)) return "Postbuilder Version kann nicht gestartet werden!\n" + batch;
-        ProcessService.StartFile(batch, $"\"{Path.Combine(model.Settings.NxInstallationPath, model.PostbuilderVersion)}\\\"");
-        model.Last.LastPostbuilderVersion = model.PostbuilderVersion;
+        ProcessService.StartFile(batch, $"\"{Path.Combine(model.Settings.NxInstallationPath, model.SelectedPostbuilderVersion)}\\\"");
+        model.Last.LastPostbuilderVersion = model.SelectedPostbuilderVersion;
         model.Save();
         return "Postbuilder wurde gestartet.";
     }
 
     public string OpenMachineFolder()
     {
-        var dir = Path.Combine(model.GetInstalledMachinesPath(), model.Machine);
+        var dir = Path.Combine(model.GetInstalledMachinesPath(model.SelectedCustomer, model.SelectedVersion), model.SelectedMachine);
         if (!Directory.Exists(dir)) return "Der Ordner konnte nicht geöffnet werden.\n" + dir;
         ProcessService.OpenFolder(dir);
         return "Ordner geöffnet.";
@@ -41,7 +41,7 @@ public sealed class GeneralService(AppModel model)
 
     public string OpenFork()
     {
-        var dir = Path.Combine(model.GetInstalledMachinesPath(), model.Machine);
+        var dir = Path.Combine(model.GetInstalledMachinesPath(model.SelectedCustomer, model.SelectedVersion), model.SelectedMachine);
         if (!File.Exists(model.ForkPath)) return "Fork ist nicht installiert oder der Pfad zur Fork.exe ist falsch.";
         if (!Directory.Exists(Path.Combine(dir, ".git"))) MessageBox.Show("Achtung: Kein Repository angelegt!", "Info");
         if (model.Settings.ShowPullReminder)
@@ -66,7 +66,7 @@ public sealed class GeneralService(AppModel model)
 
     public string OpenVsCode()
     {
-        var ppDir = Path.Combine(model.GetInstalledMachinesPath(), model.Machine, "postprocessor");
+        var ppDir = Path.Combine(model.GetInstalledMachinesPath(model.SelectedCustomer, model.SelectedVersion), model.SelectedMachine, "postprocessor");
         if (!Directory.Exists(ppDir)) return "Der PP Ordner konnte nicht geöffnet werden da er nicht existiert.\n" + ppDir;
         ProcessService.StartFile(ProcessService.FindEditor(model.Settings.Editor) ?? "code", $"\"{ppDir}\"");
         return "VS Code wurde geöffnet.";
@@ -102,7 +102,7 @@ public sealed class GeneralService(AppModel model)
 
     public string OpenCustomerBatch()
     {
-        return OpenFile(Path.Combine(model.Settings.CustomerEnvironmentPath, model.Customer, model.EnvFolderName, model.VersionName, "start_apps", $"custom_nx_{model.Customer}.bat"));
+        return OpenFile(Path.Combine(model.Settings.CustomerEnvironmentPath, model.SelectedCustomer, model.EnvFolderName, model.SelectedVersion, "start_apps", $"custom_nx_{model.SelectedCustomer}.bat"));
     }
 
     public string OpenDeveloperBatch()

@@ -12,28 +12,28 @@ public sealed class NxService(AppModel model)
 {
     public string StartNativeNx()
     {
-        //CopyRoles(model.NativeVersion);
-        var exe = GetUgrafPath(model.NativeVersion);
+        //CopyRoles(model.SelectedNativeVersion);
+        var exe = GetUgrafPath(model.SelectedNativeVersion);
         if (!File.Exists(exe)) return "Version kann nicht gestartet werden!\n" + exe;
         ProcessService.StartFile(exe);
-        model.Last.LastNativeVersion = model.NativeVersion;
+        model.Last.LastNativeVersion = model.SelectedNativeVersion;
         model.Save();
         return "NX Native wurde gestartet.";
     }
 
     public string StartCustomerNx()
     {
-        string oldRtbFilePath = Path.Combine(model.Settings.CustomerEnvironmentPath, model.Customer, model.EnvFolderName, model.VersionName, "UGII", "startup");
+        string oldRtbFilePath = Path.Combine(model.Settings.CustomerEnvironmentPath, model.SelectedCustomer, model.EnvFolderName, model.SelectedVersion, "UGII", "startup");
         GeneralService.RemoveFile(oldRtbFilePath);
         bool debug = model.Settings.StartNxWithDebug;
         string managed = model.StartNxManaged == true ? "portal_client" : "nx";
         var batch = Path.Combine(AppContext.BaseDirectory, "Batch_files", "start_routine.bat");
         if (!File.Exists(batch)) return "start_routine.bat wurde nicht gefunden.";
-        if (String.IsNullOrEmpty(model.Customer.Trim()) || String.IsNullOrEmpty(model.VersionName.Trim()))
+        if (String.IsNullOrEmpty(model.SelectedCustomer.Trim()) || String.IsNullOrEmpty(model.SelectedVersion.Trim()))
         {
             return "Kundenname und Version müssen angegeben werden!";
         }
-        if (!Directory.Exists(Path.Combine(model.Settings.NxInstallationPath, model.VersionName)))
+        if (!Directory.Exists(Path.Combine(model.Settings.NxInstallationPath, model.SelectedVersion)))
         {
             return "NX Version nicht installiert!";
         }
@@ -44,8 +44,8 @@ public sealed class NxService(AppModel model)
             loadFullResourceDir = true;
         }
         var args =
-            $"\"{model.Customer}\"" +
-            $" \"{model.VersionName}\"" +
+            $"\"{model.SelectedCustomer}\"" +
+            $" \"{model.SelectedVersion}\"" +
             $" \"{model.Last.LastLanguage}\"" +
             $" \"{model.Settings.CustomerEnvironmentPath}\"" +
             $" \"{model.Settings.NxInstallationPath}\"" +
@@ -67,9 +67,9 @@ public sealed class NxService(AppModel model)
     AppContext.BaseDirectory,
     model.Settings.StartNxWithDebug
 );
-        model.Last.LastCustomer = model.Customer;
-        model.Last.LastVersion = model.VersionName;
-        model.Last.LastMachine = model.Machine;
+        model.Last.LastCustomer = model.SelectedCustomer;
+        model.Last.LastVersion = model.SelectedVersion;
+        model.Last.LastMachine = model.SelectedMachine;
         model.Save();
         return "NX wurde für die Kundenumgebung gestartet.";
     }
