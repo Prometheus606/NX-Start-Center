@@ -167,4 +167,35 @@ public sealed class GeneralService(AppModel model)
         }
         return path;
     }
+
+    public bool HasFullMachDirContent(string resourceDirPath)
+    {
+
+        if (!Path.Exists(resourceDirPath)) return false;
+
+        string?[] orgFolders = new string[]
+        {
+            "configuration", "debug",  "feature", "library",
+            "machining_knowledge", "owi",  "post_configurator", "postprocessor",
+            "probing_cycles", "robots",  "shop_doc", "spreadsheet",
+            "template_dir", "template_part",  "template_set", "tool_path",
+            "ug_library", "user_def_event",  "wizard"
+        };
+
+        string?[] currentFolders = Directory
+            .GetDirectories(resourceDirPath)
+            .Select(Path.GetFileName)
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .ToArray();
+
+        foreach (string? folderName in orgFolders)
+        {
+            if (!currentFolders.Contains(folderName, StringComparer.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

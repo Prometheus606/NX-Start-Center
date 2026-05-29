@@ -110,20 +110,6 @@ public sealed class MainViewModel : BaseViewModel
     public ICommand OpenDeveloperBatch { get; }
     public ICommand ShowInfoCommand { get; }
 
-    private bool IsTeam(string team)
-    => string.Equals(Settings.Team, team, StringComparison.OrdinalIgnoreCase);
-
-    public Visibility CamVisibility
-    => IsTeam("CAM") ? Visibility.Visible : Visibility.Collapsed;
-
-    public Visibility PpVisibility
-        => IsTeam("PP") ? Visibility.Visible : Visibility.Collapsed;
-
-    public Visibility CamOrPpVisibility
-        => IsTeam("CAM") || IsTeam("PP")
-            ? Visibility.Visible
-            : Visibility.Collapsed;
-
     
 
     public string SelectedCustomer
@@ -198,43 +184,7 @@ public sealed class MainViewModel : BaseViewModel
 
         LoadFullResourceDir = Directory.Exists(
             Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.SelectedVersion, "MACH", "resource")) && 
-            HasFullMachDirContent(customerEnvironmentPath);
-    }
-
-    public bool HasFullMachDirContent(string customerEnvironmentPath)
-    {
-
-        string currentPath = Path.Combine(
-            customerEnvironmentPath,
-            _model.EnvFolderName,
-            _model.SelectedVersion,
-            "MACH",
-            "resource");
-
-        string?[] orgFolders = new string[]
-        {
-            "configuration", "debug",  "feature", "library",
-            "machining_knowledge", "owi",  "post_configurator", "postprocessor",
-            "probing_cycles", "robots",  "shop_doc", "spreadsheet",
-            "template_dir", "template_part",  "template_set", "tool_path",
-            "ug_library", "user_def_event",  "wizard"
-        };
-
-        string?[] currentFolders = Directory
-            .GetDirectories(currentPath)
-            .Select(Path.GetFileName)
-            .Where(x => !string.IsNullOrWhiteSpace(x))
-            .ToArray();
-
-        foreach (string? folderName in orgFolders)
-        {
-            if (!currentFolders.Contains(folderName, StringComparer.OrdinalIgnoreCase))
-            {
-                return false;
-            }
-        }
-
-        return true;
+            _generalService.HasFullMachDirContent(Path.Combine(customerEnvironmentPath, _model.EnvFolderName, _model.SelectedVersion, "MACH", "resource"));
     }
 
     public string SelectedVersion
@@ -595,9 +545,6 @@ public sealed class MainViewModel : BaseViewModel
     private void AfterSettingsChanged()
     {
         RefreshCollectionsFromModel();
-        OnPropertyChanged(nameof(CamVisibility));
-        OnPropertyChanged(nameof(PpVisibility));
-        OnPropertyChanged(nameof(CamOrPpVisibility));
         OnPropertyChanged(nameof(Settings));
     }
 }

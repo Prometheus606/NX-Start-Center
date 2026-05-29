@@ -91,6 +91,9 @@ namespace NXStartCenter.ViewModel
             _model.Save();
             _model.RefreshAll();
             _afterSettingsChanged();
+            OnPropertyChanged(nameof(CamVisibility));
+            OnPropertyChanged(nameof(PpVisibility));
+            OnPropertyChanged(nameof(CamOrPpVisibility));
             _status.SetSuccess("Einstellungen gespeichert.");
         }
 
@@ -116,6 +119,20 @@ namespace NXStartCenter.ViewModel
 
             _status.SetError("Änderungen verworfen.");
         }
+
+        private bool IsTeam(string team)
+=> string.Equals(Settings.Team, team, StringComparison.OrdinalIgnoreCase);
+
+        public Visibility CamVisibility
+        => IsTeam("CAM") ? Visibility.Visible : Visibility.Collapsed;
+
+        public Visibility PpVisibility
+            => IsTeam("PP") ? Visibility.Visible : Visibility.Collapsed;
+
+        public Visibility CamOrPpVisibility
+            => IsTeam("CAM") || IsTeam("PP")
+                ? Visibility.Visible
+                : Visibility.Collapsed;
         private void BrowseNxInstallationPath()
         {
             _model.Settings.NxInstallationPath = _generalService.BrowseForFoldersOrFiles(description: "NX Installationsordner auswählen") ?? _model.Settings.NxInstallationPath;
