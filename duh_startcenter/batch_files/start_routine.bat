@@ -51,7 +51,7 @@ rem ----------------------------------------------------------------------------
 	call :SetIfExist PLM_SHARE_DUH "%CUSTOMER_PATH%"
 	call :SetIfExist UGII_USER_DIR "%APPDATA%\Siemens\%NX_Version_DUH%\ConfigSettings"
 	call :SetIfExist UGII_CAM_CSE_USER_DIR "%PLM_SHARE_DUH%\%CUSTOMERNAME%\2_Testdaten\Temp\"
-	call :SetIfExist UGII_LOAD_OPTIONS "%PLM_SHARE_DUH%\Vorlage\load_options\load_options.def"
+	call :SetIfExist UGII_LOAD_OPTIONS "%VORLAGE_ROOT%\Vorlage\load_options\load_options.def"
 	call :SetIfExist DUH_ToolBars_DIR "%VORLAGE_ROOT%\ToolBars\DUH_Group"	
 	call :SetIfExist Siemens_ToolBars_DIR "%VORLAGE_ROOT%\ToolBars\Siemens"
 	call :SetIfExist NX_SHR_VERSION_DIR "%NX_Version_DUH%"
@@ -102,8 +102,7 @@ rem ----------------------------------------------------------------------------
 rem set License Server if NX X is Used
 rem ------------------------------------------------------------------------------
 if "%DEBUG%" == "True" Pause
-if "CLOUD_LICENSE" == "True" (
-
+if "%CLOUD_LICENSE%" == "True" (
 	set SPLM_LICENSE_SERVER=CLOUD
 ) 
 
