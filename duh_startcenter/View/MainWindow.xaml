@@ -268,24 +268,31 @@
                                             <StackPanel Grid.Row="1">
 
                                                 <Button Style="{StaticResource ActionButtonStyle}"
-                        Content="Ordner öffnen"
+                        Content="Maschinenordner öffnen"
                         ToolTip="Öffnet den Ordner der aktuell ausgewählten Maschine"
                         Command="{Binding OpenExplorerCommand}"
-                        Height="46"/>
+                        Height="38"/>
 
                                                 <Button Style="{StaticResource ActionButtonStyle}"
                         Content="PP öffnen"
                                                         ToolTip="Öffnet den PP Ordner des ausgewählten Ordners in VS Code"
                         Command="{Binding OpenVsCodeAndForkCommand}"
                         Visibility="{Binding SettingsVm.PpVisibility}"
-                        Height="46"/>
+                        Height="38"/>
 
                                                 <Button Style="{StaticResource ActionButtonStyle}"
                         Content="Fork öffnen"
                                                         ToolTip="Öffnet das Repository der ausgewählten Maschine in Fork"
                         Command="{Binding OpenForkCommand}"
                         Visibility="{Binding SettingsVm.PpVisibility}"
-                        Height="46"/>
+                        Height="38"/>
+                                                <Button Style="{StaticResource ActionButtonStyle}"
+Content="Aux/CSE Öffnen"
+                                ToolTip="Öffnet das auxiliary/CSE verzeichnis aus der jeweiligen NX Installation."
+Command="{Binding OpenAuxCSECommand}"
+Visibility="{Binding SettingsVm.PpVisibility}"
+Height="38"/>
+
                                             </StackPanel>
                                         </Grid>
                                     </Border>

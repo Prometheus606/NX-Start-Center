@@ -64,6 +64,7 @@ public sealed class MainViewModel : BaseViewModel
         OpenVsCodeCommand = new RelayCommand(() => RunAction(_generalService.OpenVsCode));
         OpenVsCodeAndForkCommand = new RelayCommand(() => RunAction(_generalService.OpenVsCodeAndFork));
         OpenForkCommand = new RelayCommand(() => RunAction(_generalService.OpenFork));
+        OpenAuxCSECommand = new RelayCommand(() => RunAction(_generalService.OpenAuxCseFolder));
         OpenMainBatch = new RelayCommand(() => RunAction(_generalService.OpenMainBatch));
         OpenCustomerBatch = new RelayCommand(() => RunAction(_generalService.OpenCustomerBatch));
         OpenDeveloperBatch = new RelayCommand(() => RunAction(_generalService.OpenDeveloperBatch));
@@ -102,6 +103,7 @@ public sealed class MainViewModel : BaseViewModel
     public ICommand OpenVsCodeCommand { get; }
     public ICommand OpenVsCodeAndForkCommand { get; }
     public ICommand OpenForkCommand { get; }
+    public ICommand OpenAuxCSECommand { get; }
     public ICommand OpenLicenseFileCommand { get; }
     public ICommand StartLmToolsCommand { get; }
     public ICommand RefreshCommand { get; }

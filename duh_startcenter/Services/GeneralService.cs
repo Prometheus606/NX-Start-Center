@@ -53,6 +53,14 @@ public sealed class GeneralService(AppModel model)
         return "Fork wurde geöffnet.";
     }
 
+    public string OpenAuxCseFolder()
+    {
+        var dir = Path.Combine(model.Settings.NxInstallationPath, model.SelectedVersion, "MACH", "auxiliary", "cse");
+        if (!Directory.Exists(dir)) return "Der Ordner konnte nicht geöffnet werden.\n" + dir;
+        ProcessService.OpenFolder(dir);
+        return "Ordner geöffnet.";
+    }
+
     public void ShowPullReminder()
     {
         MessageBox.Show(
