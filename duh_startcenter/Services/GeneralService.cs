@@ -74,10 +74,18 @@ public sealed class GeneralService(AppModel model)
 
     public string OpenVsCode()
     {
-        var ppDir = Path.Combine(model.GetInstalledMachinesPath(model.SelectedCustomer, model.SelectedVersion), model.SelectedMachine, "postprocessor");
-        if (!Directory.Exists(ppDir)) return "Der PP Ordner konnte nicht geöffnet werden da er nicht existiert.\n" + ppDir;
-        ProcessService.StartFile(ProcessService.FindEditor(model.Settings.Editor) ?? "code", $"\"{ppDir}\"");
-        return "VS Code wurde geöffnet.";
+        try
+        {
+            var ppDir = Path.Combine(model.GetInstalledMachinesPath(model.SelectedCustomer, model.SelectedVersion), model.SelectedMachine);
+            if (!Directory.Exists(ppDir)) return "Der PP Ordner konnte nicht geöffnet werden da er nicht existiert.\n" + ppDir;
+            ProcessService.StartFile("code", $"\"{ppDir}\"");
+            return "VS Code wurde geöffnet.";
+        }
+        catch (Exception)
+        {
+
+            return "VS Code konnte nicht geöffnet werden!";
+        }
     }
 
     public string OpenVsCodeAndFork()
