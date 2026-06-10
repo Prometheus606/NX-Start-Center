@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using System.IO;
 
 namespace NXStartCenter.ViewModel
 {
@@ -171,8 +172,56 @@ namespace NXStartCenter.ViewModel
 
         private void BrowseRolesPath()
         {
-            _model.Settings.RolesPath = _generalService.BrowseForFoldersOrFiles(type: "file", description: "Rollen Dateien auswählen", filers: "NX Rollen Dateien (*.mtx)|*.mtx", multiSelect: true) ?? _model.Settings.RolesPath;
+            var selectedPath = _generalService.BrowseForFoldersOrFiles(
+                type: "folder",
+                description: "Ordner vor startup auswählen",
+                filers: string.Empty,
+                multiSelect: false);
+
+            if (string.IsNullOrWhiteSpace(selectedPath))
+                return;
+
+            var path = selectedPath.Trim();
+
+            if (!IsValidRolesBaseFolder(path, out var errorMessage))
+            {
+                MessageBox.Show(
+                    errorMessage,
+                    "Ungültiger Rollen-Ordner",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
+            }
+
+            _model.Settings.RolesPath = path;
             OnPropertyChanged(nameof(Settings));
+        }
+
+        private static bool IsValidRolesBaseFolder(string path, out string errorMessage)
+        {
+            errorMessage = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                errorMessage = "Es wurde kein Ordner ausgewählt.";
+                return false;
+            }
+
+            if (!Directory.Exists(path))
+            {
+                errorMessage = $"Der Ordner existiert nicht: {path}";
+                return false;
+            }
+
+            var rolesPath = Path.Combine(path, "startup", "roles");
+
+            if (!Directory.Exists(rolesPath))
+            {
+                errorMessage = $"Der ausgewählte Ordner muss den Unterordner ...\\startup\\roles\\ enthalten: {rolesPath}";
+                return false;
+            }
+
+            return true;
         }
     }
 }

@@ -396,6 +396,7 @@ public sealed class MainViewModel : BaseViewModel
                message.Contains("muss", StringComparison.OrdinalIgnoreCase) ||
                message.Contains("müssen", StringComparison.OrdinalIgnoreCase) ||
                message.Contains("m�ssen", StringComparison.OrdinalIgnoreCase) ||
+               message.Contains("keine", StringComparison.OrdinalIgnoreCase) ||
                message.Contains("Achtung", StringComparison.OrdinalIgnoreCase);
     }
 

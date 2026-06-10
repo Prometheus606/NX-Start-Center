@@ -242,8 +242,8 @@ Height="Auto"
                 </Grid>
 
                 <!-- Rollenpfade -->
-                <TextBlock Text="Rollenpfade (; getrennt):"
-                           ToolTip="Pfade zu den Benutzerdefinierten rollen die zugänglich sein sollen."
+                <TextBlock Text="Basis Pfad der Systemrollen:"
+                           ToolTip="Es wird der Basis Pfad ausgewählt. Die Struktur muss so aussehen: &lt;Basis Pfad>\startup\roles\*.mtx"
                            Grid.Row="8"
                            Grid.Column="0"
                            VerticalAlignment="Center"/>

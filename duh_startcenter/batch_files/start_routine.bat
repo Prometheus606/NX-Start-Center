@@ -40,6 +40,7 @@ set "VORLAGE_ROOT=%~5"
 set "TC_PFAD=%~6"
 set "IS_PP_DEVELOPER=%~7"
 set "LOAD_FULL_RESOURCE_DIR=%~8"
+set "ROLES_PATH=%~9"
 
 set "SCRIPT_DIR=%~dp0"
 set "UMGEBUNG=5_Umgebung"
@@ -63,6 +64,12 @@ rem ----------------------------------------------------------------------------
 	if "%IS_PP_DEVELOPER%" == "True" (
 		call :SetIfExist DUH_PP_TOOLS "%VORLAGE_ROOT%\ToolBars\DUH_Group\PP_Tools"
 	)
+
+rem ------------------------------------------------------------------------------
+rem Custom Roles
+rem ------------------------------------------------------------------------------
+	call :SetIfExist DUH_CUSTOM_ROLES "%ROLES_PATH%"
+	set UGII_DEFAULT_ROLE=empty
 
 rem ------------------------------------------------------------------------------
 rem set CAM Setup Variables

@@ -37,12 +37,15 @@ public sealed class NxService(AppModel model)
         {
             return "NX Version nicht installiert!";
         }
+
         bool isPPUser = model.Settings.Team == "PP";
+
         bool loadFullResourceDir = model.Last.LastLoadFullResourceDir;
         if (model.Settings.Team == "CAM")
         {
             loadFullResourceDir = true;
         }
+
         var args =
             $"\"{model.SelectedCustomer}\"" +
             $" \"{model.SelectedVersion}\"" +
@@ -60,17 +63,21 @@ public sealed class NxService(AppModel model)
             $" \"{model.Settings.TemplateRoot}\"" +
             $" \"{model.Settings.TcPath}\"" +
             $" \"{isPPUser}\"" +
-            $" \"{loadFullResourceDir}\"";
+            $" \"{loadFullResourceDir}\"" +
+            $" \"{model.Settings.RolesPath}\"";
+
         ProcessService.StartBatch(
-    batch,
-    args,
-    AppContext.BaseDirectory,
-    model.Settings.StartNxWithDebug
-);
+            batch,
+            args,
+            AppContext.BaseDirectory,
+            model.Settings.StartNxWithDebug
+        );
+
         model.Last.LastCustomer = model.SelectedCustomer;
         model.Last.LastVersion = model.SelectedVersion;
         model.Last.LastMachine = model.SelectedMachine;
         model.Save();
+
         return "NX wurde für die Kundenumgebung gestartet.";
     }
 
