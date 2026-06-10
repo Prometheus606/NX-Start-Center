@@ -41,6 +41,7 @@ public sealed class GeneralService(AppModel model)
 
     public string OpenFork()
     {
+        if (!MachineSelectionIsValid()) return "Keine Maschine ausgewählt!";
         var dir = Path.Combine(model.GetInstalledMachinesPath(model.SelectedCustomer, model.SelectedVersion), model.SelectedMachine);
         if (!File.Exists(model.ForkPath)) return "Fork ist nicht installiert oder der Pfad zur Fork.exe ist falsch.";
         if (!Directory.Exists(Path.Combine(dir, ".git"))) MessageBox.Show("Achtung: Kein Repository angelegt!", "Info");
@@ -72,10 +73,21 @@ public sealed class GeneralService(AppModel model)
         );
     }
 
+    public bool MachineSelectionIsValid()
+    {
+        if (String.IsNullOrEmpty(model.SelectedCustomer) || String.IsNullOrEmpty(model.SelectedVersion) || String.IsNullOrEmpty(model.SelectedMachine))
+        {
+            //MessageBox
+            return false;
+        }
+        return true;
+    }
+
     public string OpenVsCode()
     {
         try
         {
+            if (!MachineSelectionIsValid()) return "Keine Maschine ausgewählt!";
             var ppDir = Path.Combine(model.GetInstalledMachinesPath(model.SelectedCustomer, model.SelectedVersion), model.SelectedMachine);
             if (!Directory.Exists(ppDir)) return "Der PP Ordner konnte nicht geöffnet werden da er nicht existiert.\n" + ppDir;
             ProcessService.StartFile("code", $"\"{ppDir}\"");
@@ -90,6 +102,7 @@ public sealed class GeneralService(AppModel model)
 
     public string OpenVsCodeAndFork()
     {
+        if (!MachineSelectionIsValid()) return "Keine Maschine ausgewählt!";
         string message = "";
         if (model.Settings.OpenVsCodeWithFork)
         {
