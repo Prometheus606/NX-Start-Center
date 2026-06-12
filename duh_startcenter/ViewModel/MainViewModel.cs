@@ -73,7 +73,7 @@ public sealed class MainViewModel : BaseViewModel
         RefreshCommand = new RelayCommand(RefreshAll);
         ShowInfoCommand = new RelayCommand(ShowInfo);
 
-    RefreshCollectionsFromModel();
+        RefreshCollectionsFromModel();
     }
 
     public StatusViewModel Status { get; }

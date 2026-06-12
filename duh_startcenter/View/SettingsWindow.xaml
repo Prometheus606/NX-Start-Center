@@ -63,6 +63,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <!-- Config -->
@@ -303,11 +304,19 @@ Height="Auto"
                           Margin="0,8"/>
                 
                 <CheckBox Style="{StaticResource ModernCheckBoxStyle}"
+          Content="Im Nummernblock , zu . Konvertieren"
+          ToolTip="Dies ist dann global aktiv. Um das wieder aufzuheben muss diese Option auf Aus gestellt werden."
+          IsChecked="{Binding Settings.StartAxelsPunkt}"
+          Grid.Row="12"
+          Grid.Column="1"
+          Margin="0,8" Cursor="Hand"/>
+                
+                <CheckBox Style="{StaticResource ModernCheckBoxStyle}"
           Content="Repository im Fork Automatisch mit VS Code starten"
                           ToolTip="Beim Klick auf den Button 'PP Öffnen' zusätzlich Fork öffnen."
           IsChecked="{Binding Settings.OpenVsCodeWithFork}"
                           Visibility="{Binding PpVisibility}"
-          Grid.Row="12"
+          Grid.Row="13"
           Grid.Column="1"
           Margin="0,8" Cursor="Hand"/>
                 
@@ -316,7 +325,7 @@ Height="Auto"
                           ToolTip="Die Erinnerung zum Pullen ein- oder ausschalten."
           IsChecked="{Binding Settings.ShowPullReminder}"
           Visibility="{Binding PpVisibility}"
-          Grid.Row="13"
+          Grid.Row="14"
           Grid.Column="1"
           Margin="0,8" Cursor="Hand"/>
 

@@ -43,4 +43,7 @@ public sealed class AppSettings
     [JsonPropertyName("openVsCodeWithFork")]
     public bool OpenVsCodeWithFork { get; set; } = true;
 
+    [JsonPropertyName("StartAxelsPunkt")]
+    public bool StartAxelsPunkt { get; set; } = true;
+
 }

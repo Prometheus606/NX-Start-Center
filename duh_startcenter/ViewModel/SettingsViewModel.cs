@@ -14,6 +14,7 @@ namespace NXStartCenter.ViewModel
     {
         private readonly AppModel _model;
         private readonly GeneralService _generalService;
+        private readonly AxelsPunktService _axelsPunktService;
         private readonly StatusViewModel _status;
         private readonly Action _afterSettingsChanged;
         private AppSettings? _settingsBackup;
@@ -43,6 +44,7 @@ namespace NXStartCenter.ViewModel
             _model = model;
             _generalService = generalService;
             _status = status;
+            _axelsPunktService = new AxelsPunktService(_model, _status);
             _afterSettingsChanged = afterSettingsChanged;
 
             Teams = ["CAM", "PP"];
@@ -58,6 +60,8 @@ namespace NXStartCenter.ViewModel
             BrowseLicenceServerPathCommand = new RelayCommand(BrowseLicenceServerPath);
             BrowseRolesPathCommand = new RelayCommand(BrowseRolesPath);
             BrowseTcPathCommand = new RelayCommand(BrowseTcPath);
+
+            _axelsPunktService.ApplyAxelsPunktSetting();
         }
 
         private void OpenSettings()
@@ -75,7 +79,8 @@ namespace NXStartCenter.ViewModel
                 Editor = Settings.Editor,
                 StartNxWithDebug = Settings.StartNxWithDebug,
                 OpenVsCodeWithFork = Settings.OpenVsCodeWithFork,
-                ShowPullReminder = Settings.ShowPullReminder
+                ShowPullReminder = Settings.ShowPullReminder,
+                StartAxelsPunkt = Settings.StartAxelsPunkt
             };
 
             var window = new SettingsWindow
@@ -91,6 +96,9 @@ namespace NXStartCenter.ViewModel
         {
             _model.Save();
             _model.RefreshAll();
+
+            _axelsPunktService.ApplyAxelsPunktSetting();
+
             _afterSettingsChanged();
             OnPropertyChanged(nameof(CamVisibility));
             OnPropertyChanged(nameof(PpVisibility));
@@ -115,6 +123,7 @@ namespace NXStartCenter.ViewModel
             Settings.StartNxWithDebug = _settingsBackup.StartNxWithDebug;
             Settings.OpenVsCodeWithFork = _settingsBackup.OpenVsCodeWithFork;
             Settings.ShowPullReminder = _settingsBackup.ShowPullReminder;
+            Settings.StartAxelsPunkt = _settingsBackup.StartAxelsPunkt;
 
             OnPropertyChanged(nameof(Settings));
 
