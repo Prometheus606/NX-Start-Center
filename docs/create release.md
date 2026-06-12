@@ -1,27 +1,18 @@
 # Update Releasen
-#### Alle Versionnummern an allen orten müssen mit v oder V beginnen!
-### 1. neue versionsnummer und datum in env.py eintragen
-### 2. exe datei erstellen mit der create_exe.bat:
-### 3. create_installer.iss (liegt in output/installer) mit Inno Setup öffnen und neu kompilieren (build -> compile)
-### 4. repo auf github pushen und tag erstellen mit neuer versionsnummer
-~~~ Bash
-git add .
-git commit -m "Update Info" for short message or just git commit for long message
-git branch -M main
-git tag -a v1.0.0 -m "Version 1.0.0 Release"
-git push -u origin main --tags
-~~~
-### 5. auf github ein neues release aus dem letzten tag erstellen und installer.exe dort reinziehen (aus output/installer/Output)
-### 6. password beim installer:
-~~~
-6acb22090d42b4c234d00fe3e0f4e5db (CSE password)
-~~~
+### 1. Alle änderungen comitten
+### 2. Tag erstellen in dem Format Vx.x.x
+### 3. Repo Pushen
+### 4. Den Token für SimplySign bei der IT anfordern um signieren zu können
+### 5. das release script starten (create_full_release.bat)
+    Was das script tut:
+    1. Auf uncomittete änderungen prüfen und dann ggf. abbrechen
+    2. Versionsnummer aus dem letzten Tag ziehen
+    3. Versionsnummer temporär in das .iss script schreiben, damit auch der installer die richtige versionsnummer hat
+    4. Die Versionsnummer in AppInfo.cs schreiben
+    5. Das Projekt als release builden und die resultierende .exe datei signieren
+    6. Die installer.exe erstellen und signieren
+    7. die installer datei passend umbenennen
+    8. die änderung in der .iss datei rückgängig machen, damit die änderung nicht im repo auftaucht.
 
-
-### exe datei erstellen mit pyinstaller: 
-~~~ Bash
-pyinstaller "DUH_Startcenter.py" --windowed --icon ".\src\images\duhGroup_Logo.ico" --add-data "./venv/Lib/site-packages/ttkbootstrap;ttkbootstrap" --add-data "./venv/Lib/site-packages/dotenv;dotenv" --add-data "./venv/Lib/site-packages/ttkcreator;ttkcreator" --add-data "C:/Users/niklas.beitler/AppData/Local/Programs/Python/Python311/Lib/site-packages/customtkinter;customtkinter" --add-data "C:/Users/niklas.beitler/AppData/Local/Programs/Python/Python311/Lib/tkinter;tkinter" --add-data "C:/Users/niklas.beitler/AppData/Local/Programs/Python/Python311/Lib/site-packages/PIL;PIL" --onefile -y --clean --distpath "./output/exe"
-~~~
-- Terminal im Hauptorder öffnen
-- befehl reinkopieren
-- Dieser Command muss direkt in der CMD eingegeben werden, nicht über eine IDE oder python code!
+### 6. auf github ein neues release aus dem letzten tag erstellen und installer.exe dort reinziehen (aus output/installer)
+### 7. Beim nächsten starten der alten app kommt eine meldung das es eine neue version gibt
