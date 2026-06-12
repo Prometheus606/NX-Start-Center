@@ -54,7 +54,6 @@ rem ----------------------------------------------------------------------------
 	call :SetIfExist UGII_CAM_CSE_USER_DIR "%PLM_SHARE_DUH%\%CUSTOMERNAME%\2_Testdaten\Temp\"
 	call :SetIfExist UGII_LOAD_OPTIONS "%VORLAGE_ROOT%\Vorlage\load_options\load_options.def"
 	call :SetIfExist DUH_ToolBars_DIR "%VORLAGE_ROOT%\ToolBars\DUH_Group"	
-	call :SetIfExist Siemens_ToolBars_DIR "%VORLAGE_ROOT%\ToolBars\Siemens"
 	call :SetIfExist NX_SHR_VERSION_DIR "%NX_Version_DUH%"
 	call :SetIfExist SPLM_SHR_DIR "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%"
 
@@ -152,10 +151,15 @@ rem ----------------------------------------------------------------------------
 rem ------------------------------------------------------------------------------
 rem copy custom_dirs.dat
 rem ------------------------------------------------------------------------------
-	if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\menus\custom_dirs.dat" (
-		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\menus" mkdir "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\menus"
+	set "CUSTOM_DIRS_DIR=%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\menus"
+	set "CUSTOM_DIRS_FILE=%CUSTOM_DIRS_DIR%\custom_dirs.dat"
+
+	if NOT EXIST "%CUSTOM_DIRS_FILE%" (
+		if NOT EXIST "%CUSTOM_DIRS_DIR%" mkdir "%CUSTOM_DIRS_DIR%"
+		copy "%VORLAGE_ROOT%\Vorlage\custom_dirs.dat" "%CUSTOM_DIRS_DIR%\"
+	) else (
+		call :UpdateCustomDirs "%CUSTOM_DIRS_FILE%"
 	)
-	copy "%VORLAGE_ROOT%\Vorlage\custom_dirs.dat" "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\menus\"
 
 	call :SetIfExist UGII_CUSTOM_DIRECTORY_FILE "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\menus\custom_dirs.dat"	
 	call :SetIfExist UGII_UG_CUSTOM_DIRECTORY_FILE "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\menus\ug_custom_dirs.dat"
@@ -165,8 +169,8 @@ rem ugii_env.dat
 rem ------------------------------------------------------------------------------
 	if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\UGII\ugii_env.dat" (
 		if NOT EXIST "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\UGII" mkdir "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\UGII"
+		copy "%VORLAGE_ROOT%\Vorlage\ugii_env.dat" "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\UGII"
 	)
-	copy "%VORLAGE_ROOT%\Vorlage\ugii_env.dat" "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\UGII"
 
 	call :SetIfExist UGII_ENV_FILE "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\ugii_env_switch.dat"
 	call :SetIfExist UGII_ENV_FILE "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\ugii\ugii_env.dat"
@@ -190,11 +194,19 @@ rem ----------------------------------------------------------------------------
 rem ------------------------------------------------------------------------------
 rem set nxtools environment
 rem ------------------------------------------------------------------------------
-	call :SetIfExist NXTOOLS_SYSDIR "%VORLAGE_ROOT%\ToolBars\NX_tools\%NX_Version_DUH%\NXTools"
-	set NXTOOLS_LOOK_AHEAD=true
-	call :SetIfExist UGII_USER_TOOLS_FILE "%NXTOOLS_SYSDIR%\usertools\usertools.utd"
-	call :SetIfExist UGII_USER_TOOLS_MENU "%NXTOOLS_SYSDIR%\usertools\usertools.utm"
-	call :SetIfExist UGII_USER_TOOLS_BITMAP_PATH "%NXTOOLS_SYSDIR%\usertools\bitmaps"
+	if EXIST "%VORLAGE_ROOT%\ToolBars\NX_tools\%NX_Version_DUH%\NXTools" (
+		call :SetIfExist Siemens_ToolBars_DIR "%VORLAGE_ROOT%\ToolBars\Siemens"
+		call :SetIfExist NXTOOLS_SYSDIR "%VORLAGE_ROOT%\ToolBars\NX_tools\%NX_Version_DUH%\NXTools"
+		set NXTOOLS_LOOK_AHEAD=true
+		call :SetIfExist UGII_USER_TOOLS_FILE "%NXTOOLS_SYSDIR%\usertools\usertools.utd"
+		call :SetIfExist UGII_USER_TOOLS_MENU "%NXTOOLS_SYSDIR%\usertools\usertools.utm"
+		call :SetIfExist UGII_USER_TOOLS_BITMAP_PATH "%NXTOOLS_SYSDIR%\usertools\bitmaps"
+	) else (
+		echo "================== ERROR ======================"
+		echo "Siemens and NX Tools toolbar will dont show up, because the path to NX Tools doesnt exist: %VORLAGE_ROOT%\ToolBars\NX_tools\%NX_Version_DUH%\NXTools"
+		echo "==============================================="
+		if "%DEBUG%" == "True" Pause
+	)
 
 rem ------------------------------------------------------------------------------
 rem Call custom_nx.bat
@@ -225,17 +237,16 @@ rem ----------------------------------------------------------------------------
 		echo custom_nx_%CUSTOMERNAME% nicht gefunden
 	)
 
-
 REM ------------------------------------------------------------------------------
 REM Call User Batch
 REM ------------------------------------------------------------------------------
 if exist "%SCRIPT_DIR%\Batch_files\user_settings.bat" (
     call "%SCRIPT_DIR%Batch_files\user_settings.bat"
 ) else (
-		echo user settings nicht gefunden
-	)
+	echo user settings nicht gefunden!
+)
 
-
+:START_NX
 if "%DEBUG%" == "True" Pause
 rem *****************************************************************************
 rem 								Start NX
@@ -264,8 +275,46 @@ start "" "%UGII_BASE_DIR%\UGII\ugraf.exe" -nx
 :DUH_ENDE
 exit
 
+REM ----------------------------------------------------------
+REM Set ENV Variable if the path exists
+REM Call sample:
+REM call :SetIfExist UGII_USER_TOOLS_MENU "C:\Pfad\"
+REM ----------------------------------------------------------
 :SetIfExist
 if exist "%~2" (
     set "%~1=%~f2"
+)
+exit /b
+
+REM ----------------------------------------------------------
+REM custom_dirs.dat prüfen und fehlende Einträge ergänzen
+REM Aufruf:
+REM call :UpdateCustomDirs "C:\Pfad\custom_dirs.dat"
+REM ----------------------------------------------------------
+:UpdateCustomDirs
+setlocal
+
+set "FILE=%~1"
+
+if not exist "%FILE%" (
+    echo Datei nicht gefunden: %FILE%
+    endlocal & exit /b 1
+)
+
+call :AddLineIfMissing "%FILE%" "$NXTOOLS_SYSDIR\usertools"
+call :AddLineIfMissing "%FILE%" "$DUH_ToolBars_DIR\duh_tools"
+call :AddLineIfMissing "%FILE%" "$Siemens_ToolBars_DIR"
+call :AddLineIfMissing "%FILE%" "$DUH_PP_TOOLS"
+call :AddLineIfMissing "%FILE%" "$duh_tools_DIR"
+call :AddLineIfMissing "%FILE%" "$DUH_CUSTOM_ROLES"
+
+endlocal
+exit /b 0
+
+
+:AddLineIfMissing
+findstr /x /c:"%~2" "%~1" >nul
+if errorlevel 1 (
+    echo %~2>>"%~1"
 )
 exit /b
