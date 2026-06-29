@@ -29,6 +29,7 @@
   <ItemGroup>
     <Content Include="resources\AxelsPunkt.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="resources\images\duhGroup_Logo.ico" />
   </ItemGroup>

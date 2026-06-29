@@ -21,6 +21,8 @@ if errorlevel 1 (
   exit /b 1
 )
 
+xcopy "%BASE%\duh_startcenter\resources\AxelsPunkt.exe" "%BASE%\output\exe\resources\" /Y /I
+
 "C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\signtool.exe" sign ^
   /sha1 "25b8123c7ea491f66dc913e37d668a7297f35ab6" ^
   /t http://time.certum.pl ^
