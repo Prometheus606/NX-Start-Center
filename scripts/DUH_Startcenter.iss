@@ -86,7 +86,7 @@ var
 begin
   Result := TNewEdit.Create(WizardForm);
   Result.Parent := Parent.Surface;
-  Result.Top := TopPos + 16;
+  Result.Top := TopPos + 22;
   Result.Left := 0;
   Result.Width := Parent.SurfaceWidth - 110;
   Result.Text := DefaultValue;

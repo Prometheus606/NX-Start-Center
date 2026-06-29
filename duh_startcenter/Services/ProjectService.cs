@@ -360,6 +360,12 @@ public sealed partial class NewProjectService(AppModel model)
             resourceRoot,
             Path.Combine(resourceRoot, "library"));
 
+        string installedMachinesSource = Path.Combine(resourceRoot, "library", "machine", "installed_machines");
+        if (Directory.Exists(installedMachinesSource))
+        {
+            Directory.Delete(installedMachinesSource, true);
+        }
+
         CopyDirectoryIfMissingOrEmpty(
             Path.Combine(ugiiBaseDir, "MACH", "templates"),
             Path.Combine(machRoot, "templates"));
