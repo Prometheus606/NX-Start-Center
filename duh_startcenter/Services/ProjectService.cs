@@ -38,7 +38,7 @@ public sealed partial class NewProjectService(AppModel model)
 
         if (string.IsNullOrWhiteSpace(newCustomerName) || string.IsNullOrWhiteSpace(newVersion)) return "Kundenname und Version muss angegeben sein!";
         if (new[] { newCustomerName, newVersion, newMachineName, newOrderNumber }.Any(x => x.Contains(' '))) return "Leerzeichen sind nicht zulässig!";
-        if (!NxVersionRegex().IsMatch(newVersion)) return "Die Version muss das Format NXxxxx haben.";
+        if (!NxVersionRegex().IsMatch(newVersion)) return "Die Version muss das Format NXxxxx oder Designcenter(X)xxxx haben.";
         newOrderNumber = string.IsNullOrWhiteSpace(newOrderNumber) ? "0000" : newOrderNumber;
 
         var baseEnv = model.Settings.CustomerEnvironmentPath;
@@ -249,7 +249,7 @@ public sealed partial class NewProjectService(AppModel model)
         CopyDirectory(source, target, overwriteFiles: true);
     }
 
-    [GeneratedRegex("^NX\\d{2,4}$", RegexOptions.IgnoreCase)]
+    [GeneratedRegex("^(NX|Designcenter|DesigncenterX)\\d{2,4}$", RegexOptions.IgnoreCase)]
     private static partial Regex NxVersionRegex();
 
     public void CreateNewMachine()

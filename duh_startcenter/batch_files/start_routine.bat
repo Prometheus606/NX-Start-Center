@@ -266,7 +266,7 @@ if /i "%NX_Version_DUH%" == "NX1872" set is_old_version="TRUE"
 if /i "%NX_Version_DUH%" == "NX1892" set is_old_version="TRUE"
 
 if /i %is_old_version% == "TRUE" goto old_version
-start "" "%UGII_BASE_DIR%\nxbin\ugraf.exe" -nx
+start "NX" "%UGII_BASE_DIR%\nxbin\ugraf.exe" -nx
 goto DUH_ENDE
 
 :old_version

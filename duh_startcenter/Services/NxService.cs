@@ -83,8 +83,15 @@ public sealed class NxService(AppModel model)
 
     private string GetUgrafPath(string nxVersion)
     {
-        var digits = int.TryParse(nxVersion.Replace("NX", "", StringComparison.OrdinalIgnoreCase), out var v) ? v : 9999;
-        var sub = digits < 2206 ? Path.Combine("UGII", "ugraf.exe") : Path.Combine("NXBIN", "ugraf.exe");
+        var version = nxVersion
+            .Replace("DesignCenter", "", StringComparison.OrdinalIgnoreCase)
+            .Replace("NX", "", StringComparison.OrdinalIgnoreCase);
+
+        var digits = int.TryParse(version, out var v) ? v : 9999;
+        var sub = digits < 2206
+            ? Path.Combine("UGII", "ugraf.exe")
+            : Path.Combine("NXBIN", "ugraf.exe");
+
         return Path.Combine(model.Settings.NxInstallationPath, nxVersion, sub);
     }
 

@@ -90,7 +90,13 @@ public sealed class AppModel
     public void RefreshVersions()
     {
         Versions = DirectoryNames(Path.Combine(Settings.CustomerEnvironmentPath, SelectedCustomer, EnvFolderName))
-            .Where(x => x.StartsWith("NX", StringComparison.OrdinalIgnoreCase)).Reverse().ToArray();
+            .Where(x =>
+                x.StartsWith("NX", StringComparison.OrdinalIgnoreCase) ||
+                x.StartsWith("Designcenter", StringComparison.OrdinalIgnoreCase))
+            .Reverse()
+            .OrderBy(x => x.StartsWith("Designcenter", StringComparison.OrdinalIgnoreCase) ? 0 : 1)
+            .ToArray();
+
         SelectedVersion = Pick(Last.LastVersion, Versions);
         RefreshMachines();
     }
@@ -111,8 +117,14 @@ public sealed class AppModel
     private static string Pick(string? last, IReadOnlyList<string> list) =>
         !string.IsNullOrWhiteSpace(last) && list.Contains(last) ? last : list.FirstOrDefault() ?? string.Empty;
 
-    private static IReadOnlyList<string> FindNxVersions(string basePath) => DirectoryNames(basePath)
-        .Where(x => x.StartsWith("NX", StringComparison.OrdinalIgnoreCase)).Reverse().ToArray();
+    private static IReadOnlyList<string> FindNxVersions(string basePath) =>
+    DirectoryNames(basePath)
+        .Where(x =>
+            x.StartsWith("NX", StringComparison.OrdinalIgnoreCase) ||
+            x.StartsWith("Designcenter", StringComparison.OrdinalIgnoreCase))
+        .Reverse()
+        .OrderBy(x => x.StartsWith("Designcenter", StringComparison.OrdinalIgnoreCase) ? 0 : 1)
+        .ToArray();
 
     private static IReadOnlyList<string> DirectoryNames(string path)
     {
