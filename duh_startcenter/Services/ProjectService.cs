@@ -67,7 +67,7 @@ public sealed partial class NewProjectService(AppModel model)
 
         try
         {
-            if (isNewCustomer || (!isNewCustomer && isNewNxVersion))
+            if (isNewCustomer || (!isNewCustomer && isNewNxVersion) || (!isNewCustomer && !isNewNxVersion && complexEnvRequired))
             {
                 if (complexEnvRequired)
                     CreateComplexNxEnvironment();
@@ -297,12 +297,12 @@ public sealed partial class NewProjectService(AppModel model)
             Path.Combine(customerPath, "3_Auslieferung", newOrderNumber),
             Path.Combine(customerPath, "4_Calls", newOrderNumber),
             Path.Combine(customerPath, model.EnvFolderName, newVersion, "MACH", "resource", "usertools"),
-            Path.Combine(customerPath, model.EnvFolderName, newVersion, "MACH", "resource", "library", "machine", "ascii"),
+            Path.Combine(customerPath, model.EnvFolderName, newVersion, "MACH", "resource", "library", "machine", $"ascii_{newCustomerName}"),
+            Path.Combine(customerPath, model.EnvFolderName, newVersion, "MACH", "resource", "library", "machine", $"installed_machines_{newCustomerName}"),
             Path.Combine(customerPath, model.EnvFolderName, newVersion, "MACH", "resource", "library", "machine", "inclass"),
             Path.Combine(customerPath, "6_Custom", newOrderNumber, newVersion, "roles"),
             Path.Combine(customerPath, "6_Custom", newOrderNumber, newVersion, "startup"),
-            Path.Combine(customerPath, "7_Dokumentation", newOrderNumber),
-            installedMachinesDir
+            Path.Combine(customerPath, "7_Dokumentation", newOrderNumber)
         ];
 
         foreach (var dir in dirs)
@@ -312,17 +312,13 @@ public sealed partial class NewProjectService(AppModel model)
         {
             CopyDirectoryIfExists(
                 Path.Combine(nxPath, newVersion, "MACH", "resource", "library", "machine", "ascii"),
-                Path.Combine(customerPath, model.EnvFolderName, newVersion, "MACH", "resource", "library", "machine", "ascii"));
+                Path.Combine(customerPath, model.EnvFolderName, newVersion, "MACH", "resource", "library", "machine", $"ascii_{newCustomerName}"));
 
             CopyDirectoryIfExists(
                 Path.Combine(nxPath, newVersion, "MACH", "resource", "library", "machine", "inclass"),
                 Path.Combine(customerPath, model.EnvFolderName, newVersion, "MACH", "resource", "library", "machine", "inclass"));
         }
 
-        if (!string.IsNullOrWhiteSpace(newMachineName))
-        {
-            CreateNewMachine();
-        }
     }
 
     public void CreateComplexNxEnvironment()
@@ -337,13 +333,21 @@ public sealed partial class NewProjectService(AppModel model)
         CreateDirs(
             customerPath,
             Path.Combine(customerPath, "1_Kundendaten"),
+            Path.Combine(customerPath, "1_Kundendaten", newOrderNumber),
             Path.Combine(customerPath, "2_Testdaten"),
+            Path.Combine(customerPath, "2_Testdaten", newOrderNumber),
             Path.Combine(customerPath, "2_Testdaten", "Temp"),
             Path.Combine(customerPath, "2_Testdaten", "Temp", "NX"),
             Path.Combine(customerPath, "2_Testdaten", "Shop_Doc"),
+            Path.Combine(customerPath, "3_Auslieferung"),
+            Path.Combine(customerPath, "3_Auslieferung", newOrderNumber),
             Path.Combine(customerPath, "4_Calls"),
+            Path.Combine(customerPath, "4_Calls", newOrderNumber),
             Path.Combine(customerPath, "6_Custom"),
+            Path.Combine(customerPath, "6_Custom", newOrderNumber, newVersion, "roles"),
+            Path.Combine(customerPath, "6_Custom", newOrderNumber, newVersion, "startup"),
             Path.Combine(customerPath, "7_Dokumentation"),
+            Path.Combine(customerPath, "7_Dokumentation", newOrderNumber),
             envRoot,
             machRoot,
             Path.Combine(envRoot, "Reuse_Library"),
@@ -355,10 +359,9 @@ public sealed partial class NewProjectService(AppModel model)
             Path.Combine(machRoot, "CAM_SETUP_ROOT_DIR")
         );
 
-        CopyDirectoryIfMissingOrEmpty(
+        CopyMissingResourceDirectories(
             Path.Combine(ugiiBaseDir, "MACH", "resource"),
-            resourceRoot,
-            Path.Combine(resourceRoot, "library"));
+            resourceRoot);
 
         string installedMachinesSource = Path.Combine(resourceRoot, "library", "machine", "installed_machines");
         if (Directory.Exists(installedMachinesSource))
@@ -416,9 +419,9 @@ public sealed partial class NewProjectService(AppModel model)
             Path.Combine(resourceRoot, "library", "machine", $"installed_machines_{newCustomerName}")
         );
 
-        CopyFileIfMissing(
-            Path.Combine(ugiiBaseDir, "MACH", "resource", "library", "machine", "ascii", "machine_database.dat"),
-            Path.Combine(resourceRoot, "library", "machine", $"ascii_{newCustomerName}", "machine_database.dat"));
+        CopyDirectoryIfMissingOrEmpty(
+            Path.Combine(ugiiBaseDir, "MACH", "resource", "library", "machine", "ascii"),
+            Path.Combine(resourceRoot, "library", "machine", $"ascii_{newCustomerName}"));
 
         CopyDirectoryIfMissingOrEmpty(
             Path.Combine(ugiiBaseDir, "MACH", "resource", "library", "tool", "ascii"),
@@ -591,17 +594,13 @@ public sealed partial class NewProjectService(AppModel model)
 
     private void CopyDirectoryIfMissingOrEmpty(
         string sourceDirectory,
-        string targetDirectory,
-        string? existenceCheckPath = null)
+        string targetDirectory)
     {
-        string checkPath = existenceCheckPath ?? targetDirectory;
-
         if (!Directory.Exists(sourceDirectory))
             throw new DirectoryNotFoundException($"Das Quellverzeichnis '{sourceDirectory}' wurde nicht gefunden.");
 
-        if (Directory.Exists(checkPath))
-            return;
-
+        // Vorhandene Ordner rekursiv vervollstaendigen, ohne bestehende Dateien
+        // und damit kundenspezifische Anpassungen zu ueberschreiben.
         CopyDirectory(sourceDirectory, targetDirectory, overwriteFiles: false);
     }
 
@@ -619,6 +618,47 @@ public sealed partial class NewProjectService(AppModel model)
         {
             string targetFile = Path.Combine(targetDirectory, Path.GetFileName(file));
             CopyFileTracked(file, targetFile, overwriteFiles);
+        }
+    }
+
+    private void CopyMissingResourceDirectories(
+    string sourceResourceDirectory,
+    string targetResourceDirectory)
+    {
+        if (!Directory.Exists(sourceResourceDirectory))
+        {
+            throw new DirectoryNotFoundException(
+                $"Das Quellverzeichnis '{sourceResourceDirectory}' wurde nicht gefunden.");
+        }
+
+        CreateDirTracked(targetResourceDirectory);
+
+        foreach (string sourceSubDirectory
+                 in Directory.EnumerateDirectories(sourceResourceDirectory))
+        {
+            string directoryName = Path.GetFileName(sourceSubDirectory);
+            string targetSubDirectory = Path.Combine(
+                targetResourceDirectory,
+                directoryName);
+
+            // Auch vorhandene Teilbaeume rekursiv ergaenzen. Nur so wird z. B.
+            // eine zuvor simple library-Struktur identisch zur direkten
+            // komplexen Anlage.
+            CopyDirectory(
+                sourceSubDirectory,
+                targetSubDirectory,
+                overwriteFiles: false);
+        }
+
+        // Eventuelle Dateien direkt im resource-Stamm ebenfalls übernehmen.
+        foreach (string sourceFile
+                 in Directory.EnumerateFiles(sourceResourceDirectory))
+        {
+            string targetFile = Path.Combine(
+                targetResourceDirectory,
+                Path.GetFileName(sourceFile));
+
+            CopyFileIfMissing(sourceFile, targetFile);
         }
     }
 }

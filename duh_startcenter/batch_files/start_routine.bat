@@ -88,7 +88,7 @@ set "LIBRARY_DIR=%RESOURCE_DIR%library\
 
 		if /i "%INSTALLED_MACHINES_CHECK%" == "True" (
 			call :SetIfExist UGII_CAM_LIBRARY_MACHINE_DIR "%LIBRARY_DIR%machine\"
-			call :SetIfExist UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR "%LIBRARY_DIR%machine\installed_machines\"
+			call :SetIfExist UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR "%LIBRARY_DIR%machine\installed_machines_%CUSTOMERNAME%\"
 		)
 
 		if /i "%TOOLCHECK%" == "True" (
@@ -255,6 +255,7 @@ rem ****************************************************************************
 rem start with Teamcenter!
 if /i "%MANAGED%" == "portal_client" (
     call %TC_PFAD%
+	rem start "Designcenter NX" "%UGII_BASE_DIR%\nxbin\ugraf" -pim=yes -nx			direkt NX Managed starten
     goto DUH_ENDE
 )
 
