@@ -280,6 +280,8 @@ public sealed partial class NewProjectService(AppModel model)
 
         WriteAllTextTracked(Path.Combine(machineDir, "add_to_machine_database.dat"), line);
 
+        CopyFileTracked(".\\resources\\.gitignore", $"{this.machineDir}\\.gitignore", overwrite:false);
+
         var asciiFile = GetMachineDatabaseFile();
         if (File.Exists(asciiFile))
         {
