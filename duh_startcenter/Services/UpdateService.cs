@@ -32,10 +32,21 @@ namespace NXStartCenter
 
             try
             {
+                if (String.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITLAB_TOKEN1")))
+                {                
+                    MessageBox.Show(
+                        owner,
+                        $"Update konnte nicht geladen werden, da kein Token gesetzt ist!",
+                        "Warnung",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning
+                    );
+                    return;
+                }
+
                 var release = await CheckForUpdateAsync(repoUrl, currentVersion);
 
-                if (release == null)
-                    return;
+                if (release == null) return;
 
                 release.Description = release.Description.Replace("<br>", "\n");
 
@@ -100,8 +111,9 @@ namespace NXStartCenter
 
             var response = await _httpClient.GetAsync(apiUrl);
 
-            if (!response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode) { 
                 return null;
+            }
 
             string json = await response.Content.ReadAsStringAsync();
 
