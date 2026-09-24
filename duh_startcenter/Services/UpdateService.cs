@@ -37,6 +37,8 @@ namespace NXStartCenter
                 if (release == null)
                     return;
 
+                release.Description = release.Description.Replace("<br>", "\n");
+
                 var result = MessageBox.Show(
                     owner,
                     $"Eine neue Version ist verfügbar!\n\n" +

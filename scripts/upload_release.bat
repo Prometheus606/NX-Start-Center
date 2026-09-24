@@ -57,6 +57,7 @@ if not exist "%EXE%" (
 )
 
 set /p "DESCRIPTION=Release-Beschreibung eingeben (Was ist neu): "
+set "DESCRIPTION=%DESCRIPTION:\n=<br>%"
 
 REM ------------------------------------------------
 REM Upload EXE to Generic Package Registry
