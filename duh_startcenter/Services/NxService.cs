@@ -61,7 +61,6 @@ public sealed class NxService(AppModel model)
             $" \"{model.StartNxWithCloudLicense}\"" +
             $" \"{managed}\"" +
             $" \"{model.Settings.TemplateRoot}\"" +
-            $" \"{model.Settings.TcPath}\"" +
             $" \"{isPPUser}\"" +
             $" \"{loadFullResourceDir}\"" +
             $" \"{model.Settings.RolesPath}\"";

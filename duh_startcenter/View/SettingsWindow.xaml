@@ -161,33 +161,6 @@ Height="Auto"
                     </Button>
                 </Grid>
 
-                <!-- Portal.bat -->
-                <TextBlock Text="Portal.bat (optional):"
-                           ToolTip="Startdatei vom Teamcenter Rich Client (optional)"
-                           Grid.Row="4"
-                           Grid.Column="0"
-                           VerticalAlignment="Center"/>
-
-                <Grid Grid.Row="4" Grid.Column="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-
-                    <TextBox Text="{Binding Settings.TcPath, UpdateSourceTrigger=PropertyChanged}"
-                             Grid.Column="0"/>
-
-                    <Button Grid.Column="1"
-                                                        Background="Transparent"
-                            Width="Auto"
-Height="Auto"
-                            Margin="6,0,0,0"
-                            ToolTip="Datei auswählen"
-                            Command="{Binding BrowseTcPathCommand}">
-                        <TextBlock Text="📄" FontSize="14"/>
-                    </Button>
-                </Grid>
-
                 <!-- Lizenzdatei -->
                 <TextBlock Text="Lizenzdatei:"
                            ToolTip="Pfad zur Lizenzdatei"
@@ -280,7 +253,7 @@ Height="Auto"
                           Width="250"
                           SelectedItem="{Binding Settings.Team}"
                           Grid.Row="9"
-                          Grid.Column="1" HorizontalAlignment="Left"/>
+                          Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5"/>
 
                 <!-- Editor -->
                 <TextBlock Text="Editor:"

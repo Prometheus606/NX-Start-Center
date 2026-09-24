@@ -33,7 +33,6 @@ namespace NXStartCenter.ViewModel
         public ICommand BrowseLicencePathCommand { get; }
         public ICommand BrowseLicenceServerPathCommand { get; }
         public ICommand BrowseRolesPathCommand { get; }
-        public ICommand BrowseTcPathCommand { get; }
 
         public SettingsViewModel(
         AppModel model,
@@ -59,7 +58,6 @@ namespace NXStartCenter.ViewModel
             BrowseLicencePathCommand = new RelayCommand(BrowseLicencePath);
             BrowseLicenceServerPathCommand = new RelayCommand(BrowseLicenceServerPath);
             BrowseRolesPathCommand = new RelayCommand(BrowseRolesPath);
-            BrowseTcPathCommand = new RelayCommand(BrowseTcPath);
 
             _axelsPunktService.ApplyAxelsPunktSetting();
         }
@@ -71,7 +69,6 @@ namespace NXStartCenter.ViewModel
                 NxInstallationPath = Settings.NxInstallationPath,
                 CustomerEnvironmentPath = Settings.CustomerEnvironmentPath,
                 TemplateRoot = Settings.TemplateRoot,
-                TcPath = Settings.TcPath,
                 LicencePath = Settings.LicencePath,
                 LicenceServerPath = Settings.LicenceServerPath,
                 RolesPath = Settings.RolesPath,
@@ -114,7 +111,6 @@ namespace NXStartCenter.ViewModel
             Settings.NxInstallationPath = _settingsBackup.NxInstallationPath;
             Settings.CustomerEnvironmentPath = _settingsBackup.CustomerEnvironmentPath;
             Settings.TemplateRoot = _settingsBackup.TemplateRoot;
-            Settings.TcPath = _settingsBackup.TcPath;
             Settings.LicencePath = _settingsBackup.LicencePath;
             Settings.LicenceServerPath = _settingsBackup.LicenceServerPath;
             Settings.RolesPath = _settingsBackup.RolesPath;
@@ -158,12 +154,6 @@ namespace NXStartCenter.ViewModel
         private void BrowseTemplateRoot()
         {
             _model.Settings.TemplateRoot = _generalService.BrowseForFoldersOrFiles(description: "Templates Ordner auswählen (Vorlage und Toolbars)") ?? _model.Settings.TemplateRoot;
-            OnPropertyChanged(nameof(Settings));
-        }
-
-        private void BrowseTcPath()
-        {
-            _model.Settings.TcPath = _generalService.BrowseForFoldersOrFiles(type: "file", description: "Portal.bat auswählen", filers: "Batch Dateien (*.bat)|*.bat") ?? _model.Settings.TcPath;
             OnPropertyChanged(nameof(Settings));
         }
 

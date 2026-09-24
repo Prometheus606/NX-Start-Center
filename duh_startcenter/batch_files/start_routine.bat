@@ -37,10 +37,9 @@ set "FEEDSPEEDCHECK=%~2"
 set "CLOUD_LICENSE=%~3"
 set "MANAGED=%~4"
 set "VORLAGE_ROOT=%~5"
-set "TC_PFAD=%~6"
-set "IS_PP_DEVELOPER=%~7"
-set "LOAD_FULL_RESOURCE_DIR=%~8"
-set "ROLES_PATH=%~9"
+set "IS_PP_DEVELOPER=%~6"
+set "LOAD_FULL_RESOURCE_DIR=%~7"
+set "ROLES_PATH=%~8"
 
 set "SCRIPT_DIR=%~dp0"
 set "UMGEBUNG=5_Umgebung"
@@ -251,13 +250,6 @@ if "%DEBUG%" == "True" Pause
 rem *****************************************************************************
 rem 								Start NX
 rem *****************************************************************************
-
-rem start with Teamcenter!
-if /i "%MANAGED%" == "portal_client" (
-    call %TC_PFAD%
-	rem start "Designcenter NX" "%UGII_BASE_DIR%\nxbin\ugraf" -pim=yes -nx			direkt NX Managed starten
-    goto DUH_ENDE
-)
 
 set is_old_version="FALSE"
 if /i "%NX_Version_DUH%" == "NX100" set is_old_version="TRUE"

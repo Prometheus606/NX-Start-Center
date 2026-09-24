@@ -21,9 +21,6 @@ public sealed class AppSettings
     [JsonPropertyName("template_root_path")]
     public string TemplateRoot { get; set; } = $@"D:\DUH Tools\DUH_Startcenter_templates";
 
-    [JsonPropertyName("tc_path")]
-    public string TcPath { get; set; } = $@"D:\Siemens\TC2512\portal\portal.bat";
-
     [JsonPropertyName("roles_path")]
     public string RolesPath { get; set; } = string.Empty;
 
