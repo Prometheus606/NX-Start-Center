@@ -64,7 +64,7 @@ public sealed class AxelsPunktService(AppModel model, StatusViewModel status)
 
     }
 
-    private void StopAxelsPunkt()
+    public static void StopAxelsPunkt()
     {
         foreach (var process in Process.GetProcessesByName(AxelsPunktProcessName))
         {

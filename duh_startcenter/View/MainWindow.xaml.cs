@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using NXStartCenter.ViewModel;
+using NXStartCenter.Services;
 
 
 namespace NXStartCenter.View;
@@ -42,6 +43,7 @@ public partial class MainWindow : Window
 
     private void Exit_Click(object sender, RoutedEventArgs e)
     {
+        AxelsPunktService.StopAxelsPunkt();
         Close();
     }
     private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -65,6 +67,7 @@ public partial class MainWindow : Window
 
     private void Close_Click(object sender, RoutedEventArgs e)
     {
+        AxelsPunktService.StopAxelsPunkt();
         Close();
     }
 
