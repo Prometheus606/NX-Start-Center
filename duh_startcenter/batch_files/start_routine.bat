@@ -209,6 +209,31 @@ rem ----------------------------------------------------------------------------
 	)
 
 rem ------------------------------------------------------------------------------
+rem Set sidt parameters
+rem ------------------------------------------------------------------------------
+if "%DEBUG%" == "True" (
+	set "SIDT_DEBUG=1"
+) else (
+	set "SIDT_DEBUG=0"
+)
+if "%UGII_LANG%" == "german" (
+	set "SIDT_PAR1=de"
+) else (
+	set "SIDT_PAR1=en"
+)
+set "SIDT_PAR2=%MANAGED%"
+set "SIDT_PAR3=%CUSTOMERNAME%"
+set SIDT_PAR4=""
+if "%SIDT_PAR5%" == "True" (
+	set "SIDT_PAR5=ja"
+) else (
+	set "SIDT_PAR5=nein"
+)
+set "SIDT_PAR6=ja"
+
+set "KUNDE_DUH=%CUSTOMERNAME%"
+set "NX_SHR_VERSION_DIR=%NX_Version_DUH%"
+rem ------------------------------------------------------------------------------
 rem Call custom_nx.bat
 rem set variables for customers
 rem custom_nx.bat at %PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps  
@@ -219,20 +244,7 @@ rem ----------------------------------------------------------------------------
 	)
 
 	if exist "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps\custom_nx_%CUSTOMERNAME%.bat" IF /I "%LOAD_FULL_RESOURCE_DIR%"=="True" (
-		set "KUNDE_DUH=%CUSTOMERNAME%"
-		if "%DEBUG%" == "True" (
-			set "SIDT_DEBUG=1"
-		) else (
-			set "SIDT_DEBUG=0"
-		)
-		if "%UGII_LANG%" == "german" (
-			set "SIDT_PAR1=de"
-		) else (
-			set "SIDT_PAR1=en"
-		)
-		set "NX_SHR_VERSION_DIR=%NX_Version_DUH%"
-		set "SIDT_PAR2=%MANAGED%"
-		call "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps\custom_nx_%CUSTOMERNAME%.bat"
+		call "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps\custom_nx_%CUSTOMERNAME%.bat %SIDT_PAR1% %SIDT_PAR2% %SIDT_PAR3% %SIDT_PAR4% %SIDT_PAR5% "
 	) else (
 		echo custom_nx_%CUSTOMERNAME% nicht gefunden
 	)
