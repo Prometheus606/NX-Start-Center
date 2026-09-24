@@ -17,6 +17,11 @@ namespace NXStartCenter
         static UpdateService()
         {
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Startcenter-Updater");
+
+            _httpClient.DefaultRequestHeaders.Add(
+                "PRIVATE-TOKEN",
+                Environment.GetEnvironmentVariable("GITLAB_TOKEN")
+            );
         }
 
         public static async Task CheckUpdateOnStartup(Window owner)
@@ -36,8 +41,8 @@ namespace NXStartCenter
                     owner,
                     $"Eine neue Version ist verfügbar!\n\n" +
                     $"Aktuelle Version: {currentVersion}\n" +
-                    $"Neue Version: {release.tag_name}\n\n" +
-                    $"{release.body}\n\n" +
+                    $"Neue Version: {release.TagName}\n\n" +
+                    $"{release.Description}\n\n" +
                     $"Jetzt herunterladen?",
                     "Update verfügbar",
                     MessageBoxButton.YesNo,
@@ -85,11 +90,11 @@ namespace NXStartCenter
             }
         }
 
-        private static async Task<GitHubRelease?> CheckForUpdateAsync(
+        private static async Task<GitLabRelease?> CheckForUpdateAsync(
             string repoApiUrl,
             string currentVersion)
         {
-            string apiUrl = $"{repoApiUrl}/releases/latest";
+            string apiUrl = $"{repoApiUrl}/releases/permalink/latest";
 
             var response = await _httpClient.GetAsync(apiUrl);
 
@@ -98,18 +103,23 @@ namespace NXStartCenter
 
             string json = await response.Content.ReadAsStringAsync();
 
-            var release = JsonSerializer.Deserialize<GitHubRelease>(json);
+            var release = JsonSerializer.Deserialize<GitLabRelease>(
+                json,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
 
             if (release == null)
                 return null;
 
-            string latest = release.tag_name.ToLower().Replace("v", "");
-            string current = currentVersion.ToLower().Replace("v", "");
+            string latest = NormalizeVersion(release.TagName);
+            string current = NormalizeVersion(currentVersion);
 
             if (Version.TryParse(latest, out var latestVersion) &&
-                Version.TryParse(current, out var currentVer))
+                Version.TryParse(current, out var currentVersionParsed))
             {
-                return latestVersion > currentVer
+                return latestVersion > currentVersionParsed
                     ? release
                     : null;
             }
@@ -117,23 +127,45 @@ namespace NXStartCenter
             return null;
         }
 
+        private static string NormalizeVersion(string version)
+        {
+            if (string.IsNullOrWhiteSpace(version))
+                return string.Empty;
+
+            version = version.Trim();
+
+            if (version.StartsWith("v", StringComparison.OrdinalIgnoreCase))
+                version = version.Substring(1);
+
+            return version;
+        }
+
         private static async Task<string> DownloadUpdateAsync(
-            GitHubRelease release,
+            GitLabRelease release,
             IProgress<double> progress)
         {
-            var asset = release.assets.FirstOrDefault();
+            var asset = release.Assets?.Links?
+                .FirstOrDefault(x =>
+                    x.Name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase));
 
             if (asset == null)
-                throw new Exception("Keine Download-Datei gefunden.");
+                throw new Exception("Keine EXE-Datei im Release gefunden.");
+
+            string fileName = asset.Name;
 
             string downloadPath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                 "Downloads",
-                $"startcenter-installer-{release.tag_name}.exe"
+                fileName
             );
 
+            string downloadUrl =
+                !string.IsNullOrWhiteSpace(asset.DirectAssetUrl)
+                    ? asset.DirectAssetUrl
+                    : asset.Url;
+
             using var response = await _httpClient.GetAsync(
-                asset.browser_download_url,
+                downloadUrl,
                 HttpCompletionOption.ResponseHeadersRead
             );
 
@@ -158,15 +190,18 @@ namespace NXStartCenter
 
             while ((read = await stream.ReadAsync(buffer)) > 0)
             {
-                await fileStream.WriteAsync(buffer.AsMemory(0, read));
+                await fileStream.WriteAsync(
+                    buffer.AsMemory(0, read));
 
                 totalRead += read;
 
-                if (totalBytes.HasValue)
+                if (totalBytes.HasValue &&
+                    totalBytes.Value > 0)
                 {
                     double percent =
                         (double)totalRead /
-                        totalBytes.Value * 100;
+                        totalBytes.Value *
+                        100;
 
                     progress.Report(percent);
                 }
