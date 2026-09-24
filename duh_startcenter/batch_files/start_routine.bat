@@ -87,6 +87,7 @@ set "LIBRARY_DIR=%RESOURCE_DIR%library\
 
 		if /i "%INSTALLED_MACHINES_CHECK%" == "True" (
 			call :SetIfExist UGII_CAM_LIBRARY_MACHINE_DIR "%LIBRARY_DIR%machine\"
+			call :SetIfExist UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR "%LIBRARY_DIR%machine\installed_machines\"
 			call :SetIfExist UGII_CAM_LIBRARY_INSTALLED_MACHINES_DIR "%LIBRARY_DIR%machine\installed_machines_%CUSTOMERNAME%\"
 		)
 
