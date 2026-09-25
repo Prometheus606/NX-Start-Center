@@ -32,7 +32,7 @@ namespace NXStartCenter
 
             try
             {
-                if (String.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITLAB_TOKEN1")))
+                if (String.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITLAB_TOKEN")))
                 {                
                     MessageBox.Show(
                         owner,

@@ -223,7 +223,7 @@ if "%UGII_LANG%" == "german" (
 )
 set "SIDT_PAR2=%MANAGED%"
 set "SIDT_PAR3=%CUSTOMERNAME%"
-set SIDT_PAR4=""
+set "SIDT_PAR4="
 if "%SIDT_PAR5%" == "True" (
 	set "SIDT_PAR5=ja"
 ) else (
@@ -244,7 +244,7 @@ rem ----------------------------------------------------------------------------
 	)
 
 	if exist "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps\custom_nx_%CUSTOMERNAME%.bat" IF /I "%LOAD_FULL_RESOURCE_DIR%"=="True" (
-		call "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps\custom_nx_%CUSTOMERNAME%.bat %SIDT_PAR1% %SIDT_PAR2% %SIDT_PAR3% %SIDT_PAR4% %SIDT_PAR5% "
+		call "%PLM_SHARE_DUH%\%CUSTOMERNAME%\%UMGEBUNG%\%NX_Version_DUH%\start_apps\custom_nx_%CUSTOMERNAME%.bat" "%SIDT_PAR1%" "%SIDT_PAR2%" "%SIDT_PAR3%" "%SIDT_PAR4%" "%SIDT_PAR5%"
 	) else (
 		echo custom_nx_%CUSTOMERNAME% nicht gefunden
 	)
