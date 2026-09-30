@@ -169,15 +169,6 @@ begin
     TemplateEdit.Text := Path;
 end;
 
-procedure BrowseTcFile(Sender: TObject);
-var
-  Path: string;
-begin
-  Path := TcEdit.Text;
-  if SelectFileModern('Teamcenter portal.bat auswählen', 'Batch-Dateien (*.bat)|*.bat', Path) then
-    TcEdit.Text := Path;
-end;
-
 function ConfigFileExists: Boolean;
 begin
   Result := FileExists(AddBackslash(WizardDirValue) + 'data\config.json');
@@ -210,9 +201,6 @@ begin
   
     AddLabel(SettingsPage1, 'Template Root (toolbars):', 200);
   TemplateEdit := AddEditWithBrowse(SettingsPage1, 'D:\DUH Tools\Vorlage_Root', 200, @BrowseTemplateRoot);
-
-  AddLabel(SettingsPage1, 'Teamcenter portal.bat (Für Teamcenter, optional):', 250);
-  TcEdit := AddEditWithBrowse(SettingsPage1, 'D:\Siemens\TC2512\portal\portal.bat', 250, @BrowseTcFile);
 
   SettingsPage2 := CreateCustomPage(
     SettingsPage1.ID,
