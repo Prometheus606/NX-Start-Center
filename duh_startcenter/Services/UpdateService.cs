@@ -130,7 +130,7 @@ namespace NXStartCenter
 
             if (!response.IsSuccessStatusCode)
             {
-                return null;
+                throw new AccessViolationException("Update konnte nicht geladen werden. Falscher oder abgelaufener Token.");
             }
 
             string json = await response.Content.ReadAsStringAsync();
