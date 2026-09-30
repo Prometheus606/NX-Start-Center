@@ -26,7 +26,7 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 
 [Registry]
-Root: HKCU; \
+Root: HKLM64; \
     Subkey: "Software\duh\DUH_Startcenter"; \
     ValueType: string; \
     ValueName: "UpdateToken"; \
