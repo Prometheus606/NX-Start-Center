@@ -14,5 +14,5 @@
     7. die installer datei passend umbenennen
     8. die änderung in der .iss datei rückgängig machen, damit die änderung nicht im repo auftaucht.
 
-### 6. auf github ein neues release aus dem letzten tag erstellen und installer.exe dort reinziehen (aus output/installer)
+### 6. das publish script starten (publish_release.bat)
 ### 7. Beim nächsten starten der alten app kommt eine meldung das es eine neue version gibt

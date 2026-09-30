@@ -11,6 +11,27 @@ NX_StartCenter ist ein Python-Tool, das die Verwaltung und den Start von Siemens
 - **Speicherung der Einstellungen:** Das Tool speichert die zuletzt verwendeten Einstellungen, sodass beim nächsten Start keine erneuten Eingaben erforderlich sind.
 - **Anpassung der Start-Batch:** Änderungen an der Start-Batch-Datei können in `startbatch.py` vorgenommen werden.
 
+## Gitlab Tokens
+Es wird zwischen 2 verschiedenen Gitlab tokens unterschieden:
+1. Gitlab Developer Token
+2. Gitlab Update Token
+
+### Developer Token
+Der Developer Token wird benötigt, um ein neues Release auf Gitlab bereitzustellen. Dafür ist ein Token mit vollen API rechten erforderlich.
+Token erstellen:
+1. Gitlab -> DUH_Startcenter -> settings -> access tokens -> add new token
+2. Role: Maintainer
+3. scope: api
+4. Den Token kopieren und in den Umgebungsvariablen speichern mit dem namen GITLAB_DEVELOPER_TOKEN 
+
+### Update Token
+Der Update Token wird benötigt, um ein neues Release auf Gitlab bereitzustellen. Dafür ist ein Token mit API lese rechten erforderlich.
+Token erstellen:
+1. Gitlab -> DUH_Startcenter -> settings -> access tokens -> add new token
+2. Role: Guest
+3. scope: read_api
+4. Den Token kopieren und in den Umgebungsvariablen speichern mit dem namen GITLAB_UPDATE_TOKEN 
+
 ## Installation für Entwickler
 
 1. Klonen Sie das Repository:

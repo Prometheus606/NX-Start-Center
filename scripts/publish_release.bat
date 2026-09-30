@@ -28,7 +28,7 @@ if "%TAG%"=="" (
 REM ------------------------------------------------
 REM Token check
 REM ------------------------------------------------
-if defined GITLAB_TOKEN (
+if defined GITLAB_DEVELOPER_TOKEN (
     echo Token ist gesetzt
 ) else (
     echo Token ist NICHT gesetzt
@@ -66,7 +66,7 @@ REM ------------------------------------------------
 echo Uploading %EXENAME%...
 
 curl --fail --location ^
-  --header "PRIVATE-TOKEN: %GITLAB_TOKEN%" ^
+  --header "PRIVATE-TOKEN: %GITLAB_DEVELOPER_TOKEN%" ^
   --upload-file "%EXE%" ^
   "%GITLAB_URL%/api/v4/projects/%PROJECT_ID%/packages/generic/%PACKAGE_NAME%/%TAG%/%EXENAME%"
 
@@ -86,7 +86,7 @@ echo Creating release %TAG%...
 
 curl --fail ^
   --request POST ^
-  --header "PRIVATE-TOKEN: %GITLAB_TOKEN%" ^
+  --header "PRIVATE-TOKEN: %GITLAB_DEVELOPER_TOKEN%" ^
   --data-urlencode "tag_name=%TAG%" ^
   --data-urlencode "name=%TAG%" ^
   --data-urlencode "description=Was ist neu:<br><br>%DESCRIPTION%" ^
@@ -108,7 +108,7 @@ echo Adding release asset...
 
 curl --fail ^
   --request POST ^
-  --header "PRIVATE-TOKEN: %GITLAB_TOKEN%" ^
+  --header "PRIVATE-TOKEN: %GITLAB_DEVELOPER_TOKEN%" ^
   --data-urlencode "name=%EXENAME%" ^
   --data-urlencode "url=%GITLAB_URL%/api/v4/projects/%PROJECT_ID%/packages/generic/%PACKAGE_NAME%/%TAG%/%EXENAME%" ^
   --data-urlencode "link_type=package" ^

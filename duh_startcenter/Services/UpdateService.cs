@@ -1,27 +1,41 @@
-﻿using System;
+﻿using NXStartCenter.Model;
+using NXStartCenter.View;
+using System;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Policy;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
-using NXStartCenter.Model;
-using NXStartCenter.View;
+using Microsoft.Win32;
 
 namespace NXStartCenter
 {
     public static class UpdateService
     {
         private static readonly HttpClient _httpClient = new HttpClient();
+        private static readonly string? _token;
 
         static UpdateService()
         {
+            _token = GetToken();
+
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Startcenter-Updater");
 
             _httpClient.DefaultRequestHeaders.Add(
                 "PRIVATE-TOKEN",
-                Environment.GetEnvironmentVariable("GITLAB_TOKEN")
+                GetToken()
             );
+        }
+
+        public static string? GetToken()
+        {
+            using RegistryKey? key = Registry.LocalMachine.OpenSubKey(
+           @"Software\duh\DUH_Startcenter");
+
+            return key?.GetValue("UpdateToken") as string;
+
         }
 
         public static async Task CheckUpdateOnStartup(Window owner)
@@ -32,8 +46,8 @@ namespace NXStartCenter
 
             try
             {
-                if (String.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITLAB_TOKEN")))
-                {                
+                if (String.IsNullOrEmpty(_token))
+                {
                     MessageBox.Show(
                         owner,
                         $"Update konnte nicht geladen werden, da kein Token gesetzt ist!",
@@ -90,7 +104,7 @@ namespace NXStartCenter
                     MessageBoxImage.Information
                 );
             }
-            catch (HttpRequestException) {}
+            catch (HttpRequestException) { }
             catch (Exception ex)
             {
                 MessageBox.Show(
@@ -104,37 +118,61 @@ namespace NXStartCenter
         }
 
         private static async Task<GitLabRelease?> CheckForUpdateAsync(
-            string repoApiUrl,
-            string currentVersion)
+    string repoApiUrl,
+    string currentVersion)
         {
-            string apiUrl = $"{repoApiUrl}/releases/permalink/latest";
+            string apiUrl = $"{repoApiUrl}/releases";
 
             var response = await _httpClient.GetAsync(apiUrl);
 
-            if (!response.IsSuccessStatusCode) { 
+            if (!response.IsSuccessStatusCode)
+            {
                 return null;
             }
 
             string json = await response.Content.ReadAsStringAsync();
 
-            var release = JsonSerializer.Deserialize<GitLabRelease>(
+            // /releases liefert ein Array
+            var releases = JsonSerializer.Deserialize<List<GitLabRelease>>(
                 json,
                 new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
 
-            if (release == null)
+            if (releases == null || releases.Count == 0)
                 return null;
 
-            string latest = NormalizeVersion(release.TagName);
+            // Release mit der höchsten gültigen Versionsnummer ermitteln
+            GitLabRelease? latestRelease = releases
+                .Select(release => new
+                {
+                    Release = release,
+                    VersionString = NormalizeVersion(release.TagName)
+                })
+                .Select(x => new
+                {
+                    x.Release,
+                    Version = Version.TryParse(x.VersionString, out var version)
+                        ? version
+                        : null
+                })
+                .Where(x => x.Version != null)
+                .OrderByDescending(x => x.Version)
+                .Select(x => x.Release)
+                .FirstOrDefault();
+
+            if (latestRelease == null)
+                return null;
+
+            string latest = NormalizeVersion(latestRelease.TagName);
             string current = NormalizeVersion(currentVersion);
 
             if (Version.TryParse(latest, out var latestVersion) &&
                 Version.TryParse(current, out var currentVersionParsed))
             {
                 return latestVersion > currentVersionParsed
-                    ? release
+                    ? latestRelease
                     : null;
             }
 

@@ -11,7 +11,7 @@ rem === PyInstaller Build ===
 set "ISCC=C:\Users\niklas.beitler\AppData\Local\Programs\Inno Setup 6\ISCC.exe"
 set "SCRIPT=%~dp0DUH_Startcenter.iss"
 
-"%ISCC%" "%SCRIPT%"
+"%ISCC%" /DUpdateToken="%GITLAB_UPDATE_TOKEN%" "%SCRIPT%"
 
 "C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\signtool.exe" sign /sha1 "d578eded17dbc01750709680db13b5b1273edb12" /t http://time.certum.pl /fd SHA256 /v %BASE%output\installer\DUH_Startcenter-installer.exe
 
