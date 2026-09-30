@@ -28,7 +28,7 @@ Token erstellen:
 Der Update Token wird benötigt, um ein neues Release auf Gitlab bereitzustellen. Dafür ist ein Token mit API lese rechten erforderlich.
 Token erstellen:
 1. Gitlab -> DUH_Startcenter -> settings -> access tokens -> add new token
-2. Role: Guest
+2. Role: Developer
 3. scope: read_api
 4. Den Token kopieren und in den Umgebungsvariablen speichern mit dem namen GITLAB_UPDATE_TOKEN 
 

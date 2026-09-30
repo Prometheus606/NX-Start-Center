@@ -21,12 +21,15 @@ namespace NXStartCenter
         {
             _token = GetToken();
 
-            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Startcenter-Updater");
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(
+                "Startcenter-Updater");
 
-            _httpClient.DefaultRequestHeaders.Add(
-                "PRIVATE-TOKEN",
-                GetToken()
-            );
+            if (!string.IsNullOrWhiteSpace(_token))
+            {
+                _httpClient.DefaultRequestHeaders.Add(
+                    "PRIVATE-TOKEN",
+                    _token);
+            }
         }
 
         public static string? GetToken()
